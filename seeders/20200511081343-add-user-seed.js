@@ -1,4 +1,12 @@
 'use strict';
+const { encrypt } = require('../helpers/bcrypt.js');
+
+let users = require('../data/users.json').map(user => {
+  user.createdAt = new Date();
+  user.updatedAt = new Date();
+  user.password = encrypt(user.password);
+  return user;
+});
 
 module.exports = {
   up: (queryInterface, Sequelize) => {
@@ -12,6 +20,7 @@ module.exports = {
         isBetaMember: false
       }], {});
     */
+    return queryInterface.bulkInsert('Users', users, {});
   },
 
   down: (queryInterface, Sequelize) => {
@@ -22,5 +31,6 @@ module.exports = {
       Example:
       return queryInterface.bulkDelete('People', null, {});
     */
+    return queryInterface.bulkDelete('Users', null, {});
   }
 };

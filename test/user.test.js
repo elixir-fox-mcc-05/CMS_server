@@ -4,11 +4,12 @@ const { sequelize } = require('../models');
 const { queryInterface } = sequelize;
 const { encrypt } = require('../helpers/bcrypt.js');
 
-const dummyUser = {
-  email: 'krispi@mail.com',
-  password: 'krispi',
-  role: 'member'
-};
+const users = require('../data/users.json').map(user => {
+  user.password = encrypt(user.password);
+  user.createdAt = new Date();
+  user.updatedAt = new Date();
+  return user;
+});
 
 afterAll(done => {
   queryInterface
@@ -24,17 +25,9 @@ afterAll(done => {
 
 beforeAll(done => {
   queryInterface
-    .bulkInsert('Users', [
-      {
-        email: dummyUser.email,
-        password: encrypt(dummyUser.password),
-        role: dummyUser.role,
-        createdAt: new Date(),
-        updatedAt: new Date()
-      }
-    ])
+    .bulkInsert('Users', users, {})
     .then(() => {
-      console.log(`User Created: ${dummyUser.email}`);
+      console.log(`User Created: ${users}`);
       done();
     })
     .catch(err => {
@@ -47,7 +40,7 @@ describe('User Test', () => {
     describe('Success', () => {
       test('return created user info with id, email, and role with status code 201', done => {
         const usertest = {
-          email: 'angelina@mail.com',
+          email: 'krispi@mail.com',
           password: 'krispi',
           role: 'admin'
         };
@@ -156,9 +149,14 @@ describe('User Test', () => {
             message: `Email Already Exists`
           }
         ];
+        const userexist = {
+          email: 'angelina@mail.com',
+          password: 'angelina',
+          role: 'member'
+        };
         request(app)
           .post('/register')
-          .send(dummyUser)
+          .send(userexist)
           .end((err, response) => {
             if (err) {
               return done(err);
@@ -175,8 +173,8 @@ describe('User Test', () => {
     describe('Success', () => {
       test('Return user token', done => {
         const usertest = {
-          email: 'krispi@mail.com',
-          password: 'krispi'
+          email: 'dhea@mail.com',
+          password: 'dheaangelia'
         };
         request(app)
           .post('/login')

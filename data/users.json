@@ -1,0 +1,17 @@
+[
+  {
+    "email": "angelina@mail.com",
+    "password": "angelina",
+    "role": "member"
+  },
+  {
+    "email": "dhea@mail.com",
+    "password": "dheaangelia",
+    "role": "member"
+  },
+  {
+    "email": "dazai@mail.com",
+    "password": "dazaiosamu",
+    "role": "member"
+  }
+]
