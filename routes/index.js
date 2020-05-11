@@ -12,6 +12,6 @@ router.get('/', (req, res) => {
     })
 });
 router.use('/user', userRouter);
-router.use('/tasks', productTRouter);
+router.use('/product', productTRouter);
 
 module.exports = router;

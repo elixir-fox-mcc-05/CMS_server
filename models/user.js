@@ -53,7 +53,7 @@ module.exports = (sequelize, DataTypes) => {
         },
         isEmail: {
           args: true,
-          msg: 'Please input email with correct format '
+          msg: 'Please input email with correct format'
         }
       }
     },

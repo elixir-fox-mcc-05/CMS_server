@@ -16,7 +16,7 @@ module.exports = (sequelize, DataTypes) => {
           args: true,
           msg: 'Name is required'
         },
-        min: {
+        len: {
           args: [3],
           msg: 'Name must include minimum 3 characters'
         }
@@ -47,7 +47,7 @@ module.exports = (sequelize, DataTypes) => {
           msg: 'Price is required'
         },
         min: {
-          args: 0,
+          args: [0],
           msg: 'Price can not have value below zero'
         }
       }
@@ -65,9 +65,23 @@ module.exports = (sequelize, DataTypes) => {
           msg: 'Stock is required'
         },
         min: {
-          args: 0,
+          args: [0],
           msg: 'Stock can not have value below zero'
         }
+      }
+    },
+    category: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notNull: {
+          args: true,
+          msg: 'Category is required'
+        },
+        notEmpty: {
+          args: true,
+          msg: 'Category is required'
+        },
       }
     }
   }, {

@@ -45,7 +45,7 @@ describe('User Router', () => {
     })
 
     describe('Register a user', () => {
-        describe('Success', () => {
+        describe('Success register', () => {
             test('Return status code 201 with keys data and notif', (done) => {
                 let newUser = {
                     name: 'Bambang',
@@ -72,13 +72,138 @@ describe('User Router', () => {
             })
         })
 
-        // describe('Failed', () => {
-
-        // })
+        describe('Fail register', () => {
+            describe('Attributes empty', () => {
+                test('Return status code 400 with keys err', (done) => {
+                    let customErr = [
+                        { "message": "Name is required"},
+                        { "message": "Role is required"},
+                        { "message": "Email is required"},
+                        { "message": "Password is required"}
+                    ]
+                    
+                    request(app)
+                        .post('/user/register')
+                        .end((err, response) => {
+                            if(err) {
+                                return done(err)
+                            } else {
+                                expect(response.status).toBe(400)
+                                expect(response.body).toHaveProperty('err', customErr)
+                                return done()
+                            }
+                        })
+                })
+            })
+            describe('Attribute name has length less than 3', () => {
+                test('Return status code 400 with keys err', (done) => {
+                    let customErr = [
+                        { "message": "Name must include minimum 3 characters"}
+                    ]
+                    let newUser = {
+                        name: 'Ti',
+                        role: 'Administrator',
+                        email: 'tina@contoh.com',
+                        password: '123456'
+                    }
+                    
+                    request(app)
+                        .post('/user/register')
+                        .send(newUser)
+                        .end((err, response) => {
+                            if(err) {
+                                return done(err)
+                            } else {
+                                expect(response.status).toBe(400)
+                                expect(response.body).toHaveProperty('err', customErr)
+                                return done()
+                            }
+                        })
+                })
+            })
+            describe('Attribute email has been registered before (not unique)', () => {
+                test('Return status code 400 with keys err', (done) => {
+                    let customErr = [
+                        { "message": "email must be unique"}
+                    ]
+                    let newUser = {
+                        name: 'Tina',
+                        role: 'Administrator',
+                        email: 'dummyuser@contoh.com',
+                        password: '123456'
+                    }
+                    
+                    request(app)
+                        .post('/user/register')
+                        .send(newUser)
+                        .end((err, response) => {
+                            if(err) {
+                                return done(err)
+                            } else {
+                                expect(response.status).toBe(400)
+                                expect(response.body).toHaveProperty('err', customErr)
+                                return done()
+                            }
+                        })
+                })
+            })
+            describe('Attribute email has wrong format', () => {
+                test('Return status code 400 with keys err', (done) => {
+                    let customErr = [
+                        { "message": "Please input email with correct format"}
+                    ]
+                    let newUser = {
+                        name: 'Tina',
+                        role: 'Administrator',
+                        email: 'tinaemail',
+                        password: '123456'
+                    }
+                    
+                    request(app)
+                        .post('/user/register')
+                        .send(newUser)
+                        .end((err, response) => {
+                            if(err) {
+                                return done(err)
+                            } else {
+                                expect(response.status).toBe(400)
+                                expect(response.body).toHaveProperty('err', customErr)
+                                return done()
+                            }
+                        })
+                })
+            })
+            describe('Attribute password has length less than 6', () => {
+                test('Return status code 400 with keys err', (done) => {
+                    let customErr = [
+                        { "message": "Password must include minimum 6 characters"}
+                    ]
+                    let newUser = {
+                        name: 'Tina',
+                        role: 'Administrator',
+                        email: 'tina@contoh.com',
+                        password: 'qw'
+                    }
+                    
+                    request(app)
+                        .post('/user/register')
+                        .send(newUser)
+                        .end((err, response) => {
+                            if(err) {
+                                return done(err)
+                            } else {
+                                expect(response.status).toBe(400)
+                                expect(response.body).toHaveProperty('err', customErr)
+                                return done()
+                            }
+                        })
+                })
+            })
+        })
     })
 
     describe('Login a user', () => {
-        describe('Success', () => {
+        describe('Success login', () => {
             test('Return status code 200 with keys token, data and notif', (done) => {
                 let loginUser = {
                     email: dummyuser.email,
@@ -91,6 +216,7 @@ describe('User Router', () => {
                         if(err) {
                             return done(err)
                         } else {
+                            console.log(response.body)
                             expect(response.status).toBe(200)
                             expect(response.body).toHaveProperty('token', expect.any(String) )
                             expect(response.body.data).toHaveProperty('id', expect.any(Number))
@@ -103,9 +229,53 @@ describe('User Router', () => {
             })
         })
 
-    //     describe('Failed', () => {
-            
-    //     })
+        describe('Fail login', () => {
+            describe('Attribute email is never registered or wrong email', () => {
+                test('Return status code 401 with keys err', (done) => {
+                    let customErr = "Please input registered email"
+                    let loginUser = {
+                        email: 'tina@contoh.com',
+                        password: '123456'
+                    }
+                    request(app)
+                        .post('/user/login')
+                        .send(loginUser)
+                        .end((err, response) => {
+                            if(err) {
+                                return done(err)
+                            } else {
+                                console.log(response.body)
+                                expect(response.status).toBe(401)
+                                expect(response.body).toHaveProperty('err', customErr )
+                                return done()
+                            }
+                        })
+                })
+            })
+            describe('Attribute password is never registered or wrong password', () => {
+                test('Return status code 401 with keys err', (done) => {
+                    let customErr = "Please input correct password"
+                    let loginUser = {
+                        email: dummyuser.email,
+                        password: 'qweqwe'
+                    }
+                    request(app)
+                        .post('/user/login')
+                        .send(loginUser)
+                        .end((err, response) => {
+                            if(err) {
+                                return done(err)
+                            } else {
+                                console.log(response.body)
+                                expect(response.status).toBe(401)
+                                expect(response.body).toHaveProperty('err', customErr )
+                                return done()
+                            }
+                        })
+                })
+            })
+
+        })
     })
 
 

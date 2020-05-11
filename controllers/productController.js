@@ -15,13 +15,14 @@ class ProductController {
     }
 
     static createProduct(req, res, next) {
-        let { name, description, image_url, price, stock } = req.body
+        let { name, description, image_url, price, stock, category } = req.body
         Product.create({
             name,
             description,
             image_url,
             price,
-            stock
+            stock,
+            category
         })
             .then(data => {
                 res.status(201).json({
@@ -56,13 +57,14 @@ class ProductController {
 
     static updateProduct(req, res, next) {
         let {id} = req.params
-        let { name, description, image_url, price, stock } = req.body
+        let { name, description, image_url, price, stock, category} = req.body
         Product.update({
             name,
             description,
             image_url,
             price,
-            stock
+            stock,
+            category
         }, {
             where: {
                 id
