@@ -44,7 +44,7 @@ class UserController {
                             name: data.name,
                             email: data.email
                         })
-                        res.status(201).json({
+                        res.status(200).json({
                             token,
                             data: {
                                 id: data.id,
