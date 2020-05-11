@@ -14,9 +14,9 @@ module.exports = (sequelize, DataTypes) => {
           args: true,
           msg: 'Name is required'
         },
-        len: {
-          args: [3, 40],
-          msg: 'Name must include between 3 and 40 characters'
+        min: {
+          args: [3],
+          msg: 'Name must include minimum 3 characters'
         }
       }
     },
@@ -53,9 +53,9 @@ module.exports = (sequelize, DataTypes) => {
           args: true,
           msg: 'Password is required'
         },
-        len: {
-          args: [6, 20],
-          msg: 'Password must include between 6 and 20 characters'
+        min: {
+          args: [6],
+          msg: 'Password must include minimum 6 characters'
         }
       }
     }
