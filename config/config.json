@@ -1,0 +1,25 @@
+{
+  "development": {
+    "username": "postgres",
+    "password": "Rom@nist1",
+    "database": "db_CMS_development",
+    "host": "localhost",
+    "dialect": "postgres"
+  },
+  "test": {
+    "username": "postgres",
+    "password": "Rom@nist1",
+    "database": "db_CMS_test",
+    "host": "localhost",
+    "dialect": "postgres",
+    "logging": false
+  },
+  "production": {
+    "username": "root",
+    "password": null,
+    "database": "database_production",
+    "host": "127.0.0.1",
+    "dialect": "mysql",
+    "operatorsAliases": false
+  }
+}
