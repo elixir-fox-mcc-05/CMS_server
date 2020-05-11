@@ -6,7 +6,8 @@ const { encrypt } = require('../helpers/bcrypt.js');
 
 const dummyUser = {
   email: 'krispi@mail.com',
-  password: 'krispi'
+  password: 'krispi',
+  role: 'member'
 };
 
 afterAll(done => {
@@ -27,6 +28,7 @@ beforeAll(done => {
       {
         email: dummyUser.email,
         password: encrypt(dummyUser.password),
+        role: dummyUser.role,
         createdAt: new Date(),
         updatedAt: new Date()
       }
@@ -171,23 +173,44 @@ describe('User Test', () => {
   });
   describe('Login', () => {
     describe('Success', () => {
-      test('return created user info with id, email, and role with status code 201', done => {
+      test('Return user token', done => {
         const usertest = {
-          email: 'angelina@mail.com',
-          password: 'krispi',
-          role: 'admin'
+          email: 'krispi@mail.com',
+          password: 'krispi'
         };
         request(app)
-          .post('/register')
+          .post('/login')
           .send(usertest)
           .end((err, response) => {
             if (err) {
               return done(err);
             } else {
-              expect(response.status).toBe(201);
-              expect(response.body).toHaveProperty('id', expect.any(Number));
-              expect(response.body).toHaveProperty('email', usertest.email);
-              expect(response.body).not.toHaveProperty('password');
+              expect(response.status).toBe(200);
+              expect(response.body).toHaveProperty('token');
+              return done();
+            }
+          });
+      });
+    });
+    describe('Error', () => {
+      test(`if email or password does not match`, done => {
+        const usertest = {
+          email: 'invaliduser@mail.com',
+          password: 'not exist'
+        };
+        const errors = {
+          code: 401,
+          message: `Invalid Email or Password`
+        };
+        request(app)
+          .post('/login')
+          .send(usertest)
+          .end((err, response) => {
+            if (err) {
+              return done(err);
+            } else {
+              expect(response.status).toBe(401);
+              expect(response.body).toHaveProperty('errors', errors);
               return done();
             }
           });

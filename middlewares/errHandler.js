@@ -15,7 +15,7 @@ const errHandler = (err, req, res, next) => {
     });
   } else {
     res.status(err.code || 500).json({
-      error: err
+      errors: err
     });
   }
 };
