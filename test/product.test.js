@@ -7,11 +7,31 @@ const { generateToken } = require('../helpers/jwt');
 const { queryInterface } = require('../models/index.js').sequelize;
 
 describe('Product Router', function() {
-    beforeAll(function() {
-        queryInterface.bulkDelete('Products');
+    let people = [];
+    let fakePeople = require('../users.json');
+    fakePeople.forEach(el => {
+        el['createdAt'] = new Date();
+        el['updatedAt'] = new Date();
     });
 
-    const token = generateToken({ id: '5', email: 'irene@gmail.com'});
+    let token = '';
+    beforeAll(function(done) {
+        queryInterface.bulkDelete('Products');
+        queryInterface.bulkInsert('Users', fakePeople, {
+            returning: true
+        })
+            .then(newUsers => {
+                people = newUsers;
+                token = generateToken({
+                    id: people[0].id,
+                    email: people[0].email
+                });
+                done();
+            })
+            .catch(err => {
+                done(err);
+            })
+    });
 
     describe('Add new product to system', function() {
         describe('Success', function() {
@@ -157,7 +177,14 @@ describe('Product Router', function() {
         });
     });
 
-    afterAll(function() {
+    afterAll(function(done) {
         queryInterface.bulkDelete('Products');
+        queryInterface.bulkDelete('Users')
+            .then(_ => {
+                done();
+            })
+            .catch(err => {
+                done(err);
+            })
     });
 });

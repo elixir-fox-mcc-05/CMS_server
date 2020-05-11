@@ -2,13 +2,33 @@ const app = require('../app.js');
 const request = require('supertest');
 
 const jwt = require('jsonwebtoken');
+const { encrypt } = require('../helpers/bcrypt.js');
 
 const { queryInterface } = require('../models/index.js').sequelize;
 
 describe('User Router', function() {
+    let fakePeople = require('../users.json');
+    fakePeople.forEach(el => {
+        el.password = encrypt(el.password);
+        el['createdAt'] = new Date();
+        el['updatedAt'] = new Date();
+    });
+
+    beforeAll(function(done) {
+        queryInterface.bulkInsert('Users', fakePeople, {
+            returning: true
+        })
+            .then(newUsers => {
+                done();
+            })
+            .catch(err => {
+                done(err);
+            })
+    });
+
     describe('Login user from website', function() {
         describe('Success', function() {
-            test('Should return 201 status code with token ', function(done) {
+            test('Should return 200 status code with token ', function(done) {
                 request(app)
                 .post('/users/login')
                 .send({
@@ -54,5 +74,15 @@ describe('User Router', function() {
                 })
             });
         });
+    });
+
+    afterAll(function(done) {
+        queryInterface.bulkDelete('Users')
+            .then(_ => {
+                done();
+            })
+            .catch(err => {
+                done(err);
+            })
     });
 });
