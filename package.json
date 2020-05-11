@@ -1,0 +1,22 @@
+{
+  "name": "CMS_server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "NODE_ENV=test jest --detectOpenHandles --runInBand",
+    "dev": "NODE_ENV=development nodemon bin/server.js",
+    "start": "NODE_ENV=production node bin/server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/azka-art/CMS_server.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/azka-art/CMS_server/issues"
+  },
+  "homepage": "https://github.com/azka-art/CMS_server#readme"
+}
