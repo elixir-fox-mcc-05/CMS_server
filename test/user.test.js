@@ -6,7 +6,6 @@ describe('User Router', () => {
     beforeAll(function() {
         jest.setTimeout(10000);
     });
-
     describe('register', () => {
         describe('Success : ', () => {
             test('should return JSON with id and email with status 201', done => {

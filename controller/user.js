@@ -3,10 +3,8 @@ const User = Model.User
 const {checkPassword} = require('../helpers/bcrypt.js')
 const {generateToken} = require('../helpers/jwt.js')
 
-console.log('masuk user')
 class UserController {
     static register(req, res){
-    console.log('=========')
     const {email, password} = req.body;
     User.create({ email, password })
         .then(user => {

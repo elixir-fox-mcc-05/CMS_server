@@ -9,7 +9,7 @@ const error = require('./middleware/errorHandler.js')
 
 app.use(cors())
 app.use(express.urlencoded({extended : false}))
-app.use(express.json)
+app.use(express.json())
 app.use(router)
 app.use(error)
 
