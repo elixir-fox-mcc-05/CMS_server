@@ -4,10 +4,13 @@ const { comparePassword } = require('../helpers/bcrypt')
 class UserController {
 
   static register(req, res, next) {
+    console.log('----register----');
     const payload = {
       email: req.body.email,
-      password: req.body.password
+      password: req.body.password,
+      image: req.body.image
     }
+    console.log(payload);
     User.create(payload)
       .then((result) => {
         console.log('berhasil buat')
@@ -16,13 +19,13 @@ class UserController {
           email: result.email
         }
         let access_token = generateToken(newUser)
-        return res.status(201).json({
+        res.status(201).json({
           id: result.id,
           email: result.email,
           access_token: access_token
         })
       }).catch((err) => {
-        return next(err)
+        next(err)
       });
   }
 

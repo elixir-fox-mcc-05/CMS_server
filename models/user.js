@@ -1,6 +1,6 @@
 'use strict';
+const { generatePassword } = require('../helpers/bcrypt')
 module.exports = (sequelize, DataTypes) => {
-  const { generatePassword } = require('../helpers/bcrypt')
 
   const { Model } = sequelize.Sequelize
 
@@ -9,12 +9,16 @@ module.exports = (sequelize, DataTypes) => {
   User.init({
     email: {
       type: DataTypes.STRING,
-      isEmail: true,
+      unique: true,
       allowNull: false,
       validate: {
         notNull: {
           args: true,
           msg: 'Email required.'
+        },
+        isEmail: {
+          args: true,
+          msg: "Must be an email"
         }
       }
     },
@@ -40,6 +44,7 @@ module.exports = (sequelize, DataTypes) => {
     hooks: {
       beforeCreate(User, options) {
         User.password = generatePassword(User.password)
+        console.log('beforeCreate', User.password);
         User.balance = 0
       }
     },
@@ -47,7 +52,7 @@ module.exports = (sequelize, DataTypes) => {
   })
 
   User.associate = function(models) {
-    User.belongsToMany(models.Product, { through: 'UserProducts', as: 'user', foreignKey: 'userId' })
+    User.belongsToMany(models.Product, { through: 'UserProducts', as: 'users', foreignKey: 'userId' })
   };
   return User;
 };

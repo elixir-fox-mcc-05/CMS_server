@@ -8,6 +8,15 @@ function errorHandler(err, req, res, next) {
       name: 'BadRequest',
       errors: errors
     })
+  } else if (err.name == 'SequelizeUniqueConstraintError') {
+    const errors = err.errors.map(el => ({
+      message: el.message
+    }))
+    return res.status(400).json({
+      code: 400,
+      name: 'BadRequest',
+      errors: errors
+    })
   } else if (err.name == 'BadRequest') {
     return res.status(400).json({
       code: 400,
