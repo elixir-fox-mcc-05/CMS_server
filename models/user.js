@@ -14,7 +14,11 @@ module.exports = (sequelize, DataTypes) => {
           args: true,
           msg: 'Name is required'
         },
-        min: {
+        notEmpty: {
+          args: true,
+          msg: 'Name is required'
+        },
+        len: {
           args: [3],
           msg: 'Name must include minimum 3 characters'
         }
@@ -28,6 +32,10 @@ module.exports = (sequelize, DataTypes) => {
           args: true,
           msg: 'Role is required'
         },
+        notEmpty: {
+          args: true,
+          msg: 'Role is required'
+        },
       }
     },
     email: {
@@ -36,6 +44,10 @@ module.exports = (sequelize, DataTypes) => {
       unique:true,
       validate: {
         notNull: {
+          args: true,
+          msg: 'Email is required'
+        },
+        notEmpty: {
           args: true,
           msg: 'Email is required'
         },
@@ -53,7 +65,11 @@ module.exports = (sequelize, DataTypes) => {
           args: true,
           msg: 'Password is required'
         },
-        min: {
+        notEmpty: {
+          args: true,
+          msg: 'Password is required'
+        },
+        len: {
           args: [6],
           msg: 'Password must include minimum 6 characters'
         }

@@ -12,6 +12,10 @@ module.exports = (sequelize, DataTypes) => {
           args: true,
           msg: 'Name is required'
         },
+        notEmpty: {
+          args: true,
+          msg: 'Name is required'
+        },
         min: {
           args: [3],
           msg: 'Name must include minimum 3 characters'
@@ -38,6 +42,10 @@ module.exports = (sequelize, DataTypes) => {
           args: true,
           msg: 'Price is required'
         },
+        notEmpty: {
+          args: true,
+          msg: 'Price is required'
+        },
         min: {
           args: 0,
           msg: 'Price can not have value below zero'
@@ -49,6 +57,10 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       validate: {
         notNull: {
+          args: true,
+          msg: 'Stock is required'
+        },
+        notEmpty: {
           args: true,
           msg: 'Stock is required'
         },
