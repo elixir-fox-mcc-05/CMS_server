@@ -3,10 +3,7 @@
 const router = require('express').Router();
 const ControllerUser = require('../controller/ControllerUser');
 
-router.get("/", (req, res) => {
-    res.status(200).json({
-        masuk : "Masuk Pak Eko"
-    })
-});
+router.post("/login", ControllerUser.login);
+router.post("/register", ControllerUser.register);
 
 module.exports = router;
