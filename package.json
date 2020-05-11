@@ -1,0 +1,34 @@
+{
+  "name": "cms-server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon bin/server.js",
+    "test": "cls && jest --detectOpenHandles"
+  },
+  "author": "AndreRGunawan",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.19.2",
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
+    "pg": "^8.1.0",
+    "sequelize": "^5.21.8"
+  },
+  "devDependencies": {
+    "dotenv": "^8.2.0",
+    "jest": "^26.0.1",
+    "supertest": "^4.0.2"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AndreRGunawan/CMS_server.git"
+  },
+  "bugs": {
+    "url": "https://github.com/AndreRGunawan/CMS_server/issues"
+  },
+  "homepage": "https://github.com/AndreRGunawan/CMS_server#readme"
+}
