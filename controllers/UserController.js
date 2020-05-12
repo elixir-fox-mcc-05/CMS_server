@@ -31,7 +31,7 @@ class UserController {
     }
 
     static login (req, res, next) {
-        console.log('@login is called');
+        // console.log('@login is called');
         let { email, password } = req.body
         User.findOne({
             where: { email }

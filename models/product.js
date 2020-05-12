@@ -18,7 +18,15 @@ module.exports = (sequelize, DataTypes) => {
         }
       }
     },
-    image_url: DataTypes.STRING,
+    image_url: {
+      type: DataTypes.STRING,
+      validate: {
+        isURL: {
+          args: true,
+          msg: "Invalid url format for product image"
+        }
+      }
+    },
     description: {
       type: DataTypes.STRING(999),
       defaultValue: "No description"
@@ -33,7 +41,12 @@ module.exports = (sequelize, DataTypes) => {
     },
     users: DataTypes.ARRAY(DataTypes.INTEGER)
   }, {
-    sequelize
+    sequelize,
+    hooks: {
+      beforeCreate: (product) => {
+        if (!product.description) product.description = "No description"
+      }
+    }
   });
   Product.associate = function(models) {
     // associations can be defined here
