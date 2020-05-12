@@ -4,7 +4,7 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "test": "SET NODE_ENV=test && jest --coverage --runInBand --detectOpenHandles",
+    "test": "SET NODE_ENV=test && jest --coverage --runInBand --detectOpenHandles --verbose",
     "dev": "SET NODE_ENV=development && nodemon ./bin/http.js",
     "start": "node app.js"
   },

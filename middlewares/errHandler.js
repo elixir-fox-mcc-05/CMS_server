@@ -4,9 +4,9 @@ module.exports = {
             res.status(401).json({
                 error: 'You have to login to access this page'
             })
-        } else if(err.name === 'SequelizeValidationError') {
+        } else if(Array.isArray(err.errors)) {
             let error = err.errors.map(error => {
-                return error.msg
+                return error.message
             })
 
             res.status(400).json({
