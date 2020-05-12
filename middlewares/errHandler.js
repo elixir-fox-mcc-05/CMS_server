@@ -14,6 +14,7 @@ const errHandler = (err, req, res, next) => {
       message: `Please Login First!`
     });
   } else {
+    console.log(err);
     res.status(err.code || 500).json({
       errors: err
     });
