@@ -1,0 +1,26 @@
+{
+  "development": {
+    "username": "postgres",
+    "password": "postgres",
+    "database": "ecommerce_dev",
+    "host": "127.0.0.1",
+    "dialect": "postgres",
+    "operatorsAliases": false
+  },
+  "test": {
+    "username": "postgres",
+    "password": "postgres",
+    "database": "ecommerce_test",
+    "host": "127.0.0.1",
+    "dialect": "postgres",
+    "logging": false
+  },
+  "production": {
+    "username": "postgres",
+    "password": "postgres",
+    "database": "ecommerce_production",
+    "host": "127.0.0.1",
+    "dialect": "postgres",
+    "operatorsAliases": false
+  }
+}
