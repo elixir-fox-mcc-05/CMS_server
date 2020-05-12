@@ -12,7 +12,7 @@ module.exports = {
       }, {
         name: 'Enervon-C',
         price: '35000',
-        stock: 25,
+        stock: -25,
         createdAt: new Date(),
         updatedAt: new Date()
       }

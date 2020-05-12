@@ -33,11 +33,25 @@ module.exports = (sequelize, DataTypes) => {
     },
     price: {
       type: DataTypes.INTEGER,
-      allowNull: false
+      allowNull: false,
+      validate: {
+        isPositive(value) {
+          if (+value < 0) {
+            throw new Error('Stock cannot be less than 0')
+          }
+        }
+      }
     },
     stock: {
       type: DataTypes.INTEGER,
-      allowNull: false
+      allowNull: false,
+      validate: {
+        isPositive(value) {
+          if (+value < 0) {
+            throw new Error('Stock cannot be less than 0')
+          }
+        }
+      }
     },
     users: DataTypes.ARRAY(DataTypes.INTEGER)
   }, {
