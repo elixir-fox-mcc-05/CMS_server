@@ -70,11 +70,17 @@ class ProductController {
                 id
             }
         })
-            .then(data => {
-                res.status(200).json({
-                    data,
-                    notif: 'Product successfully updated!'
-                })
+            .then(result => {
+                if(result[0] == 1 ) {
+                    res.status(200).json({
+                        notif: 'Product successfully updated!'
+                    })
+                } else {
+                    throw {
+                        msg: "Product not found",
+                        code: 404
+                    }
+                }
             })
             .catch(err => {
                 next(err)
@@ -88,10 +94,17 @@ class ProductController {
                 id
             }
         })
-            .then(() => {
-                res.status(200).json({
-                    notif: 'Product successfully removed!'
-                })
+            .then(result => {
+                if(result == 1 ) {
+                    res.status(200).json({
+                        notif: 'Product successfully removed!'
+                    })
+                } else {
+                    throw {
+                        msg: "Product not found",
+                        code: 404
+                    }
+                }
             })
             .catch(err => {
                 next(err)
