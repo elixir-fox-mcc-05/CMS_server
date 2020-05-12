@@ -1,12 +1,12 @@
 const app = require('../app')
 const request = require('supertest')
+const { User, Product } = require('../models')
 const { queryInterface } = require('../models/index.js').sequelize
 const { encryptPassword } = require('../helpers/bcrypt')
 
 afterAll((done)=> {
-    queryInterface.bulkDelete('Users')
+    User.destroy({ truncate: true, cascade: true, restartIdentity: true})
     .then(()=> {
-        console.log('Db clean up');
         done()
     })
     .catch(err=> {
@@ -37,7 +37,6 @@ beforeAll((done)=> {
         }
     ])
     .then(()=> {
-        console.log('User created ');
         done()
     })
     .catch(err => {

@@ -1,14 +1,17 @@
-const { Product } = require('../models')
+const { verify } = require('../helpers/jwt')
 
-function adminAuthorization(req, res, next){
-    
+function authorization(req, res, next){
+    let decoded = verify(req.headers.access_token)
+    let role = decoded.role
+    if(role == 'admin'){
+        return next()
+    }
+    else {
+        return next({
+            name : 'Unauthorized',
+            errors: [{message: "User not authorized"}]
+        })
+    }
 }
 
-function customerAuthorization(req, res, next){
-
-}
-
-module.exports = {
-    adminAuthorization,
-    customerAuthorization
-}
+module.exports = authorization

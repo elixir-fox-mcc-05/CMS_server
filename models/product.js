@@ -31,10 +31,6 @@ module.exports = (sequelize, DataTypes) => {
         notEmpty: {
           args: true,
           msg: 'Price is required'
-        },
-        min: {
-          args: 0,
-          msg: 'Price should be greater than or equal to 0'
         }
       }
     },
@@ -49,10 +45,6 @@ module.exports = (sequelize, DataTypes) => {
         notEmpty: {
           args: true,
           msg: 'Price is required'
-        },
-        min: {
-          args: 0,
-          msg: 'Price should be greater than or equal to 0'
         }
       }
     },
@@ -77,6 +69,13 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     sequelize,
     modelName: 'Product',
+    validate: {
+      notNegative(){
+        if(this.price < 0 || this.stock < 0){
+          throw new Error('Value should be greater than  0');
+        }
+      }
+    }
   })
   Product.associate = function(models) {
     // associations can be defined here
