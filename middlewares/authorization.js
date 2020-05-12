@@ -5,7 +5,7 @@ module.exports = {
         const { id } = req.params;
 
         Product
-            .findById(id, {
+            .findByPk(id, {
                 include: {
                     model: User,
                     attributes: { exclude: ['password'] }

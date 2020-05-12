@@ -47,7 +47,7 @@ class ProductController {
         const { id } = req.params;
         
         Product
-            .updata({
+            .update({
                 name,
                 image_url,
                 price,

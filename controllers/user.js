@@ -39,7 +39,7 @@ class UserController {
                         let payload = {
                             id: user.id,
                             name: user.name,
-                            email: user.email,
+                            email: user.email
                         };
                         let access_token = generateToken(payload);
                         res.status(200).json({

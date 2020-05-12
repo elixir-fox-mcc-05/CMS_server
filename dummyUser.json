@@ -5,5 +5,12 @@
         "email": "heroman@mail.com",
         "password": "mentormen",
         "role": "admin"
+    },
+    {
+        "id": 2,
+        "name": "Huey McMeow",
+        "email": "hueyguey@mail.com",
+        "password": "mentormen",
+        "role": "user"
     }
 ]

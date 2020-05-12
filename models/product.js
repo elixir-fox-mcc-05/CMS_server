@@ -9,6 +9,10 @@ module.exports = (sequelize, DataTypes) => {
     name: {
       type: DataTypes.STRING,
       allowNull: false,
+      unique: {
+        args: true,
+        msg: 'Product already added to the system'
+      },
       validate: {
         notEmpty: {
           msg: 'Product name can\'t be empty'
@@ -18,6 +22,10 @@ module.exports = (sequelize, DataTypes) => {
     image_url: {
       type: DataTypes.STRING,
       allowNull: false,
+      unique: {
+        args: true,
+        msg: 'Product image already added to the system'
+      },
       validate: {
         notEmpty: {
           msg: 'Product image can\'t be empty'
@@ -35,8 +43,8 @@ module.exports = (sequelize, DataTypes) => {
           msg: 'Product price can\'t be empty'
         },
         min: {
-          args: 0,
-          msg: 'Product price has to be greter than zero'
+          args: [0],
+          msg: 'Product price has to be greater than zero'
         },
         isNumeric:{
           msg: 'Product price must be a numeric value'
@@ -52,6 +60,10 @@ module.exports = (sequelize, DataTypes) => {
         },
         isInt: {
           msg: 'Product stock must be an integer value'
+        },
+        min: {
+          args: [0],
+          msg: 'Product stock has to be greater than zero'
         }
       }
     },
