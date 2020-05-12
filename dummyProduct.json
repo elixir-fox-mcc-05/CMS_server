@@ -1,0 +1,23 @@
+[
+    {
+        "id": 1,
+        "name": "Duke Football",
+        "image_url": "https://fanatics.frgimages.com/FFImage/thumb.aspx?i=/productimages/_2768000/altimages/ff_2768013alt1_full.jpg&w=900",
+        "price": 1800000,
+        "stock": 1
+    },
+    {
+        "id": 2,
+        "name": "Dallas Cowboys Helmet",
+        "image_url": "https://fanatics.frgimages.com/FFImage/thumb.aspx?i=/productimages/_3898000/ff_3898657-ccf691495748ccdae213_full.jpg&w=2000",
+        "price": 1500000,
+        "stock": 15
+    },
+    {
+        "id": 3,
+        "name": "Custom Name Dallas Cowboys Men Jersey",
+        "image_url": "https://fanatics.frgimages.com/FFImage/thumb.aspx?i=/productimages/_1586000/altimages/ff_1586957alt1_full.jpg&w=900",
+        "price": 1200000,
+        "stock": 7
+    }
+]

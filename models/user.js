@@ -43,6 +43,10 @@ module.exports = (sequelize, DataTypes) => {
         len: {
           args: [8],
           msg: 'password must be at least 8 character long'
+        },
+        is: {
+          args: /^\S+\S$/gi,
+          msg: 'password can\'t contain any whitespace character'
         }
       }
     },
@@ -63,6 +67,7 @@ module.exports = (sequelize, DataTypes) => {
       }
     }
   });
+  
   User.associate = function(models) {
     User.hasMany(models.Product);
   };
