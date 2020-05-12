@@ -55,7 +55,7 @@ class UserController{
                 })
             })
             .catch(err => {
-                console.log(err.message)
+                // console.log(err.message)
                 let errorfix = err.message
                 if(errorfix.includes(',')){
                     errorfix = errorfix.split(',')
