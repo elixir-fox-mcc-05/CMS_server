@@ -7,7 +7,7 @@ router.post('/login',UserController.login)
 // router.post('/costumer/login',CostumerController.login)
 // router.post('/costumer/register',CostumerController.register)
 router.post('/register', UserController.register)
-router.use('/product', products)
+router.use('/products', products)
 
 
 
