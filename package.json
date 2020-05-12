@@ -1,0 +1,35 @@
+{
+  "name": "cms_server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest --detectOpenHandles",
+    "start": "node app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/laevenx/CMS_server.git"
+  },
+  "keywords": [],
+  "author": "Grady Wicoady",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/laevenx/CMS_server/issues"
+  },
+  "homepage": "https://github.com/laevenx/CMS_server#readme",
+  "dependencies": {
+    "axios": "^0.19.2",
+    "bcrypt": "^4.0.1",
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "google-auth-library": "^6.0.0",
+    "jsonwebtoken": "^8.5.1",
+    "pg": "^8.1.0",
+    "sequelize": "^5.21.8"
+  },
+  "devDependencies": {
+    "jest": "^26.0.1",
+    "supertest": "^4.0.2"
+  }
+}
