@@ -5,7 +5,6 @@ const { generateToken } = require('../helpers/jwt.js');
 class UserController {
     static login(req, res, next) {
         let { email, password } = req.body;
-
         User
             .findOne({ where: { email }})
                 .then(user => {

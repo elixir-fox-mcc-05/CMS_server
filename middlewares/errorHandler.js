@@ -32,5 +32,11 @@ module.exports = (err, req, res, next) => {
             type: 'unauthorized',
             message: err.errors
         })
+    } else if(err.name === 'Internal Server Error') {
+        res.status(500).json({
+            code: 500,
+            type: 'Internal Server Error',
+            message: err.message
+        })
     }
 }

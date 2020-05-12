@@ -15,8 +15,9 @@ describe('Product Router', function() {
     });
 
     let token = '';
+    let token2 = '';
+    let ProductId = '';
     beforeAll(function(done) {
-        queryInterface.bulkDelete('Products');
         queryInterface.bulkInsert('Users', fakePeople, {
             returning: true
         })
@@ -25,6 +26,10 @@ describe('Product Router', function() {
                 token = generateToken({
                     id: people[0].id,
                     email: people[0].email
+                });
+                token2 = generateToken({
+                    id: people[1].id,
+                    email: people[1].email
                 });
                 done();
             })
@@ -177,8 +182,129 @@ describe('Product Router', function() {
         });
     });
 
+    describe('Read Product', function() {
+        describe('Succsess', function() {
+            test('It will return 200 status code with JSON data', function(done) {
+                request(app)
+                .get('/products')
+                .set('token', token)
+                .expect(200)
+                .expect('Content-Type', /json/)
+                .expect(function(result) {
+                    let data = result.body.Products;
+                    ProductId = data[0].id;
+                    expect(data[0]).toHaveProperty('name');
+                    expect(data[0]).toHaveProperty('price');
+                    expect(data[0]).toHaveProperty('stock');
+                })
+                .end(function(err) {
+                    if (err) {
+                        done(err);
+                    } else {
+                        done();
+                    }
+                })
+            });
+        });
+
+        describe('Failed', function() {
+            test('It will return 401 status code', function(done) {
+                request(app)
+                .get('/products')
+                .expect(401)
+                .expect('Content-Type', /json/)
+                .expect(function(result) {
+                    let data = result.body;
+                    expect(data.message).toContain(`Please login first`);
+                })
+                .end(function(err) {
+                    if (err) {
+                        done(err);
+                    } else {
+                        done();
+                    }
+                })
+            });
+        });
+    });
+
+
+    describe('Update Product', function() {        
+        describe('Success', function() {
+            test('It will show status code 200 with json data', function(done) {
+                request(app)
+                .patch(`/products/${ProductId}`)
+                .set('token', token)
+                .send({
+                    name: 'Minyak',
+                    price: '5000',
+                    stock: '123',
+                    description: 'Minyak baru',
+                    image_url: 'http://google.com'
+
+                })
+                .end(function(err, response) {
+                    if(err) {
+                        console.log(`Error: ${err}`);
+                        return done(err);
+                    } else {
+                        expect(response.status).toBe(200);
+                        expect(response.body.Product).toHaveProperty('name');
+                        expect(response.body.Product).toHaveProperty('price');
+                        return done();
+                    }
+                })
+            });
+        });
+
+        describe('Failed', function() {
+            test(`It will show status code 401 with message "User don't have access"`, function(done) {
+                request(app)
+                .patch(`/products/${ProductId}`)
+                .set('token', token2)
+                .send({
+                    name: 'Minyak',
+                    price: '5000',
+                    stock: '123',
+                    description: 'Minyak baru',
+                    image_url: 'http://google.com'
+
+                })
+                .end(function (err, response) {
+                    if(err) {
+                        console.log(`Error: ${err}`);
+                        return done(err);
+                    } else {
+                        expect(response.status).toBe(401);
+                        expect(response.body.message.message).toContain(`User don't have access`);
+                        return done();
+                    }
+                })
+            });
+        });
+    });
+
+    describe('Delete', function() {
+        describe('Success', function() {
+            test('It will show status code 200 with message "Successfully delete"', function(done) {
+                request(app)
+                .delete(`/products/${ProductId}`)
+                .set('token', token)
+                .end(function (err, response) {
+                    if(err) {
+                        console.log(`Error: ${err}`);
+                        return done(err);
+                    } else {
+                        expect(response.status).toBe(200);
+                        expect(response.body.Message).toContain('Successfully delete');
+                        return done();
+                    }
+                })
+            });
+        });
+    });
+
     afterAll(function(done) {
-        queryInterface.bulkDelete('Products');
         queryInterface.bulkDelete('Users')
             .then(_ => {
                 done();
