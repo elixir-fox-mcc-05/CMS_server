@@ -2,15 +2,16 @@ const { User } = require('../models')
 
 function authorization (req, res, next) {
     let id  = req.UserId
-// console.log(id)
+console.log(id)
     User.findByPk(id)
         .then(user => {
             if(user){
+                // console.log(user.role)
                 if(user.role == "Admin"){
                     next()
                 }else{
                     res.status(401).json({
-                        msg : 'Unauthorized'
+                        msg : 'Unauthorized to use this feature!'
                     })
                 }
             }else{

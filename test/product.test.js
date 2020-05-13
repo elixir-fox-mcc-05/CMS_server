@@ -19,6 +19,7 @@ const Users = require('../admin.json').map(user => {
 })
 let prodId;
 let token;
+let tokenAdmin;
 
 afterAll(done => {
     queryInterface.bulkDelete('Products')
@@ -49,6 +50,11 @@ describe('Product service', () => {
                             id : result[0].id,
                             email : result[0].email
                         })
+                        tokenAdmin = generateToken({
+                            id : result[1].id,
+                            email : result[1].email
+                        })
+
                         done()
                     })
                     .catch(err => {
@@ -108,7 +114,7 @@ describe('Product service', () => {
             request(app)
                 .post('/products')
                 .send(newProduct)
-                .set('token', token)
+                .set('token', tokenAdmin)
                 .end((err, response) => {
                     if(err){
                         return done(err)
@@ -139,7 +145,7 @@ describe('Product service', () => {
             request(app)
                 .put('/products/' + prodId)
                 .send(updatedProduct)
-                .set('token', token)
+                .set('token', tokenAdmin)
                 .end((err, response) => {
                     if(err) {
                         return done(err)
@@ -155,7 +161,7 @@ describe('Product service', () => {
         test('Should return a deleted Product with json', done => {
             request(app)
                 .delete('/products/' + prodId)
-                .set('token', token)
+                .set('token', tokenAdmin)
                 .end((err, response) => {
                     if(err) {
                         return done(err)
@@ -205,7 +211,7 @@ describe('Product service', () => {
             test('should return message Product not found with code 400', done => {
                 request(app)
                     .post('/products/')
-                    .set('token', token)
+                    .set('token', tokenAdmin)
                     .end((err, response) => {
                         if(err) {
                             return done(err)
@@ -229,7 +235,7 @@ describe('Product service', () => {
                 }
                 request(app)
                     .put('/products/' + (prodId + 20))
-                    .set('token', token)
+                    .set('token', tokenAdmin)
                     .send(updateProduct)
                     .end((err, response) => {
                         if(err) {
@@ -253,7 +259,7 @@ describe('Product service', () => {
                 }
                 request(app)
                     .put('/products/' + (prodId + 20))
-                    .set('token', token)
+                    .set('token', tokenAdmin)
                     .send(updateProduct)
                     .end((err, response) => {
                         if(err) {
@@ -289,15 +295,16 @@ describe('Product service', () => {
 
     describe('Authorization test :', () => {
         describe('fail authorization : ', () => {
-            test('should return error with code 400', done => {
+            test('should return error with code 401', done => {
                 request(app)
-                    .post('/products/')
+                    .delete('/products/' + prodId)
+                    .set('token', token)
                     .end((err, response) => {
                         if(err) {
                             return done(err)
                         }else{
-                            expect(response.status).toBe(400)
-                            expect(response.body.error).toContain('Please Login First')
+                            expect(response.status).toBe(401)
+                            expect(response.body.msg).toContain('Unauthorized to use this feature!')
                             return done()
                         }
                     })
