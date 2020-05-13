@@ -9,6 +9,16 @@ class ProductController {
             .catch(err => next(err))
     }
 
+    static findOne(req, res, next) {
+        let { id } = req.params
+        Product.findByPk(id)
+            .then(product => {
+                if (product) res.status(200).json({ product })
+                else next(`Product with id ${id} is not available`)
+            })
+            .catch(err => next(err))
+    }
+
     static create(req, res, next) {
         const { name, description, price, stock, expiry, image_url, category } = req.body;
         // console.log("@create", name);        
@@ -35,6 +45,7 @@ class ProductController {
         let updated = {}
         Product.findByPk(id)
             .then(result => {
+                if (!result) next(`Product with id ${id} is not available`)
                 updated.name = (name) ? name : result.name;
                 updated.description = (description) ? description : result.description;
                 updated.price = (price) ? price : result.price;

@@ -38,7 +38,7 @@ const vitamins = [
 const defaultImgUrl = "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c8/ImageNA.svg/600px-ImageNA.svg.png"
 
 describe('Successful Product operations', () => {
-    describe('Get All Products', () => {
+    describe('Find All Products GET /products', () => {
         beforeAll((done) => {
             queryInterface.bulkDelete('Products')
                 .then(_=> { 
@@ -47,12 +47,6 @@ describe('Successful Product operations', () => {
                         .catch(err => { done(err) })
                 })
                 .catch(err => { done(err) })            
-        })
-    
-        afterAll((done) => {
-            queryInterface.bulkDelete('Products')
-                .then(_=> { done() })
-                .catch(err => { done(err) })
         })
     
         test('Response code 200 returning array of products', (done) => {
@@ -81,8 +75,39 @@ describe('Successful Product operations', () => {
                 })
         })
     })
+
+    describe('Find one by id GET /products/:id', () => {
+        afterAll((done) => {
+            queryInterface.bulkDelete('Products')
+                .then(_=> { done() })
+                .catch(err => { done(err) })
+        })
+
+        test('Response code 200 returning one instance of Product', done => {
+            request(app)
+                .get('/products/1')
+                .end((err, response) => {
+                    if (err) return done(err)
+                    else {
+                        expect(response.status).toBe(200)
     
-    describe('Create Product', () => {
+                        // console.log(response.body);
+                        let { product } = response.body
+                        let vitamin = vitamins[0]
+    
+                        expect(typeof product.id).toBe('number')
+                        expect(product).toHaveProperty('name', vitamin.name)
+                        expect(product).toHaveProperty('category', vitamin.category)
+                        expect(product).toHaveProperty('stock', vitamin.stock)
+                        expect(product).toHaveProperty('price', vitamin.price)
+                        expect(product).toHaveProperty('description', vitamin.description)
+                        return done()
+                    }
+                })
+        })
+    })
+    
+    describe('Create Product POST /products', () => {
         beforeAll((done) => {
             queryInterface.bulkDelete('Products')
                 .then(_=> { done() })
@@ -123,7 +148,7 @@ describe('Successful Product operations', () => {
         })
     })
 
-    describe('Update Product', () => {
+    describe('Update Product PUT /products/:id', () => {
         beforeAll((done) => {
             Product.destroy({ truncate: true, cascade: true, restartIdentity: true})
                 .then( _=> {
@@ -195,7 +220,7 @@ describe('Failed Product operations', () => {
             .catch(err => { done(err) })
     })
 
-    describe('Failed to Create Product', () => {
+    describe('Failed to Create Product POST /products', () => {
         test('Response code 400 product with the same name already exists', done => {
             let vitamin = vitamins[0]
             request(app)
@@ -314,7 +339,7 @@ describe('Failed Product operations', () => {
         })
     })
 
-    describe('Failed to Update Product', () => {
+    describe('Failed to Update Product PUT /products/:id', () => {
         let wrongVitamin = {
             name: 'Elixir Update',
             description: 'Updated Vitamin description',
@@ -324,6 +349,23 @@ describe('Failed Product operations', () => {
             expiry: '2020-08-17',
             image_url: 'https://upload.wikimedia.org/wikipedia/commons/8/8a/404_File_not_found.png'
         }
+
+        test('Response code 500 product not availablee', done => {
+            let fakeId = 999
+            request(app)
+                .put(`/products/${fakeId}`)
+                .end((err, response) => {
+                    if (err) return done(err)
+                    else {
+                        expect(response.status).toBe(500)
+    
+                        // console.log(response.body);
+                        let { error } = response.body    
+                        expect(error).toBe(`Product with id ${fakeId} is not available`)
+                        return done()
+                    }
+                })
+        })
 
         test('Response code 400 expiry date cannot be set in the past', done => {
             let expiredVitamin = wrongVitamin
@@ -367,6 +409,26 @@ describe('Failed Product operations', () => {
                         expect(type).toBe(`Bad Request`)
                         expect(loc).toBe(`@sequelize`)
                         expect(msg).toBe("Invalid url format for product image")
+                        return done()
+                    }
+                })
+        })
+    })
+
+    describe('Failed to Get One Product GET /products/:id', () => {
+        test('Response code 500 returning error message', done => {
+            let fakeId = 999
+            request(app)
+                .get(`/products/${fakeId}`)
+                .end((err, response) => {
+                    if (err) return done(err)
+                    else {
+                        expect(response.status).toBe(500)
+    
+                        // console.log(response.body);
+                        let { error } = response.body
+    
+                        expect(error).toBe(`Product with id ${fakeId} is not available`)
                         return done()
                     }
                 })
