@@ -21,13 +21,11 @@ module.exports = {
       },
       price: {
         allowNull: false,
-        type: Sequelize.INTEGER,
-        min: 0
+        type: Sequelize.INTEGER
       },
       stock: {
         allowNull: false,
-        type: Sequelize.INTEGER,
-        min: 0
+        type: Sequelize.INTEGER
       },
       users: {
         type: Sequelize.ARRAY(Sequelize.INTEGER)

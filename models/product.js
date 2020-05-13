@@ -21,7 +21,7 @@ module.exports = (sequelize, DataTypes) => {
     image_url: {
       type: DataTypes.STRING,
       validate: {
-        isURL: {
+        isUrl: {
           args: true,
           msg: "Invalid url format for product image"
         }
@@ -35,22 +35,30 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
       allowNull: false,
       validate: {
-        isPositive(value) {
-          if (+value < 0) {
-            throw new Error('Stock cannot be less than 0')
-          }
-        }
+        min: {
+          args: [0],
+          msg: 'Stock cannot be less than 0'
+        },
+        // isPositive: (value) => {
+        //   if (+value < 0) {
+        //     throw new Error('Stock cannot be less than 0')
+        //   }
+        // }
       }
     },
     stock: {
       type: DataTypes.INTEGER,
       allowNull: false,
       validate: {
-        isPositive(value) {
-          if (+value < 0) {
-            throw new Error('Stock cannot be less than 0')
-          }
-        }
+        min: {
+          args: [0],
+          msg: 'Stock cannot be less than 0'
+        },
+        // isPositive: (value) => {
+        //   if (+value < 0) {
+        //     throw new Error('Stock cannot be less than 0')
+        //   }
+        // }
       }
     },
     users: DataTypes.ARRAY(DataTypes.INTEGER)
@@ -60,7 +68,18 @@ module.exports = (sequelize, DataTypes) => {
       beforeCreate: (product) => {
         if (!product.description) product.description = "No description"
       }
-    }
+    },
+    // validate: {
+    //   isPositive: () => {
+    //     if (this.price < 0) {
+    //       console.log('@validate price');          
+    //       throw new Error('Price cannot be less than 0')
+    //     } else if (this.stock < 0) {
+    //       console.log('@validate stock');          
+    //       throw new Error('Stock cannot be less than 0')
+    //     }
+    //   }
+    // }
   });
   Product.associate = function(models) {
     // associations can be defined here
