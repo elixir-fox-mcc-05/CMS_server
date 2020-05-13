@@ -59,17 +59,19 @@ module.exports = (sequelize, DataTypes) => {
       stock: {
         allowNull: false,
         type: DataTypes.INTEGER,
-        notNull: {
-          args: true,
-          msg: 'Please insert stock',
-        },
-        notEmpty: {
-          args: true,
-          msg: 'Please insert stock',
-        },
-        min: {
-          args: 0,
-          msg: 'Inputted stock should greater or equal 0',
+        validate: {
+          notNull: {
+            args: true,
+            msg: 'Please insert stock',
+          },
+          notEmpty: {
+            args: true,
+            msg: 'Please insert stock',
+          },
+          min: {
+            args: [0],
+            msg: 'Inputted stock should greater or equal 0',
+          },
         },
       },
     },
