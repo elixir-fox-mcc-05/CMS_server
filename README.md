@@ -2,6 +2,8 @@
 
 ## URL SERVER : https://shielded-bastion-44955.herokuapp.com/
 
+### NOTE : ADD DOTENV CONFIG IF YOU CLONE THIS API IN APP.JS
+
 ####    Create User
 
 * Url
