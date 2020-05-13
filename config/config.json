@@ -15,10 +15,6 @@
     "logging": false
   },
   "production": {
-    "username": "ikkecvpvmfankj",
-    "password": "8415dabb0d4bcffbeae992c3c881366a9fe9959b7441978cf40eee7ee428f093",
-    "database": "d6fsf01j7l8l9b",
-    "host": "ec2-54-157-78-113.compute-1.amazonaws.com",
-    "dialect": "postgres"
+    "use_env_variable" : "DATABASE_URL"
   }
 }
