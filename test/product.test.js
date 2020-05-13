@@ -24,7 +24,7 @@ const adminUser = {
     email: `admin@gmail.com`,
     password: `admin`
 }
-var loginToken = '';
+let loginToken = null;
 beforeAll((done) => {               
     const hashPassword = generatePassword(adminUser.password)
     queryInterface.bulkInsert(`Users`, [{
@@ -35,32 +35,34 @@ beforeAll((done) => {
     }])
         .then(() => {
             console.log(`User created: ${adminUser.email}`)
+            request(app)
+                .post('/users/login')
+                .send(adminUser)
+                .end((err, res) => {
+                    if(err) {
+                        return done(err)
+                    }
+                    else {
+                        // console.log(res.body.token)
+                        loginToken = res.body.token;
+                        console.log('token bos '+loginToken)
+                        return done()
+                    }
+                })
             done()
         })
         .catch(err => (
             done(err)
         ))
     //// authentication
-    request(app)
-        .post('/users/login')
-        .send(adminUser)
-        .end((err, res) => {
-            if(err) {
-                return done(err)
-            }
-            else {
-                console.log(res.body.token)
-                loginToken = res.body.token;
-                return done()
-            }
-        })
+    
 })
 
 describe(`Product feature`, () => {
     //// Create
     describe(`POST /products/`, () => {
         describe(`'Success create`, () => {
-            test(`Should return object with name and default description, image_url, price, stock and status 201 `, (done) => {
+            test(`Should return object with name and default value description, image_url, price, stock and status 201 `, (done) => {
                 const productInput = {
                     name: `test product 1`,
                     description: ``,
@@ -70,13 +72,15 @@ describe(`Product feature`, () => {
                 }
                 request(app)
                     .post('/products/')
+                    .set({'token':loginToken})
                     .send(productInput)
                     .end((err, res) => {
                         if(err){
                             return done(err);
                         }
                         else {
-                            console.log(res.header)
+                            console.log(res.headers)
+                            console.log(res.body)
                             expect(res.status).toBe(201);
                             expect(res.body).toHaveProperty(`id`, expect.any(Number));
                             expect(res.body).toHaveProperty(`name`, productInput.name);
