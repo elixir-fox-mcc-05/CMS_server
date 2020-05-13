@@ -30,7 +30,7 @@ class ProductController {
        Product.findAll(options)
             .then(data => {
                 res.status(200).json({
-                    producks: data
+                    products: data
                 })
             })
             .catch(err => {

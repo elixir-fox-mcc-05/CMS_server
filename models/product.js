@@ -35,10 +35,6 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
       allowNull: false,
       validate: {
-        notEmpty: {
-          args: true,
-          msg: `Price must be filled`
-        },
         min: 
         {
           args: [0],
@@ -50,10 +46,6 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
       allowNull: false,
       validate: {
-        notEmpty: {
-          args: true,
-          msg: `Stock must be filled`
-        },
         min: {
           args: [0],
           msg: `Stock must be equal to or more than 0`
