@@ -6,7 +6,7 @@
   "scripts": {
     "test": "set NODE_ENV=test&&jest --detectOpenHandles --runInBand --verbose",
     "dev" : "set NODE_ENV=test&& sequelize db:seed:all",
-    "start": "set NODE_ENV = dev && nodemon bin/server.js"
+    "start": "node bin/server.js"
   },
   "repository": {
     "type": "git",
