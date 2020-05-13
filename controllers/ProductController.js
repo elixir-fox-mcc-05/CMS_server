@@ -9,7 +9,7 @@ class ProductController {
         ]
       })
       .then((data) => {
-        return res.status(200).json({ data })
+        return res.status(200).json(data)
       })
       .catch((err) => {
         return next({
@@ -31,7 +31,28 @@ class ProductController {
         ]
       })
       .then((data) => {
-        return res.status(200).json({ data })
+        return res.status(200).json(data)
+      })
+      .catch((err) => {
+        next({
+          name: 'NotFound',
+          errors: [{ msg: 'Data Not Found' }]
+        })
+      })
+  }
+
+  static findByGenre(req, res, next) {
+    const genre = req.params.genre
+    Product.findAll({
+        where: {
+          genre: genre,
+          stock: {
+            [Op.gt]: 0
+          }
+        }
+      })
+      .then((data) => {
+        return res.status(200).json(data)
       })
       .catch((err) => {
         next({
@@ -49,7 +70,7 @@ class ProductController {
         }
       })
       .then((data) => {
-        return res.status(200).json({ data })
+        return res.status(200).json(data)
       })
       .catch((err) => {
         next({
@@ -62,38 +83,37 @@ class ProductController {
   static addProduct(req, res, next) {
     const payload = {
       name: req.body.name,
-      image: req.body.image,
+      image_url: req.body.image_url,
       stock: +req.body.stock,
       description: req.body.description,
-      price: +req.body.price
+      price: +req.body.price,
+      genre: req.body.genre
     }
     console.log(payload)
     Product.create(payload)
       .then((data) => {
         return res.status(201).json({
+          id: data.id,
           name: data.name,
-          image: data.image,
+          image_url: data.image_url,
           stock: data.stock,
           description: data.description,
           price: data.price
         })
       })
       .catch((err) => {
-        next({
-          name: 'InternalServerError',
-          errors: [{ msg: 'Failed to Create.' }]
-        })
+        next(err)
       })
   }
 
   static editProduct(req, res, next) {
-    // const id = req.params.id
     const payload = {
       name: req.body.name,
-      image: req.body.image,
+      image_url: req.body.image_url,
       stock: +req.body.stock,
       description: req.body.description,
-      price: +req.body.price
+      price: +req.body.price,
+      genre: req.body.genre
     }
     Product.update(payload, {
         where: {
@@ -102,11 +122,13 @@ class ProductController {
       })
       .then((data) => {
         return res.status(201).json({
+          id: +req.params.id,
           name: req.body.name,
-          image: req.body.image,
+          image_url: req.body.image_url,
           stock: +req.body.stock,
           description: req.body.description,
-          price: +req.body.price
+          price: +req.body.price,
+          genre: req.body.genre
         })
       })
       .catch((err) => {

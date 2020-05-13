@@ -6,7 +6,6 @@ module.exports = {
       type: "unique",
       name: "custom_unique_email"
     })
-
   },
 
   down: (queryInterface, Sequelize) => {

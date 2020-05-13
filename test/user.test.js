@@ -3,7 +3,6 @@ const app = require('../app');
 const { sequelize } = require('../models');
 const { queryInterface } = sequelize;
 const bcrypt = require('bcrypt');
-// const { Product, User } = require('../models')
 const userTest = {
   email: 'test@mail.com',
   password: 'test',
@@ -168,7 +167,6 @@ describe('User', () => {
               console.log('There is some error: ', err);
               return done(err);
             } else {
-              console.log(response.body);
               expect(response.status).toBe(400);
               expect(response.body).toHaveProperty('errors', errors);
               return done();
@@ -211,7 +209,6 @@ describe('User', () => {
               console.log('There is some error: ', err);
               return done(err);
             } else {
-              console.log(response.body);
               expect(response.status).toBe(400);
               expect(response.body).toHaveProperty('errors', errors);
               return done();
@@ -233,7 +230,6 @@ describe('User', () => {
               console.log('There is some error: ', err);
               return done(err);
             } else {
-              console.log(response.body);
               expect(response.status).toBe(400);
               expect(response.body).toHaveProperty('errors', errors);
               return done();

@@ -8,12 +8,16 @@ module.exports = (sequelize, DataTypes) => {
   Admin.init({
     email: {
       type: DataTypes.STRING,
-      isEmail: true,
       allowNull: false,
+      unique: true,
       validate: {
         notNull: {
           args: true,
           msg: 'Email required.'
+        },
+        isEmail: {
+          args: true,
+          msg: "Must be an email"
         }
       }
     },
@@ -30,14 +34,11 @@ module.exports = (sequelize, DataTypes) => {
           msg: 'Password length must between 4 or 18 Characters.'
         }
       }
-    },
-
-    isAdmin: DataTypes.BOOLEAN
+    }
   }, {
     hooks: {
       beforeCreate(Admin, options) {
         Admin.password = generatePassword(Admin.password)
-        Admin.isAdmin = true
       }
     },
     sequelize

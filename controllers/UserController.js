@@ -4,16 +4,13 @@ const { comparePassword } = require('../helpers/bcrypt')
 class UserController {
 
   static register(req, res, next) {
-    console.log('----register----');
     const payload = {
       email: req.body.email,
       password: req.body.password,
       image: req.body.image
     }
-    console.log(payload);
     User.create(payload)
       .then((result) => {
-        console.log('berhasil buat')
         let newUser = {
           id: result.id,
           email: result.email
@@ -40,7 +37,6 @@ class UserController {
         }
       })
       .then((data) => {
-        console.log('dapet data')
         if (data) {
           let decrypted = comparePassword(payload.password, data.password)
           if (decrypted) {
@@ -48,7 +44,6 @@ class UserController {
               id: data.id,
               email: data.email
             }
-            console.log('berhasi login')
             let access_token = generateToken(userdata)
             return res.status(200).json({
               id: data.id,

@@ -44,7 +44,6 @@ module.exports = (sequelize, DataTypes) => {
     hooks: {
       beforeCreate(User, options) {
         User.password = generatePassword(User.password)
-        console.log('beforeCreate', User.password);
         User.balance = 0
       }
     },

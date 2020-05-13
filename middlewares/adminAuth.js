@@ -13,8 +13,10 @@ function Auth(req, res, next) {
           }
         })
         .then((result) => {
-          if (result) next()
-          else next({ name: 'Unauthenticated' })
+          if (result) {
+            console.log('sukses');
+            next()
+          } else next({ name: 'Unauthenticated' })
         })
         .catch(next)
     } else {

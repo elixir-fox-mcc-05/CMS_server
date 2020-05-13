@@ -9,5 +9,4 @@ const generateToken = (payload) => {
 const verifyToken = (payload) => {
   return jwt.verify(payload, SECRET)
 }
-
 module.exports = { generateToken, verifyToken }
