@@ -51,7 +51,7 @@ module.exports = (sequelize, DataTypes) => {
             msg: 'Please insert price',
           },
           min: {
-            args: 0,
+            args: [0],
             msg: 'Inputted price should greater or equal 0',
           },
         },
