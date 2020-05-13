@@ -1,0 +1,20 @@
+[
+    {
+        "name" : "Jordan 1 Retro High Off-White University Blue",
+        "price": 22000000 ,
+        "stock": 4,
+        "imageUrl": "https://d38t85204sb0x0.cloudfront.net/eyJidWNrZXQiOiJraWNrYXZlbnVlLWFzc2V0cyIsImtleSI6InByb2R1Y3RzLzEzMTEvNTgxYmQ5MGQtMWY0Zi00MTYyLTgwZjMtZGM5ZjQ0M2IxODczLmpwZWciLCJlZGl0cyI6eyJyZXNpemUiOnsid2lkdGgiOjUwMH19fQ=="
+    },
+    {
+        "name" : "Nike Air Yeezy 1 Zen Grey",
+        "price": 61500000 ,
+        "stock": 3,
+        "imageUrl": "https://d38t85204sb0x0.cloudfront.net/eyJidWNrZXQiOiJraWNrYXZlbnVlLWFzc2V0cyIsImtleSI6InByb2R1Y3RzLzMyOTUvMDY1YzJhNjctNWEyYy00M2ZhLWFjMmUtMGUzNWRmZmNiNDQ1LmpwZWciLCJlZGl0cyI6eyJyZXNpemUiOnsid2lkdGgiOjUwMH19fQ=="
+    },
+    {
+        "name" : "adidas Pharrell NMD Hu China Pack Happy Gold (Friends and Family)",
+        "price": 40800000 ,
+        "stock": 4,
+        "imageUrl": "https://d38t85204sb0x0.cloudfront.net/eyJidWNrZXQiOiJraWNrYXZlbnVlLWFzc2V0cyIsImtleSI6InByb2R1Y3RzLzEzNjkvNTA2YTlmN2MtMzQ3Zi00OTYyLWIyODQtYmZkZWFhZTY5MTMzLmpwZWciLCJlZGl0cyI6eyJyZXNpemUiOnsid2lkdGgiOjUwMH19fQ=="
+    }
+]

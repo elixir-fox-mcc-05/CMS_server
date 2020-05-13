@@ -1,0 +1,17 @@
+[
+    {
+        "email": "kalys@gmail.com",
+        "password": "123123",
+        "role": "Admin"
+    },
+    {
+        "email": "Admin@gmail.com",
+        "password": "123123",
+        "role": "Admin"
+    },
+    {
+        "email": "Admin100@gmail.com",
+        "password": "123123",
+        "role": "Admin"
+    }
+]

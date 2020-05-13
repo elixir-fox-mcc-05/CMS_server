@@ -4,7 +4,7 @@ const {checkPassword} = require('../helpers/bcrypt.js')
 const {generateToken} = require('../helpers/jwt.js')
 
 class UserController {
-    static register(req, res){
+    static register(req, res, next){
     const {email, password} = req.body;
     User.create({ email, password })
         .then(user => {
@@ -14,10 +14,7 @@ class UserController {
             })
         })
         .catch(err => {
-            console.log(err)
-            res.status(500).json({
-                error : err.message
-            })
+            next(err)
         })
     }
     static logIn(req, res, next) {
@@ -33,21 +30,21 @@ class UserController {
                         let token = generateToken({
                             id : result.id,
                             email : result.email,
-                            organisation : result.organisation
                         })
-                        res.status(201).json({
-                            id : result.id, email : result.email, token, organisation : result.organisation
+                        res.status(200).json({
+                            id : result.id, email : result.email, token
                         })
                     }else{
                         throw {
-                            msg : 'email or password wrong',
+                            message : 'email or password wrong',
                             code : 401
                         }
                     }
                 }else{
-                    res.status(400).json({
-                        msg : 'Email and Password not match'
-                    })
+                    throw {
+                        message : 'Email and Password not found',
+                        code : 404
+                    }
                 }
             })
             .catch(err => {

@@ -11,7 +11,8 @@
     "password": "admin",
     "database": "database_test_eCommerce",
     "host": "127.0.0.1",
-    "dialect": "postgres"
+    "dialect": "postgres",
+    "logging": false
   },
   "production": {
     "username": "postgres",
