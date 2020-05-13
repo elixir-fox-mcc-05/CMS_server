@@ -9,13 +9,13 @@ const sinon = require('sinon');
 ////// delete all data in db test
 afterAll((done) => {            //// similar like seeding delete data
     queryInterface.bulkDelete('Users')
-    .then(() => {
-        console.log(`DB clean up`)
-        done()
-    })
-    .catch(err => {
-        done(err)
-    })
+        .then(() => {
+            console.log(`DB clean up table Users`)
+            done()
+        })
+        .catch(err => {
+            done(err)
+        })
 })
 
 /////// create dummy user (in my case, initial admin account already exist)
@@ -40,11 +40,11 @@ beforeAll((done) => {               //// similar like seeding data
         ))
 })
 
-describe(`User system`, () => {
+describe(`User feature`, () => {
     ///// Register
     describe(`POST /users/register`, () => {
         describe(`Success register`, () => {
-            test(`should return object with id and email and status 201`, (done) => {
+            test(`Should return object with id and email and status 201`, (done) => {
                 const userInput = {
                     email: 'test@gmail.com',
                     password: 'test'
@@ -68,7 +68,7 @@ describe(`User system`, () => {
             })
         })
         describe(`Error register`, () => {
-            test(`should return error with status 400 because missing email and password`, (done) => {
+            test(`Should return error with status 400 because missing email and password`, (done) => {
                 const errors = [
                     {
                         message: 'E-mail must be filled'
@@ -98,7 +98,7 @@ describe(`User system`, () => {
                         }
                     })
             })
-            test(`should return error with status 400 because missing email`, (done) => {
+            test(`Should return error with status 400 because missing email`, (done) => {
                 const errors = [
                     {
                         message: 'E-mail must be filled'
@@ -125,7 +125,7 @@ describe(`User system`, () => {
                         }
                     })
             })
-            test(`should return error with status 400 because missing password`, (done) => {
+            test(`Should return error with status 400 because missing password`, (done) => {
                 const errors = [
                     {
                         message: 'Password must be filled'
@@ -149,7 +149,7 @@ describe(`User system`, () => {
                         }
                     })
             })
-            test(`should return error with status 400 because email not in email format`, (done) => {
+            test(`Should return error with status 400 because email not in email format`, (done) => {
                 const errors = [
                     {
                         message: 'E-mail must be in format <youremail@mail.com>'
@@ -173,7 +173,7 @@ describe(`User system`, () => {
                         }
                     })
             })
-            test(`should return error with status 400 because email unique`, (done) => {
+            test(`Should return error with status 400 because email unique`, (done) => {
                 const errors = [
                     {
                         message: 'E-mail already registered'
@@ -193,7 +193,7 @@ describe(`User system`, () => {
                         }
                     })
             })
-            test(`should return error with status 400 because email and password null`, (done) => {
+            test(`Should return error with status 400 because email and password null`, (done) => {
                 const errors = [
                     {
                         message: 'User.email cannot be null'
@@ -220,13 +220,13 @@ describe(`User system`, () => {
     })
     
     /// Login
-    //// ///// ///cehck token with sinon
+    //// ///// ///check token with sinon
     describe(`POST /users/login`, () => {
         describe(`Success login`, () => {
             ////proses stub
             sinon.stub(jwt, 'sign').returns('Hash_JWT')
             sinon.stub(jwt, 'verify').returns({email: adminUser.email})
-            test(`should return success with token and status 201`, (done) => {
+            test(`Should return success with token and status 201`, (done) => {
                 request(app)
                     .post('/users/login')
                     .send(adminUser)
@@ -235,7 +235,6 @@ describe(`User system`, () => {
                             return done(err)
                         }
                         else {
-                            console.log(res.body)
                             expect(res.status).toBe(201);
                             expect(res.body).toHaveProperty('token', 'Hash_JWT');
                             return done()
@@ -245,7 +244,7 @@ describe(`User system`, () => {
             })
         })
         describe(`Error login`, () => {
-            test(`should return error with status 400 because missing email and password`, (done) => {
+            test(`Should return error with status 400 because missing email and password`, (done) => {
                 const errors = [
                     {
                         message: 'Invalid E-mail/Password'
@@ -269,7 +268,7 @@ describe(`User system`, () => {
                         }
                     })
             })
-            test(`should return error with status 400 because missing email`, (done) => {
+            test(`Should return error with status 400 because missing email`, (done) => {
                 const errors = [
                     {
                         message: 'Invalid E-mail/Password'
@@ -293,7 +292,7 @@ describe(`User system`, () => {
                         }
                     })
             })
-            test(`should return error with status 400 because missing password`, (done) => {
+            test(`Should return error with status 400 because missing password`, (done) => {
                 const errors = [
                     {
                         message: 'Invalid E-mail/Password'
@@ -317,7 +316,7 @@ describe(`User system`, () => {
                         }
                     })
             })
-            test(`should return error with status 400 because wrong password`, (done) => {
+            test(`Should return error with status 400 because wrong password`, (done) => {
                 const errors = [
                     {
                         message: 'Invalid E-mail/Password'
@@ -341,15 +340,15 @@ describe(`User system`, () => {
                         }
                     })
             })
-            test(`should return error with status 400 because email and password not registered`, (done) => {
+            test(`Should return error with status 400 because email and password not registered`, (done) => {
                 const errors = [
                     {
                         message: 'Invalid E-mail/Password'
                     }
                 ]
                 const userInput = {
-                    email: 'test@gmail.com',
-                    password: 'test'
+                    email: 'unknown@gmail.com',
+                    password: 'unknown'
                 }
                 request(app)
                     .post('/users/login')
@@ -359,8 +358,6 @@ describe(`User system`, () => {
                             return done(err) //// err for code supertest
                         }
                         else {
-                            console.log(res.body)
-                            console.log(res.status)
                             expect(res.status).toBe(400);
                             expect(res.body).toHaveProperty('errors', errors);
                             return done()
@@ -369,11 +366,20 @@ describe(`User system`, () => {
             })
         })
     })
-    /// NOTE /// /// check token with type string
+})
+
+
+
+
+
+
+
+/// NOTE /// /// check token with type string
+
+
     // describe(`POST /users/login`, () => {
     //     describe(`Success login`, () => {
-    //         ////proses stub
-    //         test(`should return success with token and status 201`, (done) => {
+    //         test(`Should return success with token and status 201`, (done) => {
     //             request(app)
     //                 .post('/users/login')
     //                 .send(adminUser)
@@ -392,4 +398,3 @@ describe(`User system`, () => {
     //         })
     //     })
     // })
-})
