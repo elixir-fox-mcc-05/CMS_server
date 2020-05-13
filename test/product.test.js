@@ -1,6 +1,16 @@
 const app = require('../app.js')
 const request = require('supertest')
 const { queryInterface } = require('../models/index.js').sequelize
+const { Product, User } = require('../models/index.js')
+
+beforeAll( done => {
+    Promise.all([
+        Product.destroy({ truncate: true, cascade: true, restartIdentity: true}),
+        User.destroy({ truncate: true, cascade: true, restartIdentity: true})
+    ])  
+    .then(_=> { done() })
+    .catch(err => { done(err) })
+})
 
 const vitamins = [
     {
@@ -9,6 +19,7 @@ const vitamins = [
         price: 3000,
         stock: 20,
         category : 'Vitamin',
+        expiry: '2020-12-12',
         createdAt: new Date(),
         updatedAt: new Date()
     },
@@ -18,6 +29,7 @@ const vitamins = [
         price: 35000,
         stock: 5,
         category : 'Vitamin',
+        expiry: '2020-12-12',
         createdAt: new Date(),
         updatedAt: new Date()
     }
@@ -28,9 +40,13 @@ const defaultImgUrl = "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c8
 describe('Successful Product operations', () => {
     describe('Get All Products', () => {
         beforeAll((done) => {
-            queryInterface.bulkInsert('Products', vitamins)
-                .then(_=> { done() })
-                .catch(err => { done(err) })
+            queryInterface.bulkDelete('Products')
+                .then(_=> { 
+                    queryInterface.bulkInsert('Products', vitamins)
+                        .then(_=> { done() })
+                        .catch(err => { done(err) })
+                })
+                .catch(err => { done(err) })            
         })
     
         afterAll((done) => {
@@ -66,7 +82,7 @@ describe('Successful Product operations', () => {
         })
     })
     
-    describe('Create Products', () => {
+    describe('Create Product', () => {
         beforeAll((done) => {
             queryInterface.bulkDelete('Products')
                 .then(_=> { done() })
@@ -82,6 +98,7 @@ describe('Successful Product operations', () => {
     
         test('Success: Response code 201 returning created product', done => {
             let vitamin = vitamins[0]
+            
             request(app)
                 .post('/products')
                 .send(vitamin)
@@ -91,12 +108,13 @@ describe('Successful Product operations', () => {
                         expect(response.status).toBe(201)
     
                         // console.log(response.body);                    
-                        let { product, msg } = response.body
-    
+                        let { product, msg } = response.body       
                         expect(typeof product.id).toBe('number')
                         expect(product).toHaveProperty('name', vitamin.name)
                         expect(product).toHaveProperty('description', vitamin.description)
-                        expect(product).toHaveProperty('description', vitamin.description)
+                        expect(product).toHaveProperty('price', vitamin.price)
+                        expect(product).toHaveProperty('stock', vitamin.stock)
+                        expect(product).toHaveProperty('category', vitamin.category)
                         expect(product).toHaveProperty('image_url', defaultImgUrl)
                         expect(msg).toBe('Product has been successfully added')
                         return done()
@@ -104,11 +122,65 @@ describe('Successful Product operations', () => {
                 })
         })
     })
+
+    describe('Update Product', () => {
+        beforeAll((done) => {
+            Product.destroy({ truncate: true, cascade: true, restartIdentity: true})
+                .then( _=> {
+                    queryInterface.bulkInsert('Products', vitamins)
+                        .then(_=> { done() })
+                        .catch(err => { done(err) })
+                })
+                .catch(err => { done(err) })                      
+        })
+
+        afterAll((done) => {
+            queryInterface.bulkDelete('Products')
+                .then(_=> { done() })
+                .catch(err => { done(err) })
+        })
+
+        test('Response code 200 product has been successfully updated', done => {
+            let updatedVitamin = {
+                name: 'Elixir Update',
+                description: 'Updated Vitamin description',
+                price: 100,
+                stock: 100,
+                category: 'Multivitamin',
+                expiry: '2045-08-17',
+                image_url: 'https://upload.wikimedia.org/wikipedia/commons/8/8a/404_File_not_found.png'
+            }
+
+            request(app)
+                .put('/products/1')
+                .send(updatedVitamin)
+                .end((err, response) => {
+                    if (err) return done(err)
+                    else {
+                        expect(response.status).toBe(200)
+    
+                        // console.log(response.body);                    
+                        let { product, msg } = response.body
+    
+                        expect(product).toHaveProperty('id', 1)
+                        expect(product).toHaveProperty('name', updatedVitamin.name)
+                        expect(product).toHaveProperty('description', updatedVitamin.description)
+                        expect(product).toHaveProperty('price', updatedVitamin.price)
+                        expect(product).toHaveProperty('stock', updatedVitamin.stock)
+                        expect(product).toHaveProperty('category', updatedVitamin.category)
+                        expect(product).toHaveProperty('image_url', updatedVitamin.image_url)
+                        expect(msg).toBe(`Product ${updatedVitamin.name} has been successfully updated`)
+                        return done()
+                    }
+                })
+        })
+    })
 })
+
 
 describe('Failed Product operations', () => {
     beforeAll((done) => {
-        queryInterface.bulkDelete('Products')
+        Product.destroy({ truncate: true, cascade: true, restartIdentity: true})
             .then(_=> { 
                 queryInterface.bulkInsert('Products', vitamins)
                     .then(_=> { done() })
@@ -123,7 +195,7 @@ describe('Failed Product operations', () => {
             .catch(err => { done(err) })
     })
 
-    describe('Failed to create Product', () => {
+    describe('Failed to Create Product', () => {
         test('Response code 400 product with the same name already exists', done => {
             let vitamin = vitamins[0]
             request(app)
@@ -242,5 +314,62 @@ describe('Failed Product operations', () => {
         })
     })
 
+    describe('Failed to Update Product', () => {
+        let wrongVitamin = {
+            name: 'Elixir Update',
+            description: 'Updated Vitamin description',
+            price: 100,
+            stock: 100,
+            category: 'Multivitamin',
+            expiry: '2020-08-17',
+            image_url: 'https://upload.wikimedia.org/wikipedia/commons/8/8a/404_File_not_found.png'
+        }
 
+        test('Response code 400 expiry date cannot be set in the past', done => {
+            let expiredVitamin = wrongVitamin
+            expiredVitamin.expiry = '2015-08-09'
+
+            request(app)
+                .put('/products/1')
+                .send(expiredVitamin)
+                .end((err, response) => {
+                    if (err) return done(err)
+                    else {
+                        expect(response.status).toBe(400)
+    
+                        // console.log(response.body);                    
+                        let { msg, loc, type } = response.body
+                        
+                        expect(type).toBe(`Bad Request`)
+                        expect(loc).toBe(`@sequelize`)
+                        expect(msg).toBe("Expiry date cannot be set in the past")
+                        return done()
+                    }
+                })
+        })
+
+        test('Response code 400 invalid image_url format', done => {            
+            let noImageVitamin = wrongVitamin
+            noImageVitamin.expiry = '2020-12-12'
+            noImageVitamin.image_url = 'hps://upload.wikimedia.org/wiki'
+
+            request(app)
+                .put('/products/1')
+                .send(noImageVitamin)
+                .end((err, response) => {
+                    if (err) return done(err)
+                    else {
+                        expect(response.status).toBe(400)
+    
+                        // console.log(response.body);                    
+                        let { msg, loc, type } = response.body
+                        
+                        expect(type).toBe(`Bad Request`)
+                        expect(loc).toBe(`@sequelize`)
+                        expect(msg).toBe("Invalid url format for product image")
+                        return done()
+                    }
+                })
+        })
+    })
 })
