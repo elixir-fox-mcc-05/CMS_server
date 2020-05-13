@@ -5,11 +5,9 @@ const {Role} = require("../models");
 function Authorization (req, res, next){
     const id = req.currentUser;
     User
-        .findByPk(id, {
-            include : Role
-        })
+        .findByPk(id)
         .then(user => {
-            if(user.Role.name === "admin"){
+            if(user.RoleId === 2){
                 next();
             } else {
                 return next({
@@ -23,3 +21,5 @@ function Authorization (req, res, next){
             return next(err);
         });
 }
+
+module.exports = Authorization;

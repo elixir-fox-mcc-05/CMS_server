@@ -17,13 +17,15 @@ module.exports = (sequelize, DataTypes) => {
     price: {
       type : DataTypes.INTEGER,
       validate : {
-        notEmpty : true
+        notEmpty : true,
+        min : 1
       }
     },
     stock: {
       type : DataTypes.INTEGER,
       validate : {
-        notEmpty : true
+        notEmpty : true,
+        min : 1
       }
     },
     CategoryId : {
@@ -33,7 +35,7 @@ module.exports = (sequelize, DataTypes) => {
         key : "id"
       },
       onDelete : "cascade",
-      onUpdate : "cascade"
+      onUpdate : "cascade",
     }
   }, {
     sequelize,

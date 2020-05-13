@@ -38,6 +38,7 @@ class ControllerUser {
                 }
             })
             .catch(err => {
+                console.log(err)
                 return next(err);
             });
     }

@@ -14,7 +14,4 @@ app.use(express.json());
 app.use(router);
 app.use(errHandler);
 
-app.listen(port, ()=> {
-    console.log("This app listen to port ", port);
-    
-});
+module.exports = app;

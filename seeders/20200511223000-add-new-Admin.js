@@ -5,8 +5,8 @@ module.exports = {
   up: (queryInterface, Sequelize) => {
     let data = [{
       name : "test",
-      email : "test@gmail.com",
-      password : generatePassword("testtest"),
+      email : "yodji@gmail.com",
+      password : "$2a$15$qfZE3BWVPG7j54fdoqueY.rdd3O9AmGsmsja/Y6hhKghPUtK9PEyG",
       RoleId : 2,
       createdAt : new Date(),
       updatedAt : new Date()

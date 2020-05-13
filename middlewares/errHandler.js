@@ -20,13 +20,24 @@ module.exports = (err, req, res, next) => {
             } else if(err.errors[0].path === "image_url"){
                 report.msg = "Image Url cannot be empty";
             } else if(err.errors[0].path === "price") {
-                report.msg = "Price cannot be empty";
+                report.msg = "Only valid integer from 1 is accepted";
             } else if(err.errors[0].path === "stock") {
-                report.msg = "Stock cannot be empty";
+                report.msg = "Only valid integer from 1 is accepted";
             }
             return res.status(400).json(report);
         } else if (err.name === "SequelizeUniqueConstraintError"){
-            report.msg = "Your email already exist";
+            if(err.errors[0].path === "email"){
+                report.msg = "Your email already exist";
+            } else if(err.errors[0].path === "name"){
+                report.msg = "Name already exist";
+            } else if(err.errors[0].path === "price"){
+                report.msg = "Only valid integer from 1 is accepted";
+            } else if(err.errors[0].path === "stock"){
+                report.msg = "Only valid integer from 1 is accepted";
+            }
+            return res.status(400).json(report);
+        } else if (err.name === "SequelizeDatabaseError"){
+            report.msg = "Only valid integer from 1 is accepted";
             return res.status(400).json(report);
         }
     } else {
