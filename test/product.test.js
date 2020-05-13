@@ -94,6 +94,7 @@ describe('Product', () => {
           });
       });
     });
+    
     describe('error Add product', () => {
       test('should send error and status 400 because missing name,image_url,price and stock', done => {
         const errors = [
@@ -127,7 +128,110 @@ describe('Product', () => {
           });
       });
     });
-      
+
+    const newProduct1={
+      image_url:"test",
+      price: 15000,
+      stock: 10 }
+    describe('error Add product with name empty', () => {
+      test('should send error and status 400 because missing name', done => {
+        const errors = [
+          {
+            message: 'Name require'
+          }
+
+        ];
+        request(app)
+          .post('/product')
+          .set({'token':token})
+          .send(newProduct1)
+          .end((err, response) => {
+            if (err) {
+              console.log('There is some error: ', err);
+              return done(err);
+            } else {
+              expect(response.status).toBe(400);              
+              expect(response.body).toHaveProperty('errors', errors);
+              return done();
+            }
+          });
+      });
+    });  
+
+    const newProduct2={
+      name : "test",
+      price: 15000,
+      stock: 10 }
+    describe('error Add product with Images_url empty', () => {
+      test('should send error and status 400 because missing Images_url', done => {
+        const errors = [
+          {
+            message: 'Images require'
+          }
+
+        ];
+        request(app)
+          .post('/product')
+          .set({'token':token})
+          .send(newProduct2)
+          .end((err, response) => {
+            if (err) {
+              console.log('There is some error: ', err);
+              return done(err);
+            } else {
+              expect(response.status).toBe(400);              
+              expect(response.body).toHaveProperty('errors', errors);
+              return done();
+            }
+          });
+      });
+    });  
+    const newProduct3={
+      name : "test",
+      image_url:"test",
+      stock: 10 }
+    describe('error Add product with name price', () => {
+      test('should send error and status 400 because missing price', done => {
+           request(app)
+          .post('/product')
+          .set({'token':token})
+          .send(newProduct3)
+          .end((err, response) => {
+            if (err) {
+              console.log('There is some error: ', err);
+              return done(err);
+            } else {
+              expect(response.status).toBe(400);              
+              expect(response.body).toHaveProperty("errors",[{"message": "Price require"}]);
+              return done();
+            }
+          });
+      });
+    });
+
+    const newProduct4={
+      name : "Test",
+      image_url:"test",
+      price: 14000 }
+    describe('error Add product with stock empty', () => {
+      test('should send error and status 400 because missing stock', done => {
+        
+        request(app)
+          .post('/product')
+          .set({'token':token})
+          .send(newProduct4)
+          .end((err, response) => {
+            if (err) {
+              console.log('There is some error: ', err);
+              return done(err);
+            } else {
+              expect(response.status).toBe(400);              
+              expect(response.body).toHaveProperty("errors",[{"message": "stock require"}]);
+              return done();
+            }
+          });
+      });
+    });
   });
 
 
@@ -153,6 +257,78 @@ describe('Product', () => {
             }
           });
       });
+    });
+
+    describe('Failed Update Product', () => {
+      describe('error Update product with name empty',()=>{
+        test('should send Message and status 400', done => {
+          request(app)
+            .put('/product/1')
+            .set({'token':token})
+            .send({name : "",
+                  image_url:"test",
+                  price: 15000,
+                  stock: 10})
+            .end((err, response) => {
+              if (err) {
+                console.log('There is some error: ', err);
+                return done(err);
+              } else {              
+                expect(response.status).toBe(400);
+                expect(response.body).toHaveProperty('errors',  [{"message": "Validation notEmpty on name failed"}]);
+                
+                return done();
+              }
+            });
+        });
+      })
+    });
+
+    describe('Failed Update Product', () => {
+      describe('error Update product with price < 0',()=>{
+        test('should send Message and status 400', done => {
+          request(app)
+            .put('/product/1')
+            .set({'token':token})
+            .send({name : "Minyak goreng lagi",
+                  price: -1,  
+                  stock: 10})
+            .end((err, response) => {
+              if (err) {
+                console.log('There is some error: ', err);
+                return done(err);
+              } else {              
+                expect(response.status).toBe(400);
+                expect(response.body).toHaveProperty('errors');
+                
+                return done();
+              }
+            });
+        });
+      })
+    });
+    describe('Failed Update Product', () => {
+      describe('error Update product with stock  < 0',()=>{
+        test('should send Message and status 400', done => {
+          request(app)
+            .put('/product/1')
+            .set({'token':token})
+            .send({name : "Minyak goreng lagi",
+                  price: 15000,  
+                  stock: -1})
+            .end((err, response) => {
+              if (err) {
+                console.log('There is some error: ', err);
+                return done(err);
+              } else {              
+                expect(response.status).toBe(400);
+                expect(response.body).toHaveProperty('errors');
+                
+                return done();
+              }
+            });
+        });
+      })
     });
   });
   describe('Find All /Product', () => {

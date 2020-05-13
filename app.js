@@ -34,13 +34,21 @@ app.use((err, req, res, next) => {
     return res.status(400).json({
       errors
     });
-  } else if (err.name == 'SequelizeForeignKeyConstraintError') {    
+  } else if (err.name == 'SequelizeDatabaseError') {
+    const errors = err.errors.map(el => {
+      return {
+        message: el.message
+      };
+    });
+    return res.status(400).json({
+      errors
+    });
+  }else if (err.name == 'SequelizeForeignKeyConstraintError') {    
     return res.status(403).json({
-      message: "elete on table violates foreign key constraint "
+      message: "delete on table violates foreign key constraint "
     });
   } else {
-    console.log("error",err);
-    
+    console.log("errorrrrrrrrrrr 500",err);    
     return res.status(500).json(err);
   }
 });

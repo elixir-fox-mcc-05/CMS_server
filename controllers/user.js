@@ -53,16 +53,16 @@ class Controller {
                 msg:"username/password not found"
             })
         }
-
-
         
-        const token = jwt.sign(payload, process.env.SECRET);
-        return res.status(200).json({
-          token
-        });
+        // const token = jwt.sign(payload, process.env.SECRET);
+        // return res.status(200).json({
+        //   token
+        // });
       })
       .catch(err => {
-        next(err);
+        return res.status(401).json({
+          msg:"username/password not found"
+        })
       });
   }
 }
