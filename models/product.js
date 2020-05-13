@@ -45,6 +45,15 @@ module.exports = (sequelize, DataTypes) => {
         },
         onUpdate: 'Cascade',
         onDelete: 'Cascade'
+      },
+      CategoryId: {
+        type: DataTypes.INTEGER,
+        references: {
+          model: 'Categories',
+          key: "id"
+        },
+        onUpdate: "Cascade",
+        onDelete: "Cascade"
       }
     },
     {
@@ -54,6 +63,7 @@ module.exports = (sequelize, DataTypes) => {
   Product.associate = function (models) {
     // associations can be defined here
     Product.belongsTo(models.User);
+    Product.belongsTo(models.Category);
   };
   return Product;
 };

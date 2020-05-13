@@ -37,13 +37,14 @@ class ProductController {
   }
   static createProduct(req, res, next) {
     let UserId = req.UserId;
-    let { name, image_url, price, stock } = req.body;
+    let { name, image_url, price, stock, CategoryId } = req.body;
     Product.create({
       name,
       image_url,
       price,
       stock,
-      UserId
+      UserId,
+      CategoryId
     })
       .then(result => {
         res.status(201).json({
@@ -55,7 +56,7 @@ class ProductController {
       });
   }
   static updateProduct(req, res, next) {
-    let { name, image_url, price, stock } = req.body;
+    let { name, image_url, price, stock, CategoryId } = req.body;
     let UserId = req.UserId;
     let { id } = req.params;
     let value = {
@@ -63,7 +64,8 @@ class ProductController {
       image_url,
       price,
       stock,
-      UserId
+      UserId,
+      CategoryId
     };
     Product.update(value, {
       where: {
