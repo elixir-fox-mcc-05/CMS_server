@@ -8,6 +8,9 @@ describe('User Sign In and Sign Up', () => {
     queryInterface.bulkDelete('Users');
   });
 
+  // ============================================
+  // Test cases
+  // ============================================
   const inputSignup = {
     name: 'Yudha',
     email: 'yudha@mail.com',
@@ -28,6 +31,11 @@ describe('User Sign In and Sign Up', () => {
   const inputSigninEmpty = {
     email: '',
     password: '',
+  };
+
+  const inputSigninNull = {
+    email: null,
+    password: null,
   };
 
   const inputSigninWrongEmail = {
@@ -53,7 +61,6 @@ describe('User Sign In and Sign Up', () => {
             expect(CreatedUser).toHaveProperty('name', inputSignup.name);
             expect(CreatedUser).toHaveProperty('email', inputSignup.email);
             expect(CreatedUser).toHaveProperty('role', 'customer');
-            done();
           })
           .end((err) => {
             if (err) {
@@ -82,6 +89,34 @@ describe('User Sign In and Sign Up', () => {
               { message: 'Please insert email' },
               { message: 'Please insert password' },
               { message: 'Password at least 3 characters, max 15' },
+            ];
+            expect(status).toEqual(400);
+            expect(error).toHaveProperty('code', 400);
+            expect(error).toHaveProperty('type', 'BAD REQUEST');
+            expect(error).toHaveProperty('message', expected);
+          })
+          .end((err) => {
+            if (err) {
+              return done(err);
+            } else {
+              done();
+            }
+          });
+      });
+    });
+
+    describe('> Sign Up failed input null', () => {
+      test('Should return bad request. All error messages (400).', (done) => {
+        request(app)
+          .post('/signup')
+          .send(inputSigninNull)
+          .expect((data) => {
+            const status = data.status;
+            const error = data.body;
+            const expected = [
+              { message: 'Please insert name' },
+              { message: 'Please insert email' },
+              { message: 'Please insert password' },
             ];
             expect(status).toEqual(400);
             expect(error).toHaveProperty('code', 400);
