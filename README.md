@@ -230,7 +230,7 @@
     }`
 
 ---
-**Delete Todo**
+**Delete Product**
 ----
 
 * **URL**

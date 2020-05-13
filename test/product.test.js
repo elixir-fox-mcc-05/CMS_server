@@ -155,6 +155,62 @@ describe('Product Router', function() {
         });
 
         describe('Failed', function() {
+            test('Should return 400 status code with json data', function(done) {
+                request(app)
+                .post('/products')
+                .set('token', token)
+                .send({
+                    name: 'Sabun',
+                    price: '3000',
+                    stock: '0',
+                    image_url: 'http://google.co.id',
+                    description: 'Sabun wangi dan higienis'
+                })
+                .expect(400)
+                .expect('Content-Type', /json/)
+                .expect(function(result) {
+                    let data = result.body;
+                    expect(data.message).toEqual([{ message: `Minimum stock is 1`}]);
+                })
+                .end(function(err) {
+                    if(err) {
+                        return done(err);
+                    } else {
+                        return done();
+                    }
+                })
+            });
+        });
+
+        describe('Failed', function() {
+            test('Should return 400 status code with json data', function(done) {
+                request(app)
+                .post('/products')
+                .set('token', token)
+                .send({
+                    name: 'Sabun',
+                    price: '0',
+                    stock: '111',
+                    image_url: 'http://google.co.id',
+                    description: 'Sabun wangi dan higienis'
+                })
+                .expect(400)
+                .expect('Content-Type', /json/)
+                .expect(function(result) {
+                    let data = result.body;
+                    expect(data.message).toEqual([{ message: `Minimum price is 1`}]);
+                })
+                .end(function(err) {
+                    if(err) {
+                        return done(err);
+                    } else {
+                        return done();
+                    }
+                })
+            });
+        });
+
+        describe('Failed', function() {
             test('Should return 401 status code with json data', function(done) {
                 request(app)
                 .post('/products')

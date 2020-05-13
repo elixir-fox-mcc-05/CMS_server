@@ -21,6 +21,10 @@ module.exports = (sequelize, DataTypes) => {
         notEmpty: {
           args: true,
           msg: `Price can't be empty`
+        },
+        min: {
+          args: 1,
+          msg: `Minimum price is 1`
         }
       }
     },
@@ -30,6 +34,10 @@ module.exports = (sequelize, DataTypes) => {
         notEmpty: {
           args: true,
           msg: `Stock can't be empty`
+        },
+        min: {
+          args: 1,
+          msg: `Minimum stock is 1`
         }
       }
     },
