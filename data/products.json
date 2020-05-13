@@ -3,18 +3,21 @@
     "name": "Susu Ultramilk",
     "image_url": "https://www.prosehat.com/wp-content/uploads/2018/04/00029984_Susu-Ultra-Coklat-250ml.jpg",
     "price": 4000,
-    "stock": 20
+    "stock": 20,
+    "UserId": 2
   },
   {
     "name": "Bimoli",
     "image_url": "https://www.prosehat.com/wp-content/uploads/2018/04/00029984_Susu-Ultra-Coklat-250ml.jpg",
     "price": 20000,
-    "stock": 60
+    "stock": 60,
+    "UserId": 2
   },
   {
     "name": "Gula Pasir",
     "image_url": "https://www.prosehat.com/wp-content/uploads/2018/04/00029984_Susu-Ultra-Coklat-250ml.jpg",
     "price": 7000,
-    "stock": 100
+    "stock": 100,
+    "UserId": 3
   }
 ]

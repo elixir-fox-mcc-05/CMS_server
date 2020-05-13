@@ -4,11 +4,7 @@ const { sequelize } = require('../models');
 const { queryInterface } = sequelize;
 const { generateToken } = require('../helpers/jwt.js');
 
-const products = require('../data/products.json').map(product => {
-  product.createdAt = new Date();
-  product.updatedAt = new Date();
-  return product;
-});
+
 const users = require('../data/users.json').map(user => {
   user.createdAt = new Date();
   user.updatedAt = new Date();
@@ -16,24 +12,37 @@ const users = require('../data/users.json').map(user => {
 });
 
 let token;
+let token_err;
+let invalid_token;
 let productid;
 let productsearch;
 
 beforeAll(done => {
   queryInterface
-    .bulkInsert('Products', products, { returning: true })
+    .bulkInsert('Users', users, { returning: true })
     .then(results => {
-      productid = results[0].id;
-      productsearch = results[0];
-      console.log(`Products Created: ${products}`);
-      return queryInterface.bulkInsert('Users', users, { returning: true });
+      token = generateToken({
+        id: results[0].id,
+        email: results[0].email
+      });
+
+      token_err = generateToken({
+        id: results[1].id,
+        email: results[1].email
+      });
+      
+      console.log(`Users Created: ${users}`);
+      const products = require('../data/products.json').map(product => {
+        product.createdAt = new Date();
+        product.updatedAt = new Date();
+        product.UserId = results[1].id;
+        return product;
+      });
+      return queryInterface.bulkInsert('Products', products, { returning: true });
     })
     .then(result => {
-      token = generateToken({
-        id: result[0].id,
-        email: result[0].email
-      });
-      console.log(`Users : ${users}`);
+      productid = result[0].id;
+      productsearch = result[0];
       done();
     })
     .catch(err => {
@@ -179,6 +188,27 @@ describe('Product Test', () => {
             }
           });
       });
+      test('Should return fail with status 401 and error message', done => {
+        const newProduct = {
+          name: '',
+          image_url:
+            'https://img1.ralali.id/mediaflex/500/assets/img/Libraries/257613_Minyak-Goreng-Bimoli-Klasik-Pouch-2L-Minyak-Sayur-Bimoli-2000mL_e0U0AarHllkjKrYO_1549057560.png',
+          price: 'bukan integer nih',
+          stock: 'string'
+        };
+        request(app)
+          .post('/products')
+          .send(newProduct)
+          .end((err, response) => {
+            if (err) {
+              return done(err);
+            } else {
+              expect(response.status).toBe(401);
+              expect(response.body).toHaveProperty('message', 'Please Login First!');
+              return done();
+            }
+          });
+      });
     });
   });
   describe('Update Product', () => {
@@ -233,6 +263,65 @@ describe('Product Test', () => {
             } else {
               let data = response.body;
               expect(response.status).toBe(404);
+              expect(data).toHaveProperty('errors', errors);
+              return done();
+            }
+          });
+      });
+      test('should return 401 unauthorized', done => {
+        const newProduct = {
+          name: 'Bimoli',
+          image_url:
+            'https://img1.ralali.id/mediaflex/500/assets/img/Libraries/257613_Minyak-Goreng-Bimoli-Klasik-Pouch-2L-Minyak-Sayur-Bimoli-2000mL_e0U0AarHllkjKrYO_1549057560.png',
+          price: 25000,
+          stock: 10
+        };
+        const errors = {
+          code: 401,
+          message: `You cannot access this service`
+        };
+        request(app)
+          .put(`/products/${productid}`)
+          .send(newProduct)
+          .set('token', token_err)
+          .end((err, response) => {
+            if (err) {
+              return done(err);
+            } else {
+              let data = response.body;
+              expect(response.status).toBe(401);
+              expect(data).toHaveProperty('errors', errors);
+              return done();
+            }
+          });
+      });
+      test('should return 401 unauthorized invalid access token', done => {
+        const newProduct = {
+          name: 'Bimoli',
+          image_url:
+            'https://img1.ralali.id/mediaflex/500/assets/img/Libraries/257613_Minyak-Goreng-Bimoli-Klasik-Pouch-2L-Minyak-Sayur-Bimoli-2000mL_e0U0AarHllkjKrYO_1549057560.png',
+          price: 25000,
+          stock: 10
+        };
+        invalid_token = generateToken({
+          id: 4848,
+          email: `emailsalah@mail.com`
+        });
+        const errors = {
+          code: 401,
+          name: "NotAuthenticatedError",
+          message: `Invalid Access Token`
+        };
+        request(app)
+          .put(`/products/${productid}`)
+          .send(newProduct)
+          .set('token', invalid_token)
+          .end((err, response) => {
+            if (err) {
+              return done(err);
+            } else {
+              let data = response.body;
+              expect(response.status).toBe(401);
               expect(data).toHaveProperty('errors', errors);
               return done();
             }

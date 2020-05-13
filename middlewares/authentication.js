@@ -9,13 +9,14 @@ const authentication = (req, res, next) => {
     User.findByPk(id)
       .then(result => {
         if (result) {
-          req.UserId = id;
+          req.UserId = result.id;
+          req.UserRole = result.role;
           next();
         } else {
           return next({
             code: 401,
             name: 'NotAuthenticatedError',
-            msg: 'Invalid Access Token'
+            message: 'Invalid Access Token'
           });
         }
       })
