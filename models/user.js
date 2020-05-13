@@ -1,42 +1,58 @@
 'use strict'
 
-const {encrypt} = require('../helpers/bcrypt')
+const {encrypt} = require('../helpers/bcrypt.js')
 
 module.exports = (sequelize, DataTypes) => {
-  const User = sequelize.define('User', {
+  const Model = sequelize.Sequelize.Model
+
+  class User extends Model {}
+
+  User.init({
     email: {
       type: DataTypes.STRING,
-      unique: true,
+      unique: {
+        args: true,
+        msg: 'Email is already exists'
+      },
       allowNull: false,
       validate: {
-        notNull: {
-          args: true,
-          msg: `Email required`
-        },
         isEmail: {
           args: true,
-          msg: `Must be an email`
+          msg: 'Invalid Email format'
+        },
+        notNull: {
+          args: true,
+          msg: 'Email is required'
+        },
+        notEmpty : {
+          args: true,
+          msg: 'Email is required'
         }
       }
     },
     password: {
       type: DataTypes.STRING,
-      allowNull: false,
       validate: {
-        notNull: true,
-        len: [6, 25]
+        len: {
+          args: [6, 25],
+          msg: 'Password must be between 6 till 25'
+        }
       }
     },
-  },  {
-    hooks: {
-      beforeCreate(user) {
-        user.password = encrypt(user.password);
+    role: {
+      type: DataTypes.STRING,
+      defaultValue: 'customer'
+    } 
+  }, {
+    sequelize,
+    hooks : {
+      beforeCreate : (user) => {
+        user.password = encrypt(user.password)
       }
-    },  sequelize, modelName: "User"
-  });
-
+    }
+  })
   User.associate = function(models) {
-    // associations can be defined here
+    User.hasMany(models.Product)
   };
   return User;
 };

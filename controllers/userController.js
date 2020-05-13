@@ -19,7 +19,7 @@ class UserController {
                 });
             })
             .catch(err => {
-                next({error: err});
+                next(err)
             });
     }
 
@@ -43,20 +43,21 @@ class UserController {
                     }
                     else {
                         throw {
-                            msg: `Email or Password is wrong`,
+                            message: `Email or Password is wrong`,
                             code: 401
                         };
                     }
                 }
                 else {
                     throw {
-                        msg: `Email or Password is wrong`,
-                        code: 401
+                        message: `Register first`,
+                        code: 400
                     }
                 }
             })
             .catch(err => {
-                next({error: err})
+                // console.log(err)
+                next(err)
             })
     }
 
