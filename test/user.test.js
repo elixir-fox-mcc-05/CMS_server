@@ -178,7 +178,7 @@ describe('Login', () => {
 
     describe('Successful Login', () => {
         describe('Customer Login', () => {
-            test('Response code 201 returning access_token', (done) => {
+            test('Response code 201 returning access_token role: customer', (done) => {
                 let { email, password } = users[0]
                 request(app)
                     .post('/login')
@@ -204,7 +204,7 @@ describe('Login', () => {
         })
 
         describe('Admin Login', () => {
-            test('Response code 201 returning access_token', (done) => {
+            test('Response code 201 returning access_token role: admin', (done) => {
                 let { email, password } = users[1]
                 request(app)
                     .post('/login')
@@ -270,7 +270,5 @@ describe('Login', () => {
                     })
             })
         })
-    })
-
-    
+    })    
 })

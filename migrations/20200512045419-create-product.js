@@ -19,6 +19,9 @@ module.exports = {
       description: {
         type: Sequelize.STRING(999)
       },
+      category: {
+        type: Sequelize.STRING
+      },
       price: {
         allowNull: false,
         type: Sequelize.INTEGER
@@ -26,6 +29,9 @@ module.exports = {
       stock: {
         allowNull: false,
         type: Sequelize.INTEGER
+      },
+      expiry: {
+        type: Sequelize.DATEONLY
       },
       users: {
         type: Sequelize.ARRAY(Sequelize.INTEGER)

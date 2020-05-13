@@ -14,8 +14,16 @@ module.exports = (err, req, res, next) => {
             msg: message
         })
     } else if (err.name === "SequelizeUniqueConstraintError") {
+        let msg = ''
+        if (err.original.table == 'Products') {
+            msg = "Product already exists"
+        } else if (err.original.table == 'Users') {
+            msg = "Email has been registered"
+        } else {
+            msg = "Unique constraint"
+        }
         res.status(400).json({
-            msg: "Email has been registered",
+            msg,
             loc: "@sequelize"
         })
     } else {

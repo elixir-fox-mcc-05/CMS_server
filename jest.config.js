@@ -1,3 +1,4 @@
 module.exports = {
-    notify: true
+    notify: true,
+    verbose: true
 };
