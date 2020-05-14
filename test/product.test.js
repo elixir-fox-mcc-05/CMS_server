@@ -235,41 +235,228 @@ describe('Product', () => {
 
     describe('UPDATE', () => {
         describe('success update', () => {
-            describe('PUT /product', () => {
+            describe('PUT /product/:id', () => {
                 test('should return all product with status 200', done => {
                     const updateProduct = {
-                        
+                        name: 'puma',
+                        image_url: 'https://dynamic.zacdn.com/ltavgF7U8adDwwne5o3Q7VItuhk=/fit-in/346x500/filters:quality(90):fill(ffffff)/http://static.id.zalora.net/p/precise-1547-3274061-1.jpg',
+                        price: 750000,
+                        stock: 15
                     }
+                    request(app)
+                        .put(`/product/6`)
+                        .set('access_token', token_admin)
+                        .send(updateProduct)
+                        .end((err, response) => {
+                            if(err){
+                                return done(err)
+                            } else {
+                                expect(response.status).toBe(200)
+                                // console.log(response.body)
+                                expect(response.body.product).toHaveProperty('id', expect.any(Number))
+                                expect(response.body.product).toHaveProperty('name', updateProduct.name)
+                                expect(response.body.product).toHaveProperty('image_url', updateProduct.image_url)
+                                expect(response.body.product).toHaveProperty('price', updateProduct.price)
+                                expect(response.body.product).toHaveProperty('stock', updateProduct.stock)
+                                expect(response.body.product).toHaveProperty('UserId', expect.any(Number))
+                                return done()
+                            }
+                        })
                 })
             })
         })
 
-    //     describe('fail update', () => {
-    //         describe('PUT /product', () => {
-    //             test('should return all product with status 200', done => {
-                
-    //             })
-    //         })
-    //     })
+        describe('fail update', () => {
+            describe('PUT /product', () => {
+                test('should return message with status 404 because product not found', done => {
+                    const updateProduct = {
+                        name: 'puma',
+                        image_url: 'https://dynamic.zacdn.com/ltavgF7U8adDwwne5o3Q7VItuhk=/fit-in/346x500/filters:quality(90):fill(ffffff)/http://static.id.zalora.net/p/precise-1547-3274061-1.jpg',
+                        price: 750000,
+                        stock: 15
+                    }
+                    request(app)
+                        .put(`/product/0`)
+                        .set('access_token', token_admin)
+                        .send(updateProduct)
+                        .end((err, response) => {
+                            if(err){
+                                return done(err)
+                            } else {
+                                expect(response.status).toBe(404)
+                                expect(response.body.error).toContain('product not found')
+                                return done()
+                            }
+                        })
+                })
+
+                test('should return message with status 401 because unauthorized', done => {
+                    const updateProduct = {
+                        name: 'puma',
+                        image_url: 'https://dynamic.zacdn.com/ltavgF7U8adDwwne5o3Q7VItuhk=/fit-in/346x500/filters:quality(90):fill(ffffff)/http://static.id.zalora.net/p/precise-1547-3274061-1.jpg',
+                        price: 750000,
+                        stock: 15
+                    }
+                    request(app)
+                        .put(`/product/6`)
+                        .set('access_token', token_client)
+                        .send(updateProduct)
+                        .end((err, response) => {
+                            if(err){
+                                return done(err)
+                            } else {
+                                expect(response.status).toBe(401)
+                                expect(response.body.error).toContain('unauthorized')
+                                return done()
+                            }
+                        })
+                })
+
+                test('should return message with status 404 because data not found', done => {
+                    const updateProduct = {
+                        name: 'puma',
+                        image_url: 'https://dynamic.zacdn.com/ltavgF7U8adDwwne5o3Q7VItuhk=/fit-in/346x500/filters:quality(90):fill(ffffff)/http://static.id.zalora.net/p/precise-1547-3274061-1.jpg',
+                        price: 750000,
+                        stock: 15
+                    }
+                    request(app)
+                        .put(`/product/6`)
+                        .send(updateProduct)
+                        .end((err, response) => {
+                            if(err){
+                                return done(err)
+                            } else {
+                                expect(response.status).toBe(401)
+                                expect(response.body.error).toContain('please login first')
+                                return done()
+                            }
+                        })
+                })
+
+                test('should return message with status 400 because there is an empty field', done => {
+                    const updateProduct = {
+                        name: '',
+                        image_url: '',
+                        price: '',
+                        stock: ''
+                    }
+                    request(app)
+                        .put(`/product/6`)
+                        .set('access_token', token_admin)
+                        .send(updateProduct)
+                        .end((err, response) => {
+                            if(err){
+                                return done(err)
+                            } else {
+                                expect(response.status).toBe(400)
+                                expect(response.body.error).toContain('please fill this field')
+                                return done()
+                            }
+                        })
+                })
+
+                test('should return message with status 400 because input for image_url is not an url', done => {
+                    const updateProduct = {
+                        name: 'puma',
+                        image_url: 'asdasd',
+                        price: 750000,
+                        stock: 15
+                    }
+                    request(app)
+                        .put(`/product/6`)
+                        .set('access_token', token_admin)
+                        .send(updateProduct)
+                        .end((err, response) => {
+                            if(err){
+                                return done(err)
+                            } else {
+                                expect(response.status).toBe(400)
+                                expect(response.body.error).toContain('please use url format')
+                                return done()
+                            }
+                        })
+                })
+
+                test('should return message with status 400 because input type is for price and stock is not a number', done => {
+                    const updateProduct = {
+                        name: 'puma',
+                        image_url: 'https://dynamic.zacdn.com/ltavgF7U8adDwwne5o3Q7VItuhk=/fit-in/346x500/filters:quality(90):fill(ffffff)/http://static.id.zalora.net/p/precise-1547-3274061-1.jpg',
+                        price: 'asda',
+                        stock: 'asa'
+                    }
+                    request(app)
+                        .put(`/product/6`)
+                        .set('access_token', token_admin)
+                        .send(updateProduct)
+                        .end((err, response) => {
+                            if(err){
+                                return done(err)
+                            } else {
+                                expect(response.status).toBe(400)
+                                expect(response.body.error).toContain('please input number format')
+                                return done()
+                            }
+                        })
+                })
+            })
+        })
 
     })
 
-    // describe('DELETE', () => {
-    //     describe('success delete', () => {
-    //         describe('DELETE /product', () => {
-    //             test('should return all product with status 200', done => {
-                
-    //             })
-    //         })
-    //     })
+    describe('DELETE', () => {
+        describe('success delete', () => {
+            describe('DELETE /product', () => {
+                test('should success message with status 200', done => {
+                    let id = 7
+                    request(app)
+                        .delete(`/product/${id}`)
+                        .set('access_token', token_admin)
+                        .end((err, response) => {
+                            if(err){
+                                return done(err)
+                            } else {
+                                expect(response.status).toBe(200)
+                                expect(response.body.success).toContain(`success delete product with id ${id}`)
+                                return done()
+                            }
+                        })
+                })
+            })
+        })
 
-    //     describe('fail delete', () => {
-    //         describe('DELETE /product', () => {
-    //             test('should return all product with status 200', done => {
-                
-    //             })
-    //         })
-    //     })
+        describe('fail delete', () => {
+            describe('DELETE /product', () => {
+                test('should error message with status 404 because product not found', done => {
+                    request(app)
+                        .delete(`/product/0`)
+                        .set('access_token', token_admin)
+                        .end((err, response) => {
+                            if(err){
+                                return done(err)
+                            } else {
+                                expect(response.status).toBe(404)
+                                expect(response.body.error).toContain('product not found')
+                                return done()
+                            }
+                        })
+                })
 
-    // })
+                test('should error message with status 401 because unauthorized', done => {
+                    request(app)
+                        .delete(`/product/6`)
+                        .set('access_token', token_client)
+                        .end((err, response) => {
+                            if(err){
+                                return done(err)
+                            } else {
+                                expect(response.status).toBe(401)
+                                expect(response.body.error).toContain('unauthorized')
+                                return done()
+                            }
+                        })
+                })
+            })
+        })
+
+    })
 })

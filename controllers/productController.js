@@ -23,6 +23,10 @@ class ProductController{
             })
     }
 
+    // static findById(req, res, next){
+
+    // }
+
     static readProduct(req, res, next){
         Product.findAll()
             .then(data => {
@@ -44,14 +48,14 @@ class ProductController{
             price,
             stock
         }
-        Product.update({
+        Product.update(newUpdate, {
             where: {id},
-            returing: true
+            returning: true
         })
             .then(data => {
                 if(data){
                     res.status(200).json({
-                        product: data
+                        product: data[1][0]
                     })
                 } else {
                     throw{
@@ -67,7 +71,7 @@ class ProductController{
 
     static deleteProduct(req, res, next){
         let {id} = req.params
-        Product.delete({
+        Product.destroy({
             where: {id}
         })
             .then(data => {
