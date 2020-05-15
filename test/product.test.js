@@ -46,6 +46,7 @@ beforeAll(async (done) => {
 //       })
 //       .catch(err => done(err))
 //   })
+let prodId
 
 describe('Product', () => {
     describe(`CREATE`, () => {
@@ -66,6 +67,9 @@ describe('Product', () => {
                             if(err){
                                 return done(err)
                             } else {
+                                prodId = response.body.product.id
+                                // console.log("==============================")
+                                // console.log(response.body.product.id)
                                 expect(response.body.product).toHaveProperty('id', expect.any(Number))
                                 expect(response.body.product).toHaveProperty('name', newProduct.name)
                                 expect(response.body.product).toHaveProperty('image_url', newProduct.image_url)
@@ -244,7 +248,7 @@ describe('Product', () => {
                         stock: 15
                     }
                     request(app)
-                        .put(`/product/6`)
+                        .put(`/product/${prodId}`)
                         .set('access_token', token_admin)
                         .send(updateProduct)
                         .end((err, response) => {
@@ -320,7 +324,7 @@ describe('Product', () => {
                         stock: 15
                     }
                     request(app)
-                        .put(`/product/6`)
+                        .put(`/product/0`)
                         .send(updateProduct)
                         .end((err, response) => {
                             if(err){
@@ -341,7 +345,7 @@ describe('Product', () => {
                         stock: ''
                     }
                     request(app)
-                        .put(`/product/6`)
+                        .put(`/product/${prodId}`)
                         .set('access_token', token_admin)
                         .send(updateProduct)
                         .end((err, response) => {
@@ -363,7 +367,7 @@ describe('Product', () => {
                         stock: 15
                     }
                     request(app)
-                        .put(`/product/6`)
+                        .put(`/product/${prodId}`)
                         .set('access_token', token_admin)
                         .send(updateProduct)
                         .end((err, response) => {
@@ -385,7 +389,7 @@ describe('Product', () => {
                         stock: 'asa'
                     }
                     request(app)
-                        .put(`/product/6`)
+                        .put(`/product/${prodId}`)
                         .set('access_token', token_admin)
                         .send(updateProduct)
                         .end((err, response) => {
@@ -407,16 +411,15 @@ describe('Product', () => {
         describe('success delete', () => {
             describe('DELETE /product', () => {
                 test('should success message with status 200', done => {
-                    let id = 7
                     request(app)
-                        .delete(`/product/${id}`)
+                        .delete(`/product/${prodId}`)
                         .set('access_token', token_admin)
                         .end((err, response) => {
                             if(err){
                                 return done(err)
                             } else {
                                 expect(response.status).toBe(200)
-                                expect(response.body.success).toContain(`success delete product with id ${id}`)
+                                expect(response.body.success).toContain(`success delete product with id ${prodId}`)
                                 return done()
                             }
                         })
