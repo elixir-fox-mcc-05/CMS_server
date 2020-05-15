@@ -83,30 +83,30 @@ describe('User', () => {
         })
     })
 
-    // describe('success register', () => {
-    //     describe('POST /register', () => {
-    //         test('should return id and email with status 201', (done) => {
-    //             const userInput = {
-    //                 email: 'customer1@mail.com',
-    //                 password: 'customer1' 
-    //             }
-    //             request(app)
-    //                 .post('/register')
-    //                 .send(userInput)
-    //                 .end((err, response) => {
-    //                     if(err){
-    //                         return done(err)
-    //                     } else {
-    //                         expect(response.status).toBe(201)
-    //                         expect(response.body).toHaveProperty('id', expect.any(Number))
-    //                         expect(response.body).toHaveProperty('email', userInput.email)
-    //                         expect(response.body).not.toHaveProperty('password')
-    //                         return done()
-    //                     }
-    //                 })
-    //         })
-    //     })
-    // })
+    describe('success register', () => {
+        describe('POST /register', () => {
+            test('should return id and email with status 201', (done) => {
+                const userInput = {
+                    email: 'customer1@mail.com',
+                    password: 'customer1' 
+                }
+                request(app)
+                    .post('/register')
+                    .send(userInput)
+                    .end((err, response) => {
+                        if(err){
+                            return done(err)
+                        } else {
+                            expect(response.status).toBe(201)
+                            expect(response.body).toHaveProperty('id', expect.any(Number))
+                            expect(response.body).toHaveProperty('email', userInput.email)
+                            expect(response.body).not.toHaveProperty('password')
+                            return done()
+                        }
+                    })
+            })
+        })
+    })
 
     describe('fail register', () => {
         describe('POST /register', () => {
