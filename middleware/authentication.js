@@ -8,7 +8,7 @@ function authentication(req,res,next){
             // console.log('liu')
             let decodeid = verifyToken(token)
             console.log(decodeid)
-            let {id} = decodeid.data
+            let {id} = decodeid
             
             User
                 .findByPk(id)
@@ -36,8 +36,8 @@ function authentication(req,res,next){
             })
         }
     }
-    catch{
-        throw err
+    catch (err){
+        next(err)
     }
 }
 

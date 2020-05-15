@@ -1,24 +1,24 @@
-const {Product} = require('../models')
+const {Product, Category} = require('../models')
 
 class ProductController{
     static list(req,res,next){
         Product 
-            .findAll({order : [['id','ASC']]})
+            .findAll({order : [['id','ASC']],include : [Category]})
             .then(data => {
                 res.status(200).json({
                     data
                 })
             })
             .catch(err => {
-                // console.log(err.message)
+                console.log(err.message)
                 next(err)
             })
     }
     static add(req,res,next){
-        let {name , image_url, price ,stock, category} = req.body 
+        let {name , image_url, price ,stock, CategoryId} = req.body 
 
         Product
-            .create({name,image_url,price,stock,category})
+            .create({name,image_url,price,stock,CategoryId})
             .then(data => {
                 // console.log(data)
                 res.status(201).json({
@@ -27,13 +27,14 @@ class ProductController{
                     image_url : data.image_url,
                     price : data.price,
                     stock : data.stock,
-                    category : data.category
+                    CategoryId : data.CategoryId
                 })
             })
             .catch(err => {
-                // console.log(err.message)
+                console.log(err.message)
                 let errorfix = err.message
                 if(errorfix.includes(',')){
+                    errorfix.replace('category is required field','')
                     errorfix = errorfix.split(',')
                     for (let i=0 ; i <errorfix.length ; i++){
                         errorfix[i] = errorfix[i].replace('Validation error: ','').replace('\n','')
@@ -55,14 +56,14 @@ class ProductController{
     static select (req,res,next){
 
         Product 
-            .findOne({where : {id : req.params.id}})
+            .findOne({where : {id : req.params.id}, include : [Category]})
             .then(data => {
                 res.status(200).json({
                     name : data.name,
                     image_url : data.image_url,
                     price : data.price,
                     stock: data.stock,
-                    category : data.category
+                    CategoryId : data.CategoryId
                 })
             })
             .catch(err => {
@@ -75,10 +76,10 @@ class ProductController{
     }
     static edit(req,res){
 
-        let {name , image_url, price ,stock, category} = req.body 
+        let {name , image_url, price ,stock, CategoryId} = req.body 
         // console.log(req.params.id)
         Product 
-            .update({ 'name' : name ,'image_url' : image_url, 'price':price ,'stock':stock, 'category':category},{where : {id : req.params.id}})
+            .update({ 'name' : name ,'image_url' : image_url, 'price':price ,'stock':stock, 'CategoryId':CategoryId},{where : {id : req.params.id}})
             .then(data => {
                 // console.log(data)
                 return Product.findByPk(req.params.id) 
@@ -90,7 +91,7 @@ class ProductController{
                     image_url : data.image_url,
                     price : data.price,
                     stock : data.stock,
-                    category : data.category
+                    CategoryId : data.CategoryId
                 })
             })
             .catch(err => {
@@ -107,6 +108,7 @@ class ProductController{
 
                 }else {
                     errorfix = errorfix.replace('Validation error: ','')
+                    errorfix = errorfix.replace('notNull Violation: ','')
                 }
                 res.status(400).json({
                     error : errorfix
@@ -133,10 +135,10 @@ class ProductController{
                                         image_url : results.image_url,
                                         price : results.price,
                                         stock : results.stock,
-                                        category : results.category})
+                                        CategoryId : results.CategoryId})
             })
             .catch(err => {
-                console.log(err)
+                console.log(err.message)
                 res.status(404).json({error : "not found"})
             })
 
@@ -151,7 +153,7 @@ class ProductController{
                     image_url : data.image_url,
                     price : data.price,
                     stock: data.stock,
-                    category : data.category
+                    CategoryId : data.CategoryId
                 })
             })
             .catch(err => {

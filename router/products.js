@@ -2,7 +2,7 @@ const router = require('express').Router()
 const ProductController = require('../controllers/productController')
 const authentication = require('../middleware/authentication')
 
-// router.use(authentication)
+router.use(authentication)
 
 router.get('/list',ProductController.list)
 router.get('/:id',ProductController.select)

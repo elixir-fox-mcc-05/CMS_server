@@ -3,7 +3,6 @@ const request = require('supertest')
 const { sequelize } = require('../models')
 const { queryInterface } = sequelize
 
-
 afterAll(done => {
     queryInterface.bulkDelete('Products')
         .then(() => {
@@ -16,24 +15,32 @@ afterAll(done => {
 })
 
 beforeAll((done) => {
+    
     queryInterface.bulkInsert('Products', [{
         name : 'balll',
         image_url: 'bb.jps',
         price : 8000,
         stock : 90,
-        category : 'buah',
+        CategoryId : 1,
         createdAt: new Date(),
         updatedAt: new Date()
     }])
+
+        queryInterface.bulkInsert('Categories', [{
+            name: 'buah',
+            createdAt: new Date(),
+            updatedAt: new Date()
+        }])
         .then(() => {
-            console.log('user created bolu!')
+            console.log('beforeAll process complete')
             done()
         })
-        .catch(err => {
-            done(err)
-        })
 })
+
 let id;
+const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwiZW1haWwiOiJtYWlsQG1haWwuY29tIiwicGFzc3dvcmQiOiIkMmIkMDQkZC9Lb0tVUTU3Z2lpUzhjR1dVQ0hYTzFrRU1pVjRKdElKbVlLaUZ5ZHVwRWpIOHZUa2VWbWkiLCJpYXQiOjE1ODkzNjcxNjd9.He_neKlcZ-q7uv_6ikyqlVxlc8-06P5CwY0Vd7tVTw4'
+
+
 describe('test success /products', () => {
     
 
@@ -48,6 +55,7 @@ describe('test success /products', () => {
             }
             request(app)
                 .post('/products/add')
+                .set('token',token)
                 .send(newProduct)
                 .end((err, response) => {
                     if (err) {
@@ -83,6 +91,7 @@ describe('Test fail /products', () => {
             }
             request(app)
             .put(`/products/edit/${id}`)
+            .set('token',token)
             .query({'id':id})
                 .send(newProduct)
                 .end((err, response) => {
@@ -107,6 +116,7 @@ describe('Test fail /products', () => {
             }
             request(app)
             .put(`/products/edit/${id}`)
+            .set('token',token)
             .query({'id':id})
             .send(newProduct)
                 .end((err, response) => {
@@ -131,6 +141,7 @@ describe('Test fail /products', () => {
             }
             request(app)
             .put(`/products/edit/${id}`)
+            .set('token',token)
             .query({'id':id})
             .send(newProduct)
                 .end((err, response) => {
@@ -155,6 +166,7 @@ describe('Test fail /products', () => {
             }
             request(app)
             .put(`/products/edit/${id}`)
+            .set('token',token)
             .query({'id':id})
             .send(newProduct)
                 .end((err, response) => {
@@ -180,6 +192,7 @@ describe('Test fail /products', () => {
             }
             request(app)
             .put(`/products/edit/${id}`)
+            .set('token',token)
             .query({'id':id})
             .send(newProduct)
                 .end((err, response) => {
@@ -205,6 +218,7 @@ describe('Test fail /products', () => {
             }
             request(app)
             .put(`/products/edit/${id}`)
+            .set('token',token)
             .query({'id':id})
                 .send(newProduct)
                 .end((err, response) => {
@@ -230,6 +244,7 @@ describe('Test fail /products', () => {
             }
             request(app)
                 .put(`/products/edit/${id}`)
+                .set('token',token)
                 .query({'id':id})
                 .send(newProduct)
                 .end((err, response) => {
@@ -255,6 +270,7 @@ describe('Test fail /products', () => {
             }
             request(app)
             .put(`/products/edit/${id}`)
+            .set('token',token)
             .query({'id':id})
             .send(newProduct)
                 .end((err, response) => {

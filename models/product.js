@@ -19,7 +19,8 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       validate: {
         notNull: {args: true, msg: 'image_url is required field' },
-        notEmpty: { args: true, msg: 'image_url is required field' }
+        notEmpty: { args: true, msg: 'image_url is required field' },
+        isUrl: {args : true, msg:'image url must in URL format'}
       }
     },
     price: {
@@ -48,12 +49,15 @@ module.exports = (sequelize, DataTypes) => {
         }
       }
     },
-    category: {
-      type: DataTypes.STRING,
-      allowNull: false,
+    CategoryId: {
+      type: DataTypes.INTEGER,
+      allowNull: {args : false,msg: "category is required field"},
       validate: {
-        notNull: {args: true, msg: 'category is required field' },
-        notEmpty: { args: true, msg: 'category is required field' }
+        checkdata(value) {
+          if(value == '' || value == null){
+            throw new Error("category is required field");
+          }
+        }
       }
     }
   }, {
@@ -61,7 +65,7 @@ module.exports = (sequelize, DataTypes) => {
     modelName: 'Product'
   });
   Product.associate = function (models) {
-    // associations can be defined here
+    Product.belongsTo(models.Category)
   };
   return Product;
 };

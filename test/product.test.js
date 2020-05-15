@@ -33,25 +33,76 @@ afterAll(done => {
 })
 
 beforeAll((done) => {
-    // const salt = bcrypt.genSaltSync(10)
-    // const hashPassword = bcrypt.hashSync(dummyUser.password, salt)
+    
     queryInterface.bulkInsert('Products', [{
         name : 'balll',
         image_url: 'bb.jps',
         price : 8000,
         stock : 90,
-        category : 'buah',
+        CategoryId : 1,
         createdAt: new Date(),
         updatedAt: new Date()
     }])
+        // .then(() => {
+        //     console.log('user created bolu!')
+        //     done()
+        // })
+        // .catch(err => {
+        //     done(err)
+        // })
+
+        queryInterface.bulkInsert('Categories', [{
+            name: 'buah',
+            createdAt: new Date(),
+            updatedAt: new Date()
+        }])
         .then(() => {
-            console.log('user created bolu!')
+            console.log('beforeAll process complete')
             done()
         })
-        .catch(err => {
-            done(err)
-        })
 })
+
+describe('POST /register then POST /login', () => {
+    test('should return object with id, name,and email. status 201', (done) => {
+        const userInput = {
+            first_name: 'yusak',
+            email: 'mail@mail.com',
+            password: 'asdasd'
+        }
+        request(app)
+            .post('/register')
+            .send(userInput)
+            .end((err, response) => {
+                if (err) {
+                    return done(err)
+                } else {
+                    console.log(response.body)
+                    return done()
+                }
+            })
+    })
+    test('should return object with token. status 200', (done) => {
+        const userInput = {
+            first_name: 'yusak',
+            email: 'mail@mail.com',
+            password: 'asdasd'
+        }
+        request(app)
+            .post('/login')
+            .send(userInput)
+            .end((err, response) => {
+                if (err) {
+                    return done(err)
+                } else {
+                    console.log(response.body)
+                    return done()
+                }
+            })
+            
+    })
+})
+
+const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwiZW1haWwiOiJtYWlsQG1haWwuY29tIiwicGFzc3dvcmQiOiIkMmIkMDQkZC9Lb0tVUTU3Z2lpUzhjR1dVQ0hYTzFrRU1pVjRKdElKbVlLaUZ5ZHVwRWpIOHZUa2VWbWkiLCJpYXQiOjE1ODkzNjcxNjd9.He_neKlcZ-q7uv_6ikyqlVxlc8-06P5CwY0Vd7tVTw4'
 
 describe('test success /products', () => {
     let id;
@@ -59,6 +110,7 @@ describe('test success /products', () => {
         test('should return objects status 200', (done) => {
             request(app)
                 .get('/products/list')
+                .set('token',token)
                 // .send(userInput)
                 .end((err, response) => {
                     if (err) {
@@ -84,22 +136,23 @@ describe('test success /products', () => {
                 image_url : 'pp.jpg',
                 price : '8000',
                 stock : '12',
-                category : 'buah'
+                CategoryId : 1,
             }
             request(app)
                 .post('/products/add')
+                .set('token',token)
                 .send(newProduct)
                 .end((err, response) => {
                     if (err) {
                         return done(err)
                     } else {
-                        // console.log(response.body)
+                        console.log(response.body)
                         expect(response.status).toBe(201)
                         expect(response.body).toHaveProperty('name', expect.any(String))
                         expect(response.body).toHaveProperty('image_url', expect.any(String))
                         expect(response.body).toHaveProperty('price', expect.any(Number))
                         expect(response.body).toHaveProperty('stock', expect.any(Number))
-                        expect(response.body).toHaveProperty('category', expect.any(String))
+                        expect(response.body).toHaveProperty('CategoryId', expect.any(Number))
                         id = response.body.id
                         return done()
                     }
@@ -113,6 +166,7 @@ describe('test success /products', () => {
             request(app)
                 
                 .get(`/products/${id}`)
+                .set('token',token)
                 .query({'id':id})
                 .end((err, response) => {
                     if (err) {
@@ -124,7 +178,7 @@ describe('test success /products', () => {
                         expect(response.body).toHaveProperty('image_url', expect.any(String))
                         expect(response.body).toHaveProperty('price', expect.any(Number))
                         expect(response.body).toHaveProperty('stock', expect.any(Number))
-                        expect(response.body).toHaveProperty('category', expect.any(String))
+                        expect(response.body).toHaveProperty('CategoryId', expect.any(Number))
                         return done()
                     }
                 })
@@ -137,6 +191,7 @@ describe('test success /products', () => {
             request(app)
                 
                 .post(`/products/search`)
+                .set('token',token)
                 .send({'name' : test})
                 .end((err, response) => {
                     if (err) {
@@ -148,7 +203,7 @@ describe('test success /products', () => {
                         expect(response.body).toHaveProperty('image_url', expect.any(String))
                         expect(response.body).toHaveProperty('price', expect.any(Number))
                         expect(response.body).toHaveProperty('stock', expect.any(Number))
-                        expect(response.body).toHaveProperty('category', expect.any(String))
+                        expect(response.body).toHaveProperty('CategoryId', expect.any(Number))
                         return done()
                     }
                 })
@@ -163,25 +218,26 @@ describe('test success /products', () => {
                 image_url : 'pp.jpg',
                 price : '8000',
                 stock : '12',
-                category : 'buah'
+                CategoryId : 1,
             }
            
             request(app)
                 
                 .put(`/products/edit/${id}`)
+                .set('token',token)
                 .query({'id':id})
                 .send(updateProduct)
                 .end((err, response) => {
                     if (err) {
                         return done(err)
                     } else {
-                        // console.log(response.body)
+                        console.log(response.body)
                         expect(response.status).toBe(200)
                         expect(response.body).toHaveProperty('name', expect.any(String))
                         expect(response.body).toHaveProperty('image_url', expect.any(String))
                         expect(response.body).toHaveProperty('price', expect.any(Number))
                         expect(response.body).toHaveProperty('stock', expect.any(Number))
-                        expect(response.body).toHaveProperty('category', expect.any(String))
+                        expect(response.body).toHaveProperty('CategoryId', expect.any(Number))
                         return done()
                     }
                 })
@@ -195,6 +251,7 @@ describe('test success /products', () => {
             request(app)
                 
                 .delete(`/products/delete/${id}`)
+                .set('token',token)
                 .query({'id':id})
                 // .send(updateProduct)
                 .end((err, response) => {
@@ -207,7 +264,7 @@ describe('test success /products', () => {
                         expect(response.body).toHaveProperty('image_url', expect.any(String))
                         expect(response.body).toHaveProperty('price', expect.any(Number))
                         expect(response.body).toHaveProperty('stock', expect.any(Number))
-                        expect(response.body).toHaveProperty('category', expect.any(String))
+                        expect(response.body).toHaveProperty('CategoryId', expect.any(Number))
                         return done()
                     }
                 })
@@ -224,6 +281,7 @@ describe('Test fail /products', () => {
         
         request(app)
             .get(`/products/${9999999}`)
+            .set('token',token)
             // .send(newProduct)
             .end((err, response) => {
                 if (err) {
@@ -244,6 +302,7 @@ describe('Test fail /products', () => {
 
         request(app)
             .delete(`/products/delete/${1}`)
+            .set('token',token)
             .query({'id':1})
             // .send(newProduct)
             .end((err, response) => {
@@ -267,10 +326,11 @@ describe('Test fail /products', () => {
                 image_url : 'pp.jpg',
                 price : '8000',
                 stock : '12',
-                category : 'buah'
+                CategoryId : 1
             }
             request(app)
                 .post('/products/add')
+                .set('token',token)
                 .send(newProduct)
                 .end((err, response) => {
                     if (err) {
@@ -290,10 +350,11 @@ describe('Test fail /products', () => {
                 image_url : '',
                 price : '8000',
                 stock : '12',
-                category : 'buah'
+                CategoryId : 1
             }
             request(app)
                 .post('/products/add')
+                .set('token',token)
                 .send(newProduct)
                 .end((err, response) => {
                     if (err) {
@@ -313,10 +374,11 @@ describe('Test fail /products', () => {
                 image_url : 'pp.jpg',
                 price : -1,
                 stock : '12',
-                category : 'buah'
+                CategoryId : 1
             }
             request(app)
                 .post('/products/add')
+                .set('token',token)
                 .send(newProduct)
                 .end((err, response) => {
                     if (err) {
@@ -336,10 +398,11 @@ describe('Test fail /products', () => {
                 image_url : 'pp.jpg',
                 price : '8000',
                 stock : -1,
-                category : 'buah'
+                CategoryId : 1
             }
             request(app)
                 .post('/products/add')
+                .set('token',token)
                 .send(newProduct)
                 .end((err, response) => {
                     if (err) {
@@ -360,10 +423,11 @@ describe('Test fail /products', () => {
                 image_url : 'pp.jpg',
                 price : '8000',
                 stock : 2,
-                category : ''
+                CategoryId : ''
             }
             request(app)
                 .post('/products/add')
+                .set('token',token)
                 .send(newProduct)
                 .end((err, response) => {
                     if (err) {
@@ -378,9 +442,10 @@ describe('Test fail /products', () => {
         })
 
         test('should return error with all null ,status 400', (done) => {
-            const error = ["Name is required field", "image_url is required field", "Price is required field", "Stock is required field", "category is required field"]
+            const error = ["Name is required field", "image_url is required field", "Price is required field", "Stock is required field","category is required field"]
             request(app)
                 .post('/products/add')
+                .set('token',token)
                 // .send(newProduct)
                 .end((err, response) => {
                     if (err) {
@@ -395,16 +460,17 @@ describe('Test fail /products', () => {
         })
 
         test('should return error with all empty with status 400', (done) => {
-            const error = ["Name is required field","Name must more than 3 letters", "image_url is required field", "category is required field", "Price is required field", "Stock is required field"]
+            const error = ["category is required field","Name is required field","Name must more than 3 letters", "image_url is required field",  "Price is required field", "Stock is required field"]
             let newProduct = {
                 name : '',
                 image_url : '',
                 price : '',
                 stock : '',
-                category : ''
+                CategoryId : ''
             }
             request(app)
                 .post('/products/add')
+                .set('token',token)
                 .send(newProduct)
                 .end((err, response) => {
                     if (err) {
@@ -419,16 +485,17 @@ describe('Test fail /products', () => {
         })
 
         test('should return error with mix validation errors with status 400', (done) => {
-            const error = ["price can't below 0. are you nuts?","Name must more than 3 letters", "image_url is required field","category is required field"]
+            const error = ["price can't below 0. are you nuts?","category is required field","Name must more than 3 letters", "image_url is required field"]
             let newProduct = {
                 name : 'as',
                 image_url : '',
                 price : -2,
                 stock : 2,
-                category : ''
+                CategoryId : ''
             }
             request(app)
                 .post('/products/add')
+                .set('token',token)
                 .send(newProduct)
                 .end((err, response) => {
                     if (err) {
