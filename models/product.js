@@ -7,8 +7,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
-        notNull:true,
-        unique: true
+        notNull:true
       }
     },
     image_url: {
@@ -38,7 +37,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
-        notNull:true
+        notNull: true
       }
     },
   },
@@ -47,7 +46,7 @@ module.exports = (sequelize, DataTypes) => {
     modelName: 'Product'
   })
   Product.associate = function(models) {
-    // associations can be defined here
+    Product.belongsToMany(models.User, { through: 'Carts' })
   };
   return Product;
 };

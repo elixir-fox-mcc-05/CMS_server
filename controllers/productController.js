@@ -1,4 +1,5 @@
 const { Product } = require('../models')
+const { Op } = require('sequelize')
 
 class ProductController {
     static findAll(req, res, next) { 
@@ -8,41 +9,52 @@ class ProductController {
                     res
                       .status(200)
                       .json({ products })
+                } else {
+                    next (err)
                 }
             })
+            .catch(err => { next(err) })
     }
     
     static findOne(req, res, next) { 
         const { productId } = req.params
 
-        Product.findByPk(productId)
+        Product.findByPk(+productId)
             .then(product => {
                 if (product) {
                     res
                       .status(200)
                       .json({ product })
+                } else {
+                    next(err)
                 }
+            })
+            .catch(err => {
+                next(err)
             })
     }
     
     static create(req, res, next) { 
-        const { name, image_url, price, stock, category } = req.body
+        let { name, image_url, price, stock, category } = req.body
 
-        Product.create({ name, image_url, price, stock, category })
+        Product.create({ name, image_url, price: +price, stock, category })
             .then(new_product => {
                 if(new_product) {
                     res
                       .status(201)
                       .json({ new_product })
+                } else {
+                    next(err)
                 }
             })
+            .catch(err => { next(err) })
     }
     
     static update(req, res, next) { 
-        const { name, image_url, price, stock, category } = req.body
+        const { stock } = req.body
         const { productId } = req.params
 
-        Product.update({ name, image_url, price, stock, category }, { where: { id: productId } })
+        Product.update({ stock }, { where: { id: productId } })
             .then(update_product => {
                 if(update_product) {
                     res

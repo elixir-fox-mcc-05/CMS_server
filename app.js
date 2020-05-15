@@ -18,4 +18,4 @@ app.use(routes)
 app.use(error_handler)
 
 // app.listen(PORT, () => console.log(`run port`, PORT))
-module.exports = app // bakalan di test menggunaka jest
+module.exports = app
