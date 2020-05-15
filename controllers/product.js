@@ -1,4 +1,5 @@
 const { User, Product } = require('../models');
+const { Op } = require("sequelize");
 
 class ProductController {
     static addNewProduct(req, res, next) {
@@ -24,13 +25,21 @@ class ProductController {
     }
 
     static showAllProducts(req, res, next) {
-        const UserId = req.uid
+        const { search } = req.query;
+        const sort  = req.query.sort.split('|');
+        const sortField = sort[0];
+        const sortDirection = sort[1].toUpperCase();
+        const UserId = req.uid;
 
         Product
             .findAll({
                 where: {
-                    UserId
-                }
+                    UserId,
+                    name: {
+                        [Op.iLike]: `%${search}%`
+                    }
+                },
+                order: [[sortField, sortDirection]]
             })
             .then(products => {
                 res.status(200).json({
