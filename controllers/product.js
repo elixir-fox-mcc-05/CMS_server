@@ -53,7 +53,7 @@ class ProductController {
     Product.update(values, options)
       .then((data) => {
         res.status(201).json({
-          UpdatedData: data[1][0],
+          UpdatedProduct: data[1][0],
         });
       })
       .catch((err) => {
