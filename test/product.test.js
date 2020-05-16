@@ -159,12 +159,6 @@ describe('Successful Product operations', () => {
                 .catch(err => { done(err) })                      
         })
 
-        afterAll((done) => {
-            queryInterface.bulkDelete('Products')
-                .then(_=> { done() })
-                .catch(err => { done(err) })
-        })
-
         test('Response code 200 product has been successfully updated', done => {
             let updatedVitamin = {
                 name: 'Elixir Update',
@@ -195,6 +189,27 @@ describe('Successful Product operations', () => {
                         expect(product).toHaveProperty('category', updatedVitamin.category)
                         expect(product).toHaveProperty('image_url', updatedVitamin.image_url)
                         expect(msg).toBe(`Product ${updatedVitamin.name} has been successfully updated`)
+                        return done()
+                    }
+                })
+        })
+    })
+
+    describe('Delete product DELETE /products/:id', () => {
+        afterAll((done) => {
+            queryInterface.bulkDelete('Products')
+                .then(_=> { done() })
+                .catch(err => { done(err) })
+        })
+
+        test('Delete successful with message', done => {
+            request(app)
+                .delete('/products/1')
+                .end((err, response) => {
+                    if (err) done(err)
+                    else {
+                        const { msg } = response.body
+                        expect(msg).toBe(`Task with id 1 has been deleted`)
                         return done()
                     }
                 })
@@ -350,7 +365,7 @@ describe('Failed Product operations', () => {
             image_url: 'https://upload.wikimedia.org/wikipedia/commons/8/8a/404_File_not_found.png'
         }
 
-        test('Response code 500 product not availablee', done => {
+        test('Response code 500 product not available', done => {
             let fakeId = 999
             request(app)
                 .put(`/products/${fakeId}`)
@@ -416,7 +431,7 @@ describe('Failed Product operations', () => {
     })
 
     describe('Failed to Get One Product GET /products/:id', () => {
-        test('Response code 500 returning error message', done => {
+        test('Response code 500 product not available', done => {
             let fakeId = 999
             request(app)
                 .get(`/products/${fakeId}`)
@@ -429,6 +444,27 @@ describe('Failed Product operations', () => {
                         let { error } = response.body
     
                         expect(error).toBe(`Product with id ${fakeId} is not available`)
+                        return done()
+                    }
+                })
+        })
+    })
+
+    describe('Failed to delete DELETE /products/:id', () => {
+        afterAll((done) => {
+            queryInterface.bulkDelete('Products')
+                .then(_=> { done() })
+                .catch(err => { done(err) })
+        })
+
+        test('Failed to delete unavailable product', done => {
+            request(app)
+                .delete('/products/999')
+                .end((err, response) => {
+                    if (err) done(err)
+                    else {
+                        const { error } = response.body
+                        expect(error).toBe(`Task with id 999 is not available`)
                         return done()
                     }
                 })

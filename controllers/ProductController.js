@@ -71,10 +71,21 @@ class ProductController {
             .catch(err => {
                 next(err)
             })
+    }
 
-        
-            
-
+    static delete(req, res, next) {
+        const { id } = req.params
+        Product.destroy({
+            where: { id }
+        })
+        .then( result => {
+            if (result) {
+                res.status(200).json({
+                    msg: `Task with id ${id} has been deleted`
+                })
+            } else next(`Task with id ${id} is not available`)            
+        })
+        .catch(err => next(err))
     }
 }
 
