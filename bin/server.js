@@ -4,7 +4,7 @@ if (NODE_ENV == 'development' || NODE_ENV == 'test') {
     require('dotenv').config()
 }
 require('dotenv').config()
-const PORT = process.env.PORT
+const PORT = process.env.PORT || 7438
 const app = require('../app')
 const server = http.createServer(app)
 
