@@ -4,7 +4,7 @@ const sinon = require('sinon');
 const jwt = require('jsonwebtoken');
 const { hashPassword } = require('../helpers/bcrypt.js');
 
-const userData = require('../dummyUser.json');
+const userData = require('../rawData/rawUser.json');
 
 const { queryInterface } = require('../models').sequelize;
 

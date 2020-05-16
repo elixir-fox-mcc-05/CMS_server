@@ -2,14 +2,17 @@ const app = require('../app.js');
 const request = require('supertest');
 const { queryInterface } = require('../models').sequelize;
 const { hashPassword } = require('../helpers/bcrypt.js');
-const productData = require('../dummyProduct.json');
-const userData = require('../dummyUser.json');
+const productData = require('../rawData/rawProduct.json');
+const userData = require('../rawData/rawUser.json');
+const categoryData = require('../rawData/rawCategory.json');
 const { generateToken } = require('../helpers/jwt.js');
 
 describe('Product Router', () => {
     let products = [];
     let user = [];
+    let categories = [];
     productData.map(product => {
+        // delete product.id;
         product.createdAt = new Date();
         product.updatedAt = new Date();
         product.UserId = 1;
@@ -18,10 +21,18 @@ describe('Product Router', () => {
     });
 
     userData.map(user => {
+        // delete user.id;
         user.password = hashPassword(user.password);
         user.createdAt = new Date();
         user.updatedAt = new Date();
         return user;
+    })
+
+    categoryData.map(category => {
+        // delete category.id;
+        category.createdAt = new Date();
+        category.updatedAt = new Date();
+        return category
     })
 
     beforeAll(done => {
@@ -30,12 +41,18 @@ describe('Product Router', () => {
         })
             .then(res => {
                 user = res;
+                return queryInterface.bulkInsert('Categories', categoryData, {
+                    returning: true
+                })
+            })
+            .then(res => {
+                categories = res;
                 return queryInterface.bulkInsert('Products', productData, {
                     returning: true
                 })
             })
             .then(res => {
-                product = res;
+                products = res;
                 done();
             })
             .catch(err => {
@@ -46,7 +63,7 @@ describe('Product Router', () => {
     
     describe('Add new product', () => {
         describe('Success', () => {
-            test('should return status code 201 created along with json with key(name, image_url, price, stock)', done => {
+            test('should return status code 201 created along with json with key(name, image_url, price, stock, CategoryId)', done => {
                 let admin = user[0];
                 let access_token = generateToken({
                     id: admin.id,
@@ -59,7 +76,8 @@ describe('Product Router', () => {
                         name: 'Dallas Cowboys White Game Jersey',
                         image_url: 'https://fanatics.frgimages.com/FFImage/thumb.aspx?i=/productimages/_2444000/altimages/ff_2444895alt1_full.jpg&w=900',
                         price: 12000,
-                        stock: 10
+                        stock: 10,
+                        categoryId: 3
                     })
                     .set('Accept', 'application/json')
                     .set('access_token', access_token)
@@ -71,6 +89,7 @@ describe('Product Router', () => {
                         expect(product).toHaveProperty('image_url', 'https://fanatics.frgimages.com/FFImage/thumb.aspx?i=/productimages/_2444000/altimages/ff_2444895alt1_full.jpg&w=900')
                         expect(product).toHaveProperty('price', '12000')
                         expect(product).toHaveProperty('stock', 10)
+                        expect(product).toHaveProperty('CategoryId', 3)
                     })
                     .end(err => {
                         if (err) {
@@ -96,7 +115,8 @@ describe('Product Router', () => {
                         name: '',
                         image_url: 'https://fanatics.frgimages.com/FFImage/thumb.aspx?i=/productimages/_2444000/altimages/ff_2444895alt1_full.jpg&w=900',
                         price: 12000,
-                        stock: 10
+                        stock: 10,
+                        categoryId: 3
                     })
                     .set('Accept', 'application/json')
                     .set('access_token', access_token)
@@ -128,7 +148,8 @@ describe('Product Router', () => {
                         name: 'Duke Football',
                         image_url: 'https://fanatics.frgimages.com/FFImage/thumb.aspx?i=/productimages/_2444000/altimages/ff_2444895alt1_full.jpg&w=900',
                         price: 12000,
-                        stock: 10
+                        stock: 10,
+                        categoryId: 3
                     })
                     .set('Accept', 'application/json')
                     .set('access_token', access_token)
@@ -160,7 +181,8 @@ describe('Product Router', () => {
                         name: 'Dallas Cowboys Blue Game Jersey',
                         image_url: 'https://fanatics.frgimages.com/FFImage/thumb.aspx?i=/productimages/_2768000/altimages/ff_2768013alt1_full.jpg&w=900',
                         price: 12000,
-                        stock: 10
+                        stock: 10,
+                        categoryId: 3
                     })
                     .set('Accept', 'application/json')
                     .set('access_token', access_token)
@@ -194,7 +216,8 @@ describe('Product Router', () => {
                         name: 'Dallas Cowboys White Game Jersey',
                         image_url: '',
                         price: 12000,
-                        stock: 10
+                        stock: 10,
+                        categoryId: 3
                     })
                     .set('Accept', 'application/json')
                     .set('access_token', access_token)
@@ -228,7 +251,8 @@ describe('Product Router', () => {
                         name: 'Dallas Cowboys Game Jersey',
                         image_url: 'fanatic website',
                         price: 12000,
-                        stock: 10
+                        stock: 10,
+                        categoryId: 3
                     })
                     .set('Accept', 'application/json')
                     .set('access_token', access_token)
@@ -262,7 +286,8 @@ describe('Product Router', () => {
                         name: 'Duke Football',
                         image_url: 'https://fanatics.frgimages.com/FFImage/thumb.aspx?i=/productimages/_2768000/altimages/ff_2768013alt1_full.jpg&w=900',
                         price: -12000,
-                        stock: 10
+                        stock: 10,
+                        categoryId: 3
                     })
                     .set('Accept', 'application/json')
                     .set('access_token', access_token)
@@ -296,7 +321,8 @@ describe('Product Router', () => {
                         name: 'Duke Football',
                         image_url: 'https://fanatics.frgimages.com/FFImage/thumb.aspx?i=/productimages/_2768000/altimages/ff_2768013alt1_full.jpg&w=900',
                         price: '',
-                        stock: 10
+                        stock: 10,
+                        categoryId: 3
                     })
                     .set('Accept', 'application/json')
                     .set('access_token', access_token)
@@ -330,7 +356,8 @@ describe('Product Router', () => {
                         name: 'Dallas Cowboys Game Jersey',
                         image_url: 'fanatic website',
                         price: 'twelve thousand',
-                        stock: 10
+                        stock: 10,
+                        categoryId: 3
                     })
                     .set('Accept', 'application/json')
                     .set('access_token', access_token)
@@ -362,7 +389,8 @@ describe('Product Router', () => {
                         name: 'Duke Football',
                         image_url: 'https://fanatics.frgimages.com/FFImage/thumb.aspx?i=/productimages/_2768000/altimages/ff_2768013alt1_full.jpg&w=900',
                         price: 12000,
-                        stock: -3
+                        stock: -3,
+                        categoryId: 3
                     })
                     .set('Accept', 'application/json')
                     .set('access_token', access_token)
@@ -396,7 +424,8 @@ describe('Product Router', () => {
                         name: 'Duke Football',
                         image_url: 'https://fanatics.frgimages.com/FFImage/thumb.aspx?i=/productimages/_2768000/altimages/ff_2768013alt1_full.jpg&w=900',
                         price: 1200000,
-                        stock: ''
+                        stock: '',
+                        categoryId: 3
                     })
                     .set('Accept', 'application/json')
                     .set('access_token', access_token)
@@ -412,9 +441,7 @@ describe('Product Router', () => {
                         } else {
                             done();
                         }
-                    })
-
-                    
+                    })    
             })
 
             test('should return status 400 bad request because product stock is not in integer format', done => {
@@ -430,7 +457,8 @@ describe('Product Router', () => {
                         name: 'Dallas Cowboys Game Jersey',
                         image_url: 'https://fanatics.frgimages.com/FFImage/thumb.aspx?i=/productimages/_2768000/altimages/ff_2768013alt1_full.jpg&w=900',
                         price: 1200000,
-                        stock: 1.4
+                        stock: 1.4,
+                        categoryId: 3
                     })
                     .set('Accept', 'application/json')
                     .set('access_token', access_token)
@@ -446,9 +474,40 @@ describe('Product Router', () => {
                         } else {
                             done();
                         }
-                    })
+                    })      
+            })
 
-                    
+            test('should return status 400 bad request because product category is empty', done => {
+                let admin = user[0];
+                let access_token = generateToken({
+                    id: admin.id,
+                    name: admin.name,
+                    email: admin.email
+                })
+                request(app)
+                    .post('/products')
+                    .send({
+                        name: 'Duke Football',
+                        image_url: 'https://fanatics.frgimages.com/FFImage/thumb.aspx?i=/productimages/_2768000/altimages/ff_2768013alt1_full.jpg&w=900',
+                        price: 1200000,
+                        stock: '',
+                        categoryId: ''
+                    })
+                    .set('Accept', 'application/json')
+                    .set('access_token', access_token)
+                    .expect('Content-Type', /json/)
+                    .expect(400)
+                    .expect(res => {
+                        let product = res.body;
+                        expect(product.error).toContain('Product Category can\'t be empty')
+                    })
+                    .end(err => {
+                        if (err) {
+                            done(err);
+                        } else {
+                            done();
+                        }
+                    })    
             })
 
             test('should return status code 401 unauthorized because user doesnt have permission to add product', done => {
@@ -464,7 +523,8 @@ describe('Product Router', () => {
                         name: 'Dallas Cowboys White Game Jersey',
                         image_url: 'https://fanatics.frgimages.com/FFImage/thumb.aspx?i=/productimages/_2444000/altimages/ff_2444895alt1_full.jpg&w=900',
                         price: 12000,
-                        stock: 10
+                        stock: 10,
+                        categoryId: 3
                     })
                     .set('Accept', 'application/json')
                     .set('access_token', access_token)
@@ -496,7 +556,8 @@ describe('Product Router', () => {
                         name: 'Dallas Cowboys White Game Jersey',
                         image_url: 'https://fanatics.frgimages.com/FFImage/thumb.aspx?i=/productimages/_2444000/altimages/ff_2444895alt1_full.jpg&w=900',
                         price: 12000,
-                        stock: 10
+                        stock: 10,
+                        categoryId: 3
                     })
                     .set('Accept', 'application/json')
                     .expect('Content-Type', /json/)
@@ -513,6 +574,39 @@ describe('Product Router', () => {
                         }
                     })
             })
+
+            test('should return status 401 unauthorized because user doesnt have permission to add new product(user is not an admin)', done => {
+                let admin = user[1];
+                let access_token = generateToken({
+                    id: admin.id,
+                    name: admin.name,
+                    email: admin.email
+                })
+                request(app)
+                    .post('/products')
+                    .send({
+                        name: 'Dallas Cowboys Game Jersey',
+                        image_url: 'https://fanatics.frgimages.com/FFImage/thumb.aspx?i=/productimages/_2768000/altimages/ff_2768013alt1_full.jpg&w=900',
+                        price: 1200000,
+                        stock: 1.4,
+                        categoryId: 3
+                    })
+                    .set('Accept', 'application/json')
+                    .set('access_token', access_token)
+                    .expect('Content-Type', /json/)
+                    .expect(401)
+                    .expect(res => {
+                        let product = res.body;
+                        expect(product.error).toContain('Only admin has the authority to do this action')
+                    })
+                    .end(err => {
+                        if (err) {
+                            done(err);
+                        } else {
+                            done();
+                        }
+                    })    
+            })
         })
     })
     
@@ -526,7 +620,7 @@ describe('Product Router', () => {
                     email: admin.email
                 })
                 request(app)
-                    .get('/products')
+                    .get('/products?sort=name|asc&page=1&per_page=10&search=')
                     .set('Accept', 'application/json')
                     .set('access_token', access_token)
                     .expect('Content-Type', /json/)
@@ -536,8 +630,9 @@ describe('Product Router', () => {
                         expect(products).toEqual(
                             expect.arrayContaining([
                                 expect.objectContaining({
-                                    id: 1,
+                                    CategoryId: 3,
                                     UserId: 1,
+                                    id: 1,
                                     image_url: "https://fanatics.frgimages.com/FFImage/thumb.aspx?i=/productimages/_2768000/altimages/ff_2768013alt1_full.jpg&w=900",
                                     name: "Duke Football",
                                     price: "1800000",
@@ -625,7 +720,8 @@ describe('Product Router', () => {
                         name: 'Duke White Football',
                         image_url: 'https://fanatics.frgimages.com/FFImage/thumb.aspx?i=/productimages/_2768000/altimages/ff_2768013alt1_full.jpg&w=900',
                         price: 18000,
-                        stock: 10
+                        stock: 10,
+                        categoryId: 3
                     })
                     .set('Accept', 'application/json')
                     .set('access_token', access_token)
@@ -637,6 +733,8 @@ describe('Product Router', () => {
                             expect.arrayContaining([
                                 expect.arrayContaining([
                                     expect.objectContaining({
+                                        CategoryId: 3,
+                                        UserId: 1,
                                         id: 1,
                                         name: 'Duke White Football',
                                         image_url: 'https://fanatics.frgimages.com/FFImage/thumb.aspx?i=/productimages/_2768000/altimages/ff_2768013alt1_full.jpg&w=900',
@@ -671,7 +769,8 @@ describe('Product Router', () => {
                         name: '',
                         image_url: 'https://fanatics.frgimages.com/FFImage/thumb.aspx?i=/productimages/_2444000/altimages/ff_2444895alt1_full.jpg&w=900',
                         price: 12000,
-                        stock: 10
+                        stock: 10,
+                        categoryId: 3
                     })
                     .set('Accept', 'application/json')
                     .set('access_token', access_token)
@@ -703,7 +802,8 @@ describe('Product Router', () => {
                         name: 'Dallas Cowboys Helmet',
                         image_url: 'https://fanatics.frgimages.com/FFImage/thumb.aspx?i=/productimages/_2444000/altimages/ff_2444895alt1_full.jpg&w=900',
                         price: 12000,
-                        stock: 10
+                        stock: 10,
+                        categoryId: 3
                     })
                     .set('Accept', 'application/json')
                     .set('access_token', access_token)
@@ -735,7 +835,8 @@ describe('Product Router', () => {
                         name: 'Dallas Cowboys Blue Game Jersey',
                         image_url: 'https://fanatics.frgimages.com/FFImage/thumb.aspx?i=/productimages/_1586000/altimages/ff_1586957alt1_full.jpg&w=900',
                         price: 12000,
-                        stock: 10
+                        stock: 10,
+                        categoryId: 3
                     })
                     .set('Accept', 'application/json')
                     .set('access_token', access_token)
@@ -769,7 +870,8 @@ describe('Product Router', () => {
                         name: 'Dallas Cowboys White Game Jersey',
                         image_url: '',
                         price: 12000,
-                        stock: 10
+                        stock: 10,
+                        categoryId: 3
                     })
                     .set('Accept', 'application/json')
                     .set('access_token', access_token)
@@ -803,7 +905,8 @@ describe('Product Router', () => {
                         name: 'Dallas Cowboys Game Jersey',
                         image_url: 'fanatic website',
                         price: 12000,
-                        stock: 10
+                        stock: 10,
+                        categoryId: 3
                     })
                     .set('Accept', 'application/json')
                     .set('access_token', access_token)
@@ -837,7 +940,8 @@ describe('Product Router', () => {
                         name: 'Duke Football',
                         image_url: 'https://fanatics.frgimages.com/FFImage/thumb.aspx?i=/productimages/_2768000/altimages/ff_2768013alt1_full.jpg&w=900',
                         price: -12000,
-                        stock: 10
+                        stock: 10,
+                        categoryId: 3
                     })
                     .set('Accept', 'application/json')
                     .set('access_token', access_token)
@@ -871,7 +975,8 @@ describe('Product Router', () => {
                         name: 'Duke Football',
                         image_url: 'https://fanatics.frgimages.com/FFImage/thumb.aspx?i=/productimages/_2768000/altimages/ff_2768013alt1_full.jpg&w=900',
                         price: '',
-                        stock: 10
+                        stock: 10,
+                        categoryId: 3
                     })
                     .set('Accept', 'application/json')
                     .set('access_token', access_token)
@@ -905,7 +1010,8 @@ describe('Product Router', () => {
                         name: 'Dallas Cowboys Game Jersey',
                         image_url: 'fanatic website',
                         price: 'twelve thousand',
-                        stock: 10
+                        stock: 10,
+                        categoryId: 3
                     })
                     .set('Accept', 'application/json')
                     .set('access_token', access_token)
@@ -937,7 +1043,8 @@ describe('Product Router', () => {
                         name: 'Duke Football',
                         image_url: 'https://fanatics.frgimages.com/FFImage/thumb.aspx?i=/productimages/_2768000/altimages/ff_2768013alt1_full.jpg&w=900',
                         price: 12000,
-                        stock: -3
+                        stock: -3,
+                        categoryId: 3
                     })
                     .set('Accept', 'application/json')
                     .set('access_token', access_token)
@@ -971,7 +1078,8 @@ describe('Product Router', () => {
                         name: 'Duke Football',
                         image_url: 'https://fanatics.frgimages.com/FFImage/thumb.aspx?i=/productimages/_2768000/altimages/ff_2768013alt1_full.jpg&w=900',
                         price: 1200000,
-                        stock: ''
+                        stock: '',
+                        categoryId: 3
                     })
                     .set('Accept', 'application/json')
                     .set('access_token', access_token)
@@ -1005,7 +1113,8 @@ describe('Product Router', () => {
                         name: 'Dallas Cowboys Game Jersey',
                         image_url: 'https://fanatics.frgimages.com/FFImage/thumb.aspx?i=/productimages/_2768000/altimages/ff_2768013alt1_full.jpg&w=900',
                         price: 1200000,
-                        stock: 1.4
+                        stock: 1.4,
+                        categoryId: 3
                     })
                     .set('Accept', 'application/json')
                     .set('access_token', access_token)
@@ -1024,6 +1133,39 @@ describe('Product Router', () => {
                     })
 
                     
+            })
+
+            test('should return status 400 bad request because product category is empty', done => {
+                let admin = user[0];
+                let access_token = generateToken({
+                    id: admin.id,
+                    name: admin.name,
+                    email: admin.email
+                })
+                request(app)
+                    .put('/products/1')
+                    .send({
+                        name: 'Dallas Cowboys Game Jersey',
+                        image_url: 'https://fanatics.frgimages.com/FFImage/thumb.aspx?i=/productimages/_2768000/altimages/ff_2768013alt1_full.jpg&w=900',
+                        price: 1200000,
+                        stock: 1,
+                        categoryId: ''
+                    })
+                    .set('Accept', 'application/json')
+                    .set('access_token', access_token)
+                    .expect('Content-Type', /json/)
+                    .expect(400)
+                    .expect(res => {
+                        let product = res.body;
+                        expect(product.error).toContain('Product Category can\'t be empty')
+                    })
+                    .end(err => {
+                        if (err) {
+                            done(err);
+                        } else {
+                            done();
+                        }
+                    })    
             })
 
             test('should return status code 401 unauthorized because user doesnt have permission to update product', done => {
@@ -1144,7 +1286,7 @@ describe('Product Router', () => {
                     .expect(401)
                     .expect(res => {
                         let product = res.body;
-                        expect(product.error).toContain('You dont have the authority to do this action')
+                        expect(product.error).toContain('Only admin has the authority to do this action')
                     })
                     .end(err => {
                         if (err) {
@@ -1152,9 +1294,7 @@ describe('Product Router', () => {
                         } else {
                             done();
                         }
-                    })
-
-                    
+                    })    
             })
         })
     })
@@ -1289,7 +1429,7 @@ describe('Product Router', () => {
                     .expect(401)
                     .expect(res => {
                         let product = res.body;
-                        expect(product.error).toContain('You dont have the authority to do this action')
+                        expect(product.error).toContain('Only admin has the authority to do this action')
                     })
                     .end(err => {
                         if (err) {
@@ -1310,6 +1450,9 @@ describe('Product Router', () => {
                 return queryInterface.bulkDelete('Products')
             })
             .then(() => {
+                return queryInterface.bulkDelete('Categories')
+            })
+            ,then(() => {
                 done();
             })
             .catch(err => {

@@ -31,12 +31,11 @@ class ProductController {
         const sort  = req.query.sort.split('|');
         const sortField = sort[0];
         const sortDirection = sort[1].toUpperCase();
-        const UserId = req.uid;
+        // const UserId = req.uid;
 
         Product
             .findAll({
                 where: {
-                    UserId,
                     name: {
                         [Op.iLike]: `%${search}%`
                     }

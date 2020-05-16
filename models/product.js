@@ -87,7 +87,12 @@ module.exports = (sequelize, DataTypes) => {
       },
       onDelete: 'cascade',
       onUpdate: 'cascade',
-      hooks: true
+      hooks: true,
+      validate: {
+        notEmpty: {
+          msg: 'Product Category can\'t be empty'
+        }
+      }
     }
   }, {
     sequelize,
