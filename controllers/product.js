@@ -1,9 +1,10 @@
-const { User, Product } = require('../models');
+const { User, Product, Category } = require('../models');
 const { Op } = require("sequelize");
 
 class ProductController {
     static addNewProduct(req, res, next) {
         const { name, image_url, price, stock } = req.body;
+        const CategoryId = req.body.categoryId;
         const UserId = req.uid;
 
         Product
@@ -12,7 +13,8 @@ class ProductController {
                 image_url,
                 price,
                 stock,
-                UserId
+                UserId,
+                CategoryId
             })
             .then(product => {
                 res.status(201).json({
@@ -39,6 +41,7 @@ class ProductController {
                         [Op.iLike]: `%${search}%`
                     }
                 },
+                include: [Category],
                 order: [[sortField, sortDirection]]
             })
             .then(products => {
@@ -53,6 +56,7 @@ class ProductController {
 
     static updateProduct(req, res, next) {
         const { name, image_url, price, stock } = req.body;
+        const CategoryId = req.body.categoryId;
         const { id } = req.params;
         
         Product
@@ -60,7 +64,8 @@ class ProductController {
                 name,
                 image_url,
                 price,
-                stock
+                stock,
+                CategoryId
             }, {
                 where: {
                     id

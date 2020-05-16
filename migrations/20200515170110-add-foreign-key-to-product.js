@@ -2,20 +2,20 @@
 
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.addColumn('Products', 'UserId', {
+    return queryInterface.addColumn('Products', 'CategoryId', {
       type: Sequelize.INTEGER,
-      allowNull: false,
       references: {
-        model: 'Users',
+        model: 'Categories',
+        allowNull: false,
         key: 'id'
       },
-      onUpdate: 'cascade',
       onDelete: 'cascade',
+      onUpdate: 'cascade',
       hooks: true
     })
   },
 
   down: (queryInterface, Sequelize) => {
-    return queryInterface.removeColumn('Products', 'UserId')
+    return queryInterface.removeColumn('Products', 'CategoryId')
   }
 };

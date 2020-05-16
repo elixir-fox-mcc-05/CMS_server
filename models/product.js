@@ -69,6 +69,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     UserId: {
       type: DataTypes.INTEGER,
+      allowNull: false,
       references: {
         model: 'Users',
         key: 'id'
@@ -76,16 +77,117 @@ module.exports = (sequelize, DataTypes) => {
       onUpdate: 'cascade',
       onDelete: 'cascade',
       hooks: true
+    },
+    CategoryId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: 'Categories',
+        key: 'id'
+      },
+      onDelete: 'cascade',
+      onUpdate: 'cascade',
+      hooks: true
     }
   }, {
     sequelize,
     modelName: 'Product',
     defaultScope: {
       attributes: { exclude: ['createdAt', 'updatedAt'] }
+    },
+    hooks: {
+      beforeCreate(product) {
+        const { models } = sequelize;
+        const id = product.CategoryId;
+
+        return models.Category
+          .findByPk(id)
+          .then(category => {
+            category.total_product++
+
+            return models.Category
+              .update({
+                total_product: category.total_product
+              }, {
+                where: {
+                  id
+                }
+              })
+          })
+          .catch(err => {
+            throw(err);
+          })
+      },
+      beforeBulkUpdate(options) {
+        options.individualHooks = true
+      },
+      beforeUpdate(product) {
+        const { models } = sequelize;
+        const newId = product.dataValues.CategoryId;
+        const previousId = product._previousDataValues.CategoryId;
+        if(newId !== previousId) {
+          return models.Category
+            .findByPk(previousId)
+            .then(category => {
+              category.total_product--;
+              return models.Category
+                .update({
+                  total_product: category.total_product
+                }, {
+                  where: {
+                    id: category.id
+                  }
+                })
+            })
+            .then(() => {
+              return models.Category
+                .findByPk(newId)
+            })
+            .then(category => {
+              category.total_product++;
+              return models.Category
+                .update({
+                  total_product: category.total_product
+                }, {
+                  where: {
+                    id: category.id
+                  }
+                })
+            })
+            .catch(err => {
+              throw(err);
+            })
+        }
+      },
+      beforeBulkDestroy(options) {
+        options.individualHooks = true
+      },
+      beforeDestroy(product) {
+        const { models } = sequelize;
+        const id = product.CategoryId
+
+        return models.Category
+          .findByPk(id)
+          .then(category => {
+            category.total_product--;
+            return models.Category
+              .update({
+                total_product: category.total_product
+              },{
+                where: {
+                  id
+                }
+              })
+          })
+          .catch(err => {
+            throw(err);
+          })
+      }
     }
   });
   Product.associate = function(models) {
     Product.belongsTo(models.User);
+    Product.belongsTo(models.Category);
   };
   return Product;
 };
