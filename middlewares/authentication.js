@@ -15,7 +15,6 @@ const authentication = (req, res, next) => {
         } else {
           return next({
             code: 401,
-            name: 'NotAuthenticatedError',
             message: 'Invalid Access Token'
           });
         }

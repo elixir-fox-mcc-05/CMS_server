@@ -20,7 +20,8 @@ class UserController {
             });
 
             res.status(200).json({
-              token
+              token,
+              role: result.role
             });
           } else {
             return next({

@@ -48,7 +48,7 @@ module.exports = (sequelize, DataTypes) => {
         validate: {
           isIn: {
             args: [['admin', 'member']],
-            msg: "Status must be either 'member' or 'admin' "
+            msg: "Role must be either 'member' or 'admin'"
           }
         }
       }

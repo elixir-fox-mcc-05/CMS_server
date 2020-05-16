@@ -116,6 +116,54 @@ describe('User Test', () => {
             }
           });
       });
+      test(`Send email as boolean`, done => {
+        const usertest = {
+          email: true,
+          password: 12313232,
+          role: 'member'
+        };
+        const errors = [
+          {
+            message: `Must Be an email`
+          }
+        ];
+        request(app)
+          .post('/register')
+          .send(usertest)
+          .end((err, response) => {
+            if (err) {
+              return done(err);
+            } else {
+              expect(response.status).toBe(400);
+              expect(response.body).toHaveProperty('errors', errors);
+              return done();
+            }
+          });
+      });
+      test(`should return error 400 and message Role must be either member or admin`, done => {
+        const usertest = {
+          email: 'yosa@mail.com',
+          password: 12313232,
+          role: 'adasdasd'
+        };
+        const errors = [
+          {
+            message: `Role must be either 'member' or 'admin'`
+          }
+        ];
+        request(app)
+          .post('/register')
+          .send(usertest)
+          .end((err, response) => {
+            if (err) {
+              return done(err);
+            } else {
+              expect(response.status).toBe(400);
+              expect(response.body).toHaveProperty('errors', errors);
+              return done();
+            }
+          });
+      });
       test(`Input is not email and password < 6`, done => {
         const usertest = {
           email: 'bukan email',

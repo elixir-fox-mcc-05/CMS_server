@@ -81,26 +81,6 @@ describe("Category Test", () => {
           });
       });
     })
-    describe('Failure', () => {
-      test(`Should return 401 unauthorized`, done => {
-        const errors = {
-          code: 401,
-          message: `You cannot access this service`
-        };
-        request(app)
-          .get('/categories')
-          .set('token', token_err)
-          .end((err, response) => {
-            if (err) {
-              return done(err);
-            } else {
-              expect(response.status).toBe(401);
-              expect(response.body).toHaveProperty('errors', errors);
-              return done();
-            }
-          });
-      });
-    });
   });
   describe("Create Category", () => {
     describe("Success", () => {
@@ -142,28 +122,6 @@ describe("Category Test", () => {
               return done(err);
             } else {
               expect(response.status).toBe(400);
-              expect(response.body).toHaveProperty('errors', errors);
-              return done();
-            }
-          });
-      });
-      test('Should return status 401 Unauthorized', done => {
-        const errors = {
-          code: 401,
-          message: `You cannot access this service`
-        };
-        const newCat = {
-          name: 'Kategori Baru'
-        };
-        request(app)
-          .post('/categories')
-          .send(newCat)
-          .set('token', token_err)
-          .end((err, response) => {
-            if (err) {
-              return done(err);
-            } else {
-              expect(response.status).toBe(401);
               expect(response.body).toHaveProperty('errors', errors);
               return done();
             }

@@ -82,6 +82,7 @@ describe('Product Test', () => {
     test('Should return all products from database', done => {
       request(app)
         .get('/products')
+        .set('token', token)
         .end((err, response) => {
           if (err) {
             return done(err);
@@ -98,6 +99,7 @@ describe('Product Test', () => {
       test('Should return a product from database', done => {
         request(app)
           .get(`/products/${productid}`)
+          .set('token', token)
           .end((err, response) => {
             if (err) {
               return done(err);
@@ -184,6 +186,36 @@ describe('Product Test', () => {
             'https://img1.ralali.id/mediaflex/500/assets/img/Libraries/257613_Minyak-Goreng-Bimoli-Klasik-Pouch-2L-Minyak-Sayur-Bimoli-2000mL_e0U0AarHllkjKrYO_1549057560.png',
           price: 'bukan integer nih',
           stock: 'string'
+        };
+        request(app)
+          .post('/products')
+          .send(newProduct)
+          .set('token', token)
+          .end((err, response) => {
+            if (err) {
+              return done(err);
+            } else {
+              expect(response.status).toBe(400);
+              expect(response.body).toHaveProperty('errors', errors);
+              return done();
+            }
+          });
+      });
+      test('Should return fail with status 400 and error message', done => {
+        const errors = [
+          {
+            message: `Price must be integer`
+          },
+          {
+            message: `Stock must be integer`
+          }
+        ];
+        const newProduct = {
+          name: 'Bimoli',
+          image_url:
+            'https://img1.ralali.id/mediaflex/500/assets/img/Libraries/257613_Minyak-Goreng-Bimoli-Klasik-Pouch-2L-Minyak-Sayur-Bimoli-2000mL_e0U0AarHllkjKrYO_1549057560.png',
+          price: true,
+          stock: true
         };
         request(app)
           .post('/products')
@@ -320,7 +352,6 @@ describe('Product Test', () => {
         });
         const errors = {
           code: 401,
-          name: "NotAuthenticatedError",
           message: `Invalid Access Token`
         };
         request(app)

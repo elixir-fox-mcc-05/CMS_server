@@ -1,8 +1,22 @@
-const { Product } = require('../models');
+const { Product, Category } = require('../models');
 
 class ProductController {
   static findAll(req, res, next) {
-    Product.findAll()
+    let UserId = req.UserId;
+    let UserRole = req.UserRole;
+    let search = {};
+    console.log(UserRole);
+    if(UserRole == 'member') {
+      search = {
+        UserId
+      }
+    }
+    Product.findAll({
+      include: {
+        model: Category
+      },
+      where: search
+    })
       .then(result => {
         res.status(200).json({
           Products: result
@@ -17,6 +31,9 @@ class ProductController {
     Product.findOne({
       where: {
         id
+      },
+      include: {
+        model: Category
       }
     })
       .then(result => {
