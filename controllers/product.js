@@ -27,25 +27,43 @@ class ProductController {
     }
 
     static showAllProducts(req, res, next) {
-        const { search } = req.query;
+        console.log(req.query);
+        const { search, per_page, categoryId, page } = req.query;
         const sort  = req.query.sort.split('|');
         const sortField = sort[0];
         const sortDirection = sort[1].toUpperCase();
-        // const UserId = req.uid;
+        const whereClause = {
+            name: {
+                [Op.iLike]: `%${search}%`
+            }
+        }
+        if (categoryId) {
+            whereClause.CategoryId = categoryId;
+        }
+
+        const startIndex = (page - 1) * per_page;
+        const endIndex = page * per_page; 
 
         Product
-            .findAll({
-                where: {
-                    name: {
-                        [Op.iLike]: `%${search}%`
-                    }
-                },
+            .findAndCountAll({
+                where: whereClause,
                 include: [Category],
-                order: [[sortField, sortDirection]]
+                order: [[sortField, sortDirection]],
+                offset: startIndex,
+                limit: per_page
             })
-            .then(products => {
+            .then(results => {
+                const lastPage = Math.ceil(results.count/per_page);
                 res.status(200).json({
-                    products
+                    products: {
+                        total: results.count,
+                        per_page: +per_page,
+                        current_page: +page,
+                        last_page: lastPage,
+                        from: startIndex+1,
+                        to: endIndex,
+                        data: results.rows
+                    }
                 })
             })
             .catch((err) => {
