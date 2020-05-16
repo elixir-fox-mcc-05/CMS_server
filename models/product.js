@@ -2,7 +2,7 @@
 module.exports = (sequelize, DataTypes) => {
 
   const Model = sequelize.Sequelize.Model;
-
+  
   class Product extends Model {}
 
   Product.init({
@@ -41,16 +41,24 @@ module.exports = (sequelize, DataTypes) => {
         }
       }
     },
-    image_url: DataTypes.STRING,
-    description: DataTypes.STRING,
-    UserId: DataTypes.INTEGER
+    UserId: DataTypes.INTEGER,
+    category: {
+      type: DataTypes.STRING,
+      validate: {
+        notEmpty: {
+          args: true,
+          msg: `Category can't be empty`
+        }
+      }
+    },
+    image_url: DataTypes.STRING
   }, {
     sequelize,
     modelName: 'Product'
-  });
+  })
 
   Product.associate = function(models) {
-    Product.belongsTo(models.User, { foreignKey: 'UserId', targetKey: 'id' });
+    Product.belongsTo(models.User, { foreignKey: 'UserId', targetKey: 'id' })
   };
   return Product;
 };

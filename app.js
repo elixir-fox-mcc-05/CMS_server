@@ -10,11 +10,14 @@ const app = express();
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
+// Initiate Cors
+const cors = require('cors');
+app.use(cors());
+
 // Declare Routes
 const routes = require('./routes/index.js');
 const errHandler = require('./middlewares/errorHandler.js');
 app.use('/', routes);
 app.use(errHandler);
-
 
 module.exports = app;

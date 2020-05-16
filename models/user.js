@@ -9,36 +9,44 @@ module.exports = (sequelize, DataTypes) => {
     email: {
       type: DataTypes.STRING,
       validate: {
-        isEmail: {
-          args: true,
-          msg: `Email must be written in email format`
-        },
-        isEmpty: {
+        notEmpty: {
           args: true,
           msg: `Email can't be empty`
+        },
+        isEmail: {
+          args: true,
+          msg: `Email must be email format`
         }
       }
     },
     password: {
       type: DataTypes.STRING,
       validate: {
-        isEmpty: {
+        notEmpty: {
           args: true,
           msg: `Password can't be empty`
         },
         len: {
           args: [6],
-          msg: `Password must consist at least 6 character`
+          msg: `Password minimum 6 characters`
+        }
+      }
+    },
+    role: {
+      type:  DataTypes.STRING,
+      validate: {
+        notEmpty: {
+          args: true,
+          msg: `Role can't be empty`
         }
       }
     }
   }, {
     sequelize,
     modelName: 'User'
-  });
-
+  })
   User.associate = function(models) {
-    User.hasMany(models.Product, { foreignKey: 'UserId', targetKey: 'id' });
+    User.hasMany(models.Product, { foreignKey: 'UserId', targetKey: 'id' })
   };
   return User;
 };

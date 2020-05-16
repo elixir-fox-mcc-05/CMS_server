@@ -2,13 +2,13 @@ const { Product } = require('../models');
 
 class ProductController {
     static create(req, res, next) {
-        let { name, price, stock, description, image_url } = req.body;
+        let { name, price, stock, category, image_url } = req.body;
         const UserId = req.currentUserId;
         const values = {
             name,
             price,
             stock,
-            description,
+            category,
             image_url,
             UserId
         };
@@ -34,7 +34,7 @@ class ProductController {
     } 
 
     static update(req, res, next) {
-        let { name, price, stock, image_url, description } = req.body;
+        let { name, price, stock, image_url, category } = req.body;
         const ProductId = req.params.productid;
         const options = {
             returning: true,
@@ -47,7 +47,7 @@ class ProductController {
             price,
             stock,
             image_url,
-            description
+            category
         };
         Product
             .update(values, options)

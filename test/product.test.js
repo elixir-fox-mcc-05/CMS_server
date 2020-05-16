@@ -50,7 +50,7 @@ describe('Product Router', function() {
                     price: '3000',
                     stock: '120',
                     image_url: 'http://google.co.id',
-                    description: 'Sabun wangi dan higienis'
+                    category: 'Rumah tangga'
                 })
                 .expect(201)
                 .expect('Content-Type', /json/)
@@ -108,7 +108,7 @@ describe('Product Router', function() {
                     price: '',
                     stock: '120',
                     image_url: 'http://google.co.id',
-                    description: 'Sabun wangi dan higienis'
+                    category: 'Rumah Tangga'
                 })
                 .expect(400)
                 .expect('Content-Type', /json/)
@@ -136,7 +136,7 @@ describe('Product Router', function() {
                     price: '3000',
                     stock: '',
                     image_url: 'http://google.co.id',
-                    description: 'Sabun wangi dan higienis'
+                    category: 'Rumah Tangga'
                 })
                 .expect(400)
                 .expect('Content-Type', /json/)
@@ -162,9 +162,37 @@ describe('Product Router', function() {
                 .send({
                     name: 'Sabun',
                     price: '3000',
+                    stock: '200',
+                    image_url: 'http://google.co.id',
+                    category: ''
+                })
+                .expect(400)
+                .expect('Content-Type', /json/)
+                .expect(function(result) {
+                    let data = result.body;
+                    expect(data.message).toEqual([{ message: `Category can't be empty`}]);
+                })
+                .end(function(err) {
+                    if(err) {
+                        return done(err);
+                    } else {
+                        return done();
+                    }
+                })
+            });
+        });
+
+        describe('Failed', function() {
+            test('Should return 400 status code with json data', function(done) {
+                request(app)
+                .post('/products')
+                .set('token', token)
+                .send({
+                    name: 'Sabun',
+                    price: '3000',
                     stock: '0',
                     image_url: 'http://google.co.id',
-                    description: 'Sabun wangi dan higienis'
+                    category: 'Rumah Tangga'
                 })
                 .expect(400)
                 .expect('Content-Type', /json/)
@@ -192,7 +220,7 @@ describe('Product Router', function() {
                     price: '0',
                     stock: '111',
                     image_url: 'http://google.co.id',
-                    description: 'Sabun wangi dan higienis'
+                    category: 'Rumah Tangga'
                 })
                 .expect(400)
                 .expect('Content-Type', /json/)
@@ -219,7 +247,7 @@ describe('Product Router', function() {
                     price: '3000',
                     stock: '120',
                     image_url: 'http://google.co.id',
-                    description: 'Sabun wangi dan higienis'
+                    category: 'Rumah Tangga'
                 })
                 .expect(401)
                 .expect('Content-Type', /json/)
@@ -295,7 +323,7 @@ describe('Product Router', function() {
                     name: 'Minyak',
                     price: '5000',
                     stock: '123',
-                    description: 'Minyak baru',
+                    category: 'Rumah Tangga',
                     image_url: 'http://google.com'
 
                 })
@@ -322,7 +350,7 @@ describe('Product Router', function() {
                     name: 'Minyak',
                     price: '5000',
                     stock: '123',
-                    description: 'Minyak baru',
+                   category: 'Rumah Tangga',
                     image_url: 'http://google.com'
 
                 })
