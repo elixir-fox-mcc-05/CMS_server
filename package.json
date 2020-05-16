@@ -7,7 +7,8 @@
     "montest": "NODE_ENV=test nodemon ./bin/http.js",
     "test": "NODE_ENV=test jest  --detectOpenHandles --runInBand --forceExit",
     "ftest": "NODE_ENV=test jest",
-    "dev" : "nodemon ./bin/http.js"
+    "dev" : "nodemon ./bin/http.js",
+    "start" : "node ./bin/http.js"
   },
   "repository": {
     "type": "git",

@@ -15,10 +15,10 @@
     "logging": false
   },
   "production": {
-    "username": "postgres",
-    "password": 12345,
-    "database": "CMS_Server_production",
-    "host": "127.0.0.1",
+    "username": "pmetlxaflewzrz",
+    "password": "2177f5f948ad4ba9503d497e0769caafbdbbac3e3020a734bfd5bb606d0b989a",
+    "database": "dfph7urrd1sl3l",
+    "host": "ec2-34-200-101-236.compute-1.amazonaws.com",
     "dialect": "postgres"
   }
 }
