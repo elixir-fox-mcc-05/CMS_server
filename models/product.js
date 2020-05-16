@@ -45,7 +45,13 @@ module.exports = (sequelize, DataTypes) => {
         }
       }
     },
-    imageUrl: DataTypes.STRING,
+    imageUrl: {
+      type: DataTypes.STRING,
+      isUrl: {
+        args : true,
+        msg : 'must be url input'
+      }
+    },
     UserId : {
       type : DataTypes.INTEGER,
       refrences : {
