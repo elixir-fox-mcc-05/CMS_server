@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node app.js",
+    "start": "node /bin/http.js",
     "dev": "set NODE_ENV=development&&nodemon ./bin/http.js",
     "test": "set NODE_ENV=test&&sequelize db:migrate:undo:all&&sequelize db:migrate&&sequelize db:migrate&&jest --runInBand --detectOpenHandles --forceExit"
   },
