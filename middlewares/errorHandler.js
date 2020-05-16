@@ -3,8 +3,7 @@ function error_handler(err, req, res, next) {
         let errorMessage = err.errors.map(el => { return el.message })
         res.status(400).json({ name: `Sequelize validation error :`, data: errorMessage })
     } else if (err.name == 'SequelizeDatabaseError') {
-        let errorMessage = err.errors.map(el => { return el.message })
-        res.status(400).json({ name: `Sequelize validation error :`, data: errorMessage })
+        res.status(400).json({ name: `Sequelize validation error :`, data: err.message })
     } else if (err.name == 'ReferenceError') {
         res.status(404).json({ err: `NOT FOUND` })
     } else if (err.name == "JsonWebTokenError") {
@@ -12,7 +11,7 @@ function error_handler(err, req, res, next) {
     } else if (err.name == "SequelizeUniqueConstraintError") {
         res.status(400).json({ name: `email must unique`, data: `your mail already exist` })
     } else {
-        console.log(err)
+        console.log(err.message)
         res.status(500).json({ err: err.name })
     }
 }

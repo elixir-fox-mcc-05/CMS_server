@@ -2,10 +2,14 @@
   "name": "CMS_server",
   "version": "1.0.0",
   "description": "",
+  "engines": {
+    "node": "12.14.1"
+  },
   "main": "app.js",
   "scripts": {
     "test": "NODE_ENV=test jest --runInBand --detectOpenHandles",
-    "dev": "NODE_ENV=development nodemon ./bin/http.js"
+    "dev": "NODE_ENV=development nodemon ./bin/http.js",
+    "start": "node app.js"
   },
   "repository": {
     "type": "git",

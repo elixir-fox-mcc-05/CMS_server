@@ -33,6 +33,23 @@ class ProductController {
                 next(err)
             })
     }
+
+    static category (req, res, next) {
+        
+        Product.findAll({ where: { category: req.params.category } })
+        .then(products => {
+            if (products) {
+                res
+                .status(200)
+                .json({ products })
+            } else {
+                next(err)
+            }
+        })
+        .catch(err => {
+            next(err)
+        })
+    }
     
     static create(req, res, next) { 
         let { name, image_url, price, stock, category } = req.body
