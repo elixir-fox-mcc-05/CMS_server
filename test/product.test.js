@@ -624,7 +624,7 @@ describe('Product Router', () => {
                     .expect(200)
                     .expect(res => {
                         let { products } = JSON.parse(res.text)
-                        expect(products).toEqual(
+                        expect(products.data).toEqual(
                             expect.arrayContaining([
                                 expect.objectContaining({
                                     CategoryId: 3,
