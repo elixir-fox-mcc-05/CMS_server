@@ -50,12 +50,42 @@ describe('Product create, read, update, delete', () => {
     price: 2000,
     stock: 100,
   };
+
+  const inputProductNameEmpty = {
+    name: '',
+    image_url: 'https://imageurl.test',
+    price: 2000,
+    stock: 100,
+  };
+
+  const inputProductImageEmpty = {
+    name: 'Gorengan',
+    image_url: '',
+    price: 2000,
+    stock: 100,
+  };
+
+  const inputProductPriceEmpty = {
+    name: 'Gorengan',
+    image_url: 'https://imageurl.test',
+    price: '',
+    stock: 100,
+  };
+
+  const inputProductStockEmpty = {
+    name: 'Gorengan',
+    image_url: 'https://imageurl.test',
+    price: 2000,
+    stock: '',
+  };
+
   const inputProductEmptyAndFalse = {
     name: '',
     image_url: '',
     price: -1,
     stock: -1,
   };
+
   const inputProductAllNull = {
     name: null,
     image_url: null,
@@ -95,7 +125,7 @@ describe('Product create, read, update, delete', () => {
   });
 
   describe('=> Add a new product failed', () => {
-    describe('> Add new product failed input empty', () => {
+    describe('> Add new product failed input empty and false', () => {
       test('Should return bad request. All error messages (400).', (done) => {
         request(app)
           .post('/products')
@@ -105,11 +135,132 @@ describe('Product create, read, update, delete', () => {
             const status = data.status;
             const error = data.body;
             const expected = [
-              { message: 'Please insert name' },
+              {
+                message: 'Please insert name',
+              },
+              {
+                message: 'Please insert image url',
+              },
+              {
+                message: 'Please insert valid url ex:(foo@bar.com)',
+              },
+              {
+                message: 'Inputted price should greater or equal 0',
+              },
+              {
+                message: 'Inputted stock should greater or equal 0',
+              },
+            ];
+            expect(status).toEqual(400);
+            expect(error).toHaveProperty('code', 400);
+            expect(error).toHaveProperty('type', 'BAD REQUEST');
+            expect(error).toHaveProperty('message', expected);
+          })
+          .end((err) => {
+            if (err) {
+              done(err);
+            } else {
+              done();
+            }
+          });
+      });
+    });
+
+    describe('> Add new product failed input name empty', () => {
+      test('Should return bad request. Name empty error messages (400).', (done) => {
+        request(app)
+          .post('/products')
+          .send(inputProductNameEmpty)
+          .set('access_token', access_token_admin)
+          .expect((data) => {
+            const status = data.status;
+            const error = data.body;
+            const expected = [
+              {
+                message: 'Please insert name',
+              },
+            ];
+            expect(status).toEqual(400);
+            expect(error).toHaveProperty('code', 400);
+            expect(error).toHaveProperty('type', 'BAD REQUEST');
+            expect(error).toHaveProperty('message', expected);
+          })
+          .end((err) => {
+            if (err) {
+              done(err);
+            } else {
+              done();
+            }
+          });
+      });
+    });
+
+    describe('> Add new product failed input image empty', () => {
+      test('Should return bad request. Image empty error messages (400).', (done) => {
+        request(app)
+          .post('/products')
+          .send(inputProductImageEmpty)
+          .set('access_token', access_token_admin)
+          .expect((data) => {
+            const status = data.status;
+            const error = data.body;
+            const expected = [
               { message: 'Please insert image url' },
               { message: 'Please insert valid url ex:(foo@bar.com)' },
-              { message: 'Inputted price should greater or equal 0' },
-              { message: 'Inputted stock should greater or equal 0' },
+            ];
+            expect(status).toEqual(400);
+            expect(error).toHaveProperty('code', 400);
+            expect(error).toHaveProperty('type', 'BAD REQUEST');
+            expect(error).toHaveProperty('message', expected);
+          })
+          .end((err) => {
+            if (err) {
+              done(err);
+            } else {
+              done();
+            }
+          });
+      });
+    });
+
+    describe('> Add new product failed input price empty', () => {
+      test('Should return bad request. Price empty error messages (400).', (done) => {
+        request(app)
+          .post('/products')
+          .send(inputProductPriceEmpty)
+          .set('access_token', access_token_admin)
+          .expect((data) => {
+            const status = data.status;
+            const error = data.body;
+            const expected = [
+              { message: 'Please insert price' },
+            ];
+            expect(status).toEqual(400);
+            expect(error).toHaveProperty('code', 400);
+            expect(error).toHaveProperty('type', 'BAD REQUEST');
+            expect(error).toHaveProperty('message', expected);
+          })
+          .end((err) => {
+            if (err) {
+              done(err);
+            } else {
+              done();
+            }
+          });
+      });
+    });
+
+    describe('> Add new product failed input stock empty', () => {
+      test('Should return bad request. Stock empty error messages (400).', (done) => {
+        request(app)
+          .post('/products')
+          .send(inputProductStockEmpty)
+          .set('access_token', access_token_admin)
+          .expect((data) => {
+            const status = data.status;
+            const error = data.body;
+            const expected = [
+              { message: 'Please insert stock' },
             ];
             expect(status).toEqual(400);
             expect(error).toHaveProperty('code', 400);
@@ -136,10 +287,18 @@ describe('Product create, read, update, delete', () => {
             const status = data.status;
             const error = data.body;
             const expected = [
-              { message: 'Please insert name' },
-              { message: 'Please insert image url' },
-              { message: 'Please insert price' },
-              { message: 'Please insert stock' },
+              {
+                message: 'Please insert name',
+              },
+              {
+                message: 'Please insert image url',
+              },
+              {
+                message: 'Please insert price',
+              },
+              {
+                message: 'Please insert stock',
+              },
             ];
             expect(status).toEqual(400);
             expect(error).toHaveProperty('code', 400);
