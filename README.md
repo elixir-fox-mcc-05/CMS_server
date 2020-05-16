@@ -7,11 +7,11 @@
 
 ## Client URL :
 
-(status : inactive)
+https://client-cms-ecommerce-yudhaaw96.firebaseapp.com/ (status : active)
 
 ## Server URL :
 
-(status : inactive)
+https://server-cms-ecommerce-yudhaaw96.herokuapp.com/ (status : active)
 
 ## SIGNUP USER
 
