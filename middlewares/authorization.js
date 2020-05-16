@@ -1,13 +1,14 @@
 const { Product } = require('../models');
+const { User } = require('../models')
 
 function authorization(req, res, next) {
-    let ProductId = req.params.productid;
-    Product
-        .findByPk(ProductId)
-            .then(product => {
-                if(product) {
-                    if(product.UserId === req.currentUserId) {
-                        next();
+    let userId = req.currentUserId
+    User
+        .findByPk(userId)
+            .then(user => {
+                if (user) {
+                    if(user.role === 'admin') {
+                        next()
                     } else {
                         next({
                             name: 'Unauthorized',
@@ -20,9 +21,9 @@ function authorization(req, res, next) {
                         errors: { message: `Item Not Found`}
                     })
                 }
-            })
-            .catch(err => {
-                next(err);
+            }).
+            catch(err => {
+                next(err)
             })
 }
 

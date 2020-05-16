@@ -24,7 +24,7 @@ class ProductController {
 
     static read(req, res, next) {
         Product
-            .findAll()
+            .findAll({ order: [['id', 'asc']] })
                 .then(products => {
                     res.status(200).json({ Products: products });
                 })

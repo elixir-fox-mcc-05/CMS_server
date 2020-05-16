@@ -7,6 +7,6 @@ const authorization = require('../middlewares/authorization.js');
 router.delete('/:productid', authentication, authorization, ProductController.delete);
 router.patch('/:productid', authentication, authorization, ProductController.update);
 router.get('/', authentication, ProductController.read);
-router.post('/', authentication, ProductController.create);
+router.post('/', authentication, authorization, ProductController.create);
 
 module.exports = router;
