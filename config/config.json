@@ -8,8 +8,21 @@
     "logging": false,
     "operatorsAliases": false
   },
+  "test": {
+    "username": "postgres",
+    "password": "meginia12",
+    "database": "cms_server",
+    "host": "127.0.0.1",
+    "dialect": "postgres",
+    "logging": false,
+    "operatorsAliases": false
+  },
   "production": {
-    "use_env_variable" : "DATABASE_URL",
-    "dialect" : "postgres"
+    "username": "root",
+    "password": null,
+    "database": "database_production",
+    "host": "127.0.0.1",
+    "dialect": "mysql",
+    "operatorsAliases": false
   }
 }

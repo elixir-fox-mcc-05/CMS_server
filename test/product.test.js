@@ -20,7 +20,7 @@ const ProductController = require('../controllers/productController')
 // const { mockRequest, mockResponse } = require('mock-req-res')
 // const proxyquire = require('proxyquire')
 
-let token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwiZW1haWwiOiJtYWlsQG1haWwuY29tIiwicGFzc3dvcmQiOiIkMmIkMDQkZC9Lb0tVUTU3Z2lpUzhjR1dVQ0hYTzFrRU1pVjRKdElKbVlLaUZ5ZHVwRWpIOHZUa2VWbWkiLCJpYXQiOjE1ODkzNjcxNjd9.He_neKlcZ-q7uv_6ikyqlVxlc8-06P5CwY0Vd7tVTw4'
+// let token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwiZW1haWwiOiJtYWlsQG1haWwuY29tIiwicGFzc3dvcmQiOiIkMmIkMDQkZC9Lb0tVUTU3Z2lpUzhjR1dVQ0hYTzFrRU1pVjRKdElKbVlLaUZ5ZHVwRWpIOHZUa2VWbWkiLCJpYXQiOjE1ODkzNjcxNjd9.He_neKlcZ-q7uv_6ikyqlVxlc8-06P5CwY0Vd7tVTw4'
 
 afterAll(done => {
     queryInterface.bulkDelete('Products')
@@ -62,6 +62,9 @@ beforeAll((done) => {
             done()
         })
 })
+
+let categorynum;
+let token;
 describe('POST /register then POST /login', () => {
     test('should return object with id, name,and email. status 201', (done) => {
         const userInput = {
@@ -101,6 +104,31 @@ describe('POST /register then POST /login', () => {
             })
             
     })
+    describe('POST /category/add', () => {
+        test('return object with id and name, status 201', (done) => {
+            let newCategory = {
+                name: 'test'
+            }
+
+            request(app)
+                .post(`/category/add`)
+                .set('token', token)
+                // .query({'id':id})
+                .send(newCategory)
+                .end((err, response) => {
+                    if (err) {
+                        return done(err)
+                    } else {
+                        console.log(response.body)
+                        categorynum = response.body.id
+                        expect(response.status).toBe(201)
+                        expect(response.body).toHaveProperty('id', expect.any(Number))
+                        expect(response.body).toHaveProperty('name', newCategory.name)
+                        return done()
+                    }
+                })
+        })
+    })
 })
 
 
@@ -138,7 +166,7 @@ describe('test success /products', () => {
                 image_url : 'pp.jpg',
                 price : '8000',
                 stock : '12',
-                CategoryId : 1,
+                CategoryId : categorynum,
             }
             request(app)
                 .post('/products/add')
@@ -189,7 +217,7 @@ describe('test success /products', () => {
 
     describe('GET /search', () => {
         test('should return objects with id,name,image_url,price and stock status 200',(done) => {
-            let test ='balll'
+            let test ='buah'
             request(app)
                 
                 .post(`/products/search`)
@@ -220,7 +248,7 @@ describe('test success /products', () => {
                 image_url : 'pp.jpg',
                 price : '8000',
                 stock : '12',
-                CategoryId : 1,
+                CategoryId : categorynum,
             }
            
             request(app)
@@ -328,7 +356,7 @@ describe('Test fail /products', () => {
                 image_url : 'pp.jpg',
                 price : '8000',
                 stock : '12',
-                CategoryId : 1
+                CategoryId : categorynum
             }
             request(app)
                 .post('/products/add')
@@ -352,7 +380,7 @@ describe('Test fail /products', () => {
                 image_url : '',
                 price : '8000',
                 stock : '12',
-                CategoryId : 1
+                CategoryId : categorynum
             }
             request(app)
                 .post('/products/add')
@@ -376,7 +404,7 @@ describe('Test fail /products', () => {
                 image_url : 'pp.jpg',
                 price : -1,
                 stock : '12',
-                CategoryId : 1
+                CategoryId : categorynum
             }
             request(app)
                 .post('/products/add')
@@ -400,7 +428,7 @@ describe('Test fail /products', () => {
                 image_url : 'pp.jpg',
                 price : '8000',
                 stock : -1,
-                CategoryId : 1
+                CategoryId : categorynum
             }
             request(app)
                 .post('/products/add')

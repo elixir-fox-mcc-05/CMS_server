@@ -16,7 +16,7 @@ function authorization(req, res, next) {
             } else {
 
                 res.status(404).json({
-                    msg: 'not found'
+                    error: 'not found'
                 })
             }
 

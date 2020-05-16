@@ -2,6 +2,7 @@ const app = require('../app')
 const request = require('supertest')
 const { sequelize } = require('../models')
 const { queryInterface } = sequelize
+const {compare} = require('../app')
 
 
 afterAll(done => {
@@ -20,7 +21,7 @@ describe('Test Register', () => {
         test('should return object with id, name,and email. status 201', (done) => {
             const userInput = {
                 first_name: 'yusak',
-                email: 'mail@mail.com',
+                email: 'mail@maill.com',
                 password: 'asdasd'
             }
             request(app)

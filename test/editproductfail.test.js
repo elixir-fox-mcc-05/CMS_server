@@ -3,6 +3,7 @@ const request = require('supertest')
 const { sequelize } = require('../models')
 const { queryInterface } = sequelize
 
+
 afterAll(done => {
     queryInterface.bulkDelete('Products')
         .then(() => {
@@ -31,12 +32,13 @@ beforeAll((done) => {
             createdAt: new Date(),
             updatedAt: new Date()
         }])
-        .then(() => {
+        .then((data) => {
+            console.log(data)
             console.log('beforeAll process complete')
             done()
         })
 })
-
+let categorynum
 let id;
 let token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwiZW1haWwiOiJtYWlsQG1haWwuY29tIiwicGFzc3dvcmQiOiIkMmIkMDQkZC9Lb0tVUTU3Z2lpUzhjR1dVQ0hYTzFrRU1pVjRKdElKbVlLaUZ5ZHVwRWpIOHZUa2VWbWkiLCJpYXQiOjE1ODkzNjcxNjd9.He_neKlcZ-q7uv_6ikyqlVxlc8-06P5CwY0Vd7tVTw4'
 describe('POST /register then POST /login', () => {
@@ -82,6 +84,31 @@ describe('POST /register then POST /login', () => {
 
 describe('test success /products', () => {
     
+    describe('POST /category/add', () => {
+        test('return object with id and name, status 201', (done) => {
+            let newCategory = {
+                name: 'test'
+            }
+
+            request(app)
+                .post(`/category/add`)
+                .set('token', token)
+                // .query({'id':id})
+                .send(newCategory)
+                .end((err, response) => {
+                    if (err) {
+                        return done(err)
+                    } else {
+                        console.log(response.body)
+                        categorynum = response.body.id
+                        expect(response.status).toBe(201)
+                        expect(response.body).toHaveProperty('id', expect.any(Number))
+                        expect(response.body).toHaveProperty('name', newCategory.name)
+                        return done()
+                    }
+                })
+        })
+    })
 
     describe('POST /add', () => {
         test('should return objects with id,name,image_url,price and stock status 201', (done) => {
@@ -90,7 +117,7 @@ describe('test success /products', () => {
                 image_url : 'pp.jpg',
                 price : '8000',
                 stock : '12',
-                CategoryId : 1
+                CategoryId : categorynum
             }
             request(app)
                 .post('/products/add')
@@ -100,7 +127,7 @@ describe('test success /products', () => {
                     if (err) {
                         return done(err)
                     } else {
-                        console.log(response.body)
+                        console.log("xxxxxxx", response.body)
                         expect(response.status).toBe(201)
                         expect(response.body).toHaveProperty('name', expect.any(String))
                         expect(response.body).toHaveProperty('image_url', expect.any(String))
@@ -108,6 +135,7 @@ describe('test success /products', () => {
                         expect(response.body).toHaveProperty('stock', expect.any(Number))
                         expect(response.body).toHaveProperty('CategoryId', expect.any(Number))
                         id = response.body.id
+
                         return done()
                     }
                 })
@@ -126,8 +154,9 @@ describe('Test fail /products', () => {
                 image_url : 'pp.jpg',
                 price : '8000',
                 stock : '12',
-                CategoryId : 1
+                CategoryId : categorynum
             }
+            console.log(id)
             request(app)
             .put(`/products/edit/${id}`)
             .set('token',token)
@@ -151,7 +180,7 @@ describe('Test fail /products', () => {
                 image_url : '',
                 price : '8000',
                 stock : '12',
-                CategoryId : 1
+                CategoryId : categorynum
             }
             request(app)
             .put(`/products/edit/${id}`)
@@ -176,7 +205,7 @@ describe('Test fail /products', () => {
                 image_url : 'pp.jpg',
                 price : -1,
                 stock : '12',
-                CategoryId : 1
+                CategoryId : categorynum
             }
             request(app)
             .put(`/products/edit/${id}`)
@@ -201,7 +230,7 @@ describe('Test fail /products', () => {
                 image_url : 'pp.jpg',
                 price : '8000',
                 stock : -1,
-                CategoryId : 1
+                CategoryId : categorynum
             }
             request(app)
             .put(`/products/edit/${id}`)

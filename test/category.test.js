@@ -286,9 +286,9 @@ describe('TEST FAIL /category', () => {
             // }
 
             request(app)
-                .get(`/category/1292319278301`)
+                .get(`/category/1292`)
                 .set('token', token)
-                .query({ 'id': 1292319278301 })
+                .query({ 'id': 1292 })
                 // .send(newCategory)
                 .end((err, response) => {
                     if (err) {
