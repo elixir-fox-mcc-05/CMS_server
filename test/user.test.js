@@ -160,7 +160,7 @@ describe('User Routes Test', () => {
                     if(err){
                         return done(err) // Jika gagal, tunjukkan server error-nya di terminal
                     } else {
-                        console.log("============", response.body)
+                        // console.log("============", response.body)
                         // console.log( '+ ', response.error , '+', response.status,' >>>> ',response.body )// Jika berhasil, maka kita cek dengan beberapa expectation
                         expect(response.status).toBe(400)
                         expect(response.body.errors).toEqual(
@@ -218,7 +218,7 @@ describe('User Routes Test', () => {
                     if(err){
                         return done(err) // Jika gagal, tunjukkan server error-nya di terminal
                     } else {
-                        console.log("============", response.body)
+                        // console.log("============", response.body)
                         // console.log( '+ ', response.error , '+', response.status,' >>>> ',response.body )// Jika berhasil, maka kita cek dengan beberapa expectation
                         expect(response.status).toBe(200)
                         expect(response.body).toHaveProperty('access_token', expect.any(String)) 
@@ -247,7 +247,7 @@ describe('User Routes Test', () => {
                         // console.log( '+ ', response.error , '+', response.status,' >>>> ',response.body )// Jika berhasil, maka kita cek dengan beberapa expectation
                         expect(response.status).toBe(400)
                         expect(response.body).not.toHaveProperty('access_token') 
-                        expect(response.body).toHaveProperty('error', 'Invalid password/message') 
+                        expect(response.body).toHaveProperty('error', 'Invalid password/email') 
                         return done()
                     }
                 })

@@ -6,7 +6,8 @@ class userController {
     static register(req,res,next){
         let newUser = {
             email: req.body.email,
-            password: req.body.password
+            password: req.body.password,
+            role: req.body.role
         }
         User.create(newUser)
             .then(result =>{
@@ -32,8 +33,9 @@ class userController {
             }
         })
         .then(result => {
-            console.log(result)
+            // console.log(result)
             if(result){
+                // console.log("++++++++++++", result.password, " **** ",loggingUser.password, "+++++++++++++++++++++")
                 let passwordMatch = comparePassword(loggingUser.password, result.password)
                 if(passwordMatch){
                     //buatkan token
@@ -50,13 +52,13 @@ class userController {
                 } else {
                     next({
                         message:"BadRequest",
-                        error:"Invalid password/message"
+                        error:"Invalid password/email"
                     })
                 }
             } else {
                 next({
                     message:"BadRequest",
-                    error:"Invalid password/message"
+                    error:"Invalid password/email"
                 })
             }
             

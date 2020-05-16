@@ -1,4 +1,7 @@
 'use strict';
+
+const {encryptPassword} = require("../helpers/bcrypt.js")
+
 module.exports = (sequelize, DataTypes) => {
 
   class Product extends sequelize.Sequelize.Model {}
@@ -20,7 +23,13 @@ module.exports = (sequelize, DataTypes) => {
     image_url: {
       type: DataTypes.STRING,
       allowNull: false,
-      defaultValue: ""
+      defaultValue: "https://di2ponv0v5otw.cloudfront.net/users/2019/03/29/50fce591f816d841e900986f/s_5c9eb78d5b565fe74bd17c95.jpg",
+      validate:{
+        notNull:{
+          arg: true,
+          msg: 'Link to product image must not be empty'
+        }
+      }
     },
     price: {
       type: DataTypes.INTEGER,
@@ -63,11 +72,6 @@ module.exports = (sequelize, DataTypes) => {
       }
     }
   }, {
-    hooks:{
-      beforeCreate: (user,options) =>{
-        user.password = encryptPassword(user.password)
-      }
-    },
     // Other model options go here
     sequelize, // We need to pass the connection instance
     modelName: 'Product' // We need to choose the model name

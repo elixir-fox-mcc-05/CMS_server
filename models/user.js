@@ -56,8 +56,8 @@ module.exports = (sequelize, DataTypes) => {
     }
   }, {
     hooks:{
-      beforeCreate: (user,options) =>{
-        user.password = encryptPassword(user.password)
+      beforeCreate: (User,options) =>{
+        User.password = encryptPassword(User.password)
       }
     },
     // Other model options go here

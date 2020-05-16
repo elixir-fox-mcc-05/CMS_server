@@ -1,5 +1,5 @@
 function errorHandler(err, req, res, next){
-    // console.log("======", err.name, "<====== ini errornya")
+    // console.log("======", err, "<====== ini error dari errorHandler")
     if(err.name == "SequelizeValidationError"){
         const errors = err.errors.map(el => ({
             message : el.message
@@ -23,14 +23,15 @@ function errorHandler(err, req, res, next){
         return res.status(400).json({
             error: err.error
         })
-    } else if(err.message == "User Not Found"){
+    } else if(err.message == "InternalServerError" && err.error == 'User Not Found'){
         return res.status(404).json({
-            errors: err.errors
+            message: "Internal Server Error",
+            error: err.error
         })
-    }else if(err.message == "JsonWebTokenError"){
-        return res.status(401).json({
-            errors: err.errors,
-            message: "Please sign in first"
+    }else if(err.name == "Internal Server Error" && err.error[0].message.name == 'JsonWebTokenError'){
+        return res.status(500).json({
+            message: "InternalServerError",
+            error: 'JWT Token malformed/does not exist. Please sign in first'
         })
     } else {
         return res.status(500).json({
