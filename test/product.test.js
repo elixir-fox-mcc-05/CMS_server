@@ -32,7 +32,7 @@ afterAll((done) => {
 
 describe('Tis On Product', ()=> {
   describe('Success Add Product', ()=> {
-    describe('POST /product/add', ()=> {
+    describe('POST /product', ()=> {
       test('should return object with id and email and status 201', done => {
         let data = {
           name: 'ikan',
@@ -42,11 +42,12 @@ describe('Tis On Product', ()=> {
           tags: 'food',
         }
       request(app)
-        .post('/product/add')
+        .post('/product')
         .set('access_token', access_token)
         .send(data)
         .end((err, res) => {
           if(err) {
+            console.log(err);
             return done(err)
           } else {
             expect(res.status).toBe(201)
@@ -62,7 +63,7 @@ describe('Tis On Product', ()=> {
     })
   })
   describe('Fail Add Product', ()=> {
-    describe('POST /product/add', ()=> {
+    describe('POST /product', ()=> {
       test('Please Insert Correct Number code 400', done => {
         let errors = [
           {
@@ -77,14 +78,13 @@ describe('Tis On Product', ()=> {
           tags: 'food',
         }
       request(app)
-        .post('/product/add')
+        .post('/product')
         .set('access_token', access_token)
         .send(data)
         .end((err, res) => {
           if(err) {
             return done(err)
           } else {
-            // console.log(res.body);
               expect(res.status).toBe(400)
               expect(res.body).toHaveProperty('errors',errors)
             return done()

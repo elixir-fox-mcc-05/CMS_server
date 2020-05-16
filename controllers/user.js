@@ -4,7 +4,8 @@ class UserController {
   static register(req, res, next) {
     let data = {
       email: req.body.email,
-      password: req.body.password
+      password: req.body.password,
+      status: req.body.status
     }
     User.create(data)
       .then((result) => {
@@ -26,13 +27,15 @@ class UserController {
       }
     })
       .then((result) => {
+        let status = result.dataValues.status
         let data = {
           id: result.id,
-          email: result.email
+          email: result.email,
         }
         let access_token = jwtToken(data)
         res.status(200).json({
-          access_token
+          access_token,
+          status
         })
       })
       .catch((err) => {
