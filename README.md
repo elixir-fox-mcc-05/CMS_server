@@ -234,10 +234,12 @@ Read all products data in products list
   /products
 
 *  **URL Params**
-
-   **Required:**
  
-    headers = token
+    None
+
+*  **Headers**
+    
+    token
 
 * **Data Params**
 
@@ -287,9 +289,79 @@ Read all products data in products list
           ]
         }
 
+### **Search Product**
+
+Read product data in products list by productId
+
+* **Method:**
+
+  `GET`
+
+* **URL**
+
+  /products/:productId
+
+*  **URL Params**
+ 
+    productId = [integer]
+
+*  **Headers**
+    
+    token
+
+* **Data Params**
+
+    none
+
+* **Success Response:**
+
+  * **Code:** 200 Ok<br />
+  **Content:** 
+
+        {
+            "product": {
+                "id": 1,
+                "name": "example 1",
+                "description": "desc 1",
+                "image_url": "url 1",
+                "price": 10000,
+                "stock": 1,
+                "updatedAt": "2020-05-13T17:58:28.831Z",
+                "createdAt": "2020-05-13T17:58:28.831Z"
+            }
+        }
+
+* **Error Response:**
+
+    * **Code:** 401 Unauthorized <br />
+    **Content:**
+
+            {
+                "name": "Unauthorized",
+                "errors": [
+                        {
+                            "message": "Unauthorized. Please login first"
+                        },
+                ]
+            }
+        
+    OR
+
+    * **Code:** 404 Not Found <br />
+    **Content:**
+
+            {
+                "name": "NotFound",
+                "errors": [
+                        {
+                            "message": "Product with id 9 not found"
+                        },
+                ]
+            }
+
 ### **Update Product**
 
-Update product data in products list
+Update product data in products list by productId
 
 * **Method:**
 
@@ -300,11 +372,12 @@ Update product data in products list
   /products/:productsId
 
 *  **URL Params**
-
-   **Required:**
  
-    headers = token <br />
     productId = [integer]
+
+*  **Headers**
+    
+    token
 
 * **Data Params**
 
@@ -394,7 +467,7 @@ Update product data in products list
 
 ### **Delete Product**
 
-Delete product data in products list
+Delete product data in products list by productId
 
 * **Method:**
 
@@ -405,11 +478,12 @@ Delete product data in products list
   /products/:productsId
 
 *  **URL Params**
-
-   **Required:**
  
-    headers = token <br />
     productId = [integer]
+
+*  **Headers**
+    
+    token
 
 * **Data Params**
 
