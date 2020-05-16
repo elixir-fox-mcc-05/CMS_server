@@ -135,21 +135,11 @@ describe('Product create, read, update, delete', () => {
             const status = data.status;
             const error = data.body;
             const expected = [
-              {
-                message: 'Please insert name',
-              },
-              {
-                message: 'Please insert image url',
-              },
-              {
-                message: 'Please insert valid url ex:(foo@bar.com)',
-              },
-              {
-                message: 'Inputted price should greater or equal 0',
-              },
-              {
-                message: 'Inputted stock should greater or equal 0',
-              },
+              { message: 'Please insert name' },
+              { message: 'Please insert image url' },
+              { message: 'Please insert valid url ex:(foo@bar.com)' },
+              { message: 'Inputted price should greater or equal 0' },
+              { message: 'Inputted stock should greater or equal 0' },
             ];
             expect(status).toEqual(400);
             expect(error).toHaveProperty('code', 400);
@@ -232,9 +222,7 @@ describe('Product create, read, update, delete', () => {
           .expect((data) => {
             const status = data.status;
             const error = data.body;
-            const expected = [
-              { message: 'Please insert price' },
-            ];
+            const expected = [{ message: 'Please insert price' }];
             expect(status).toEqual(400);
             expect(error).toHaveProperty('code', 400);
             expect(error).toHaveProperty('type', 'BAD REQUEST');
@@ -259,9 +247,7 @@ describe('Product create, read, update, delete', () => {
           .expect((data) => {
             const status = data.status;
             const error = data.body;
-            const expected = [
-              { message: 'Please insert stock' },
-            ];
+            const expected = [{ message: 'Please insert stock' }];
             expect(status).toEqual(400);
             expect(error).toHaveProperty('code', 400);
             expect(error).toHaveProperty('type', 'BAD REQUEST');
@@ -287,18 +273,10 @@ describe('Product create, read, update, delete', () => {
             const status = data.status;
             const error = data.body;
             const expected = [
-              {
-                message: 'Please insert name',
-              },
-              {
-                message: 'Please insert image url',
-              },
-              {
-                message: 'Please insert price',
-              },
-              {
-                message: 'Please insert stock',
-              },
+              { message: 'Please insert name' },
+              { message: 'Please insert image url' },
+              { message: 'Please insert price' },
+              { message: 'Please insert stock' },
             ];
             expect(status).toEqual(400);
             expect(error).toHaveProperty('code', 400);
@@ -354,6 +332,253 @@ describe('Product create, read, update, delete', () => {
             expect(error).toHaveProperty('code', 401);
             expect(error).toHaveProperty('type', 'UNAUTHORIZED');
             expect(error).toHaveProperty('message', 'Please signin first!');
+          })
+          .end((err) => {
+            if (err) {
+              done(err);
+            } else {
+              done();
+            }
+          });
+      });
+    });
+  });
+
+  describe('=> Update a product success', () => {
+    describe('> Update product success!', () => {
+      test('Should return UpdatedProduct', (done) => {
+        request(app)
+          .put('/products/1')
+          .send(inputProduct)
+          .set('access_token', access_token_admin)
+          .expect((data) => {
+            const status = data.status;
+            const UpdatedProduct = data.body.UpdatedProduct;
+            expect(status).toEqual(201);
+            expect(UpdatedProduct).toHaveProperty('id');
+            expect(UpdatedProduct).toHaveProperty('name', inputProduct.name);
+            expect(UpdatedProduct).toHaveProperty(
+              'image_url',
+              inputProduct.image_url
+            );
+            expect(UpdatedProduct).toHaveProperty('price', inputProduct.price);
+            expect(UpdatedProduct).toHaveProperty('stock', inputProduct.stock);
+          })
+          .end((err) => {
+            if (err) {
+              done(err);
+            } else {
+              done();
+            }
+          });
+      });
+    });
+  });
+
+  describe('=> Update a product failed', () => {
+    describe('> Update product input empty and false', () => {
+      test('Should return bad request, all error messages (404).', (done) => {
+        request(app)
+          .put('/products/1')
+          .send(inputProductEmptyAndFalse)
+          .set('access_token', access_token_admin)
+          .expect((data) => {
+            const status = data.status;
+            const error = data.body;
+            const expected = [
+              { message: 'Please insert name' },
+              { message: 'Please insert image url' },
+              { message: 'Please insert valid url ex:(foo@bar.com)' },
+              { message: 'Inputted price should greater or equal 0' },
+              { message: 'Inputted stock should greater or equal 0' },
+            ];
+            expect(status).toEqual(400);
+            expect(error).toHaveProperty('code', 400);
+            expect(error).toHaveProperty('type', 'BAD REQUEST');
+            expect(error).toHaveProperty('message', expected);
+          })
+          .end((err) => {
+            if (err) {
+              done(err);
+            } else {
+              done();
+            }
+          });
+      });
+    });
+
+    describe('> Update product input all null', () => {
+      test('Should return bad request, all error messages (404).', (done) => {
+        request(app)
+          .put('/products/1')
+          .send(inputProductAllNull)
+          .set('access_token', access_token_admin)
+          .expect((data) => {
+            const status = data.status;
+            const error = data.body;
+            const expected = [
+              { message: 'Please insert name' },
+              { message: 'Please insert image url' },
+              { message: 'Please insert price' },
+              { message: 'Please insert stock' },
+            ];
+            expect(status).toEqual(400);
+            expect(error).toHaveProperty('code', 400);
+            expect(error).toHaveProperty('type', 'BAD REQUEST');
+            expect(error).toHaveProperty('message', expected);
+          })
+          .end((err) => {
+            if (err) {
+              done(err);
+            } else {
+              done();
+            }
+          });
+      });
+    });
+
+    describe('> Update a product failed NOT an Admin', () => {
+      test('Should return unauthorized. Unauthorized error messages (401).', (done) => {
+        request(app)
+          .put('/products/1')
+          .set('access_token', access_token_customer)
+          .expect((data) => {
+            const status = data.status;
+            const error = data.body;
+            expect(status).toEqual(401);
+            expect(error).toHaveProperty('code', 401);
+            expect(error).toHaveProperty('type', 'UNAUTHORIZED');
+            expect(error).toHaveProperty(
+              'message',
+              'Sorry, not authorized, you are not an admin'
+            );
+          })
+          .end((err) => {
+            if (err) {
+              done(err);
+            } else {
+              done();
+            }
+          });
+      });
+    });
+
+    describe('> Update a product failed NOT signed in', () => {
+      test('Should return unauthorized. Unauthorized error messages (401).', (done) => {
+        request(app)
+          .put('/products/1')
+          .send(inputProduct)
+          .expect((data) => {
+            const status = data.status;
+            const error = data.body;
+            expect(status).toEqual(401);
+            expect(error).toHaveProperty('code', 401);
+            expect(error).toHaveProperty('type', 'UNAUTHORIZED');
+            expect(error).toHaveProperty('message', 'Please signin first!');
+          })
+          .end((err) => {
+            if (err) {
+              done(err);
+            } else {
+              done();
+            }
+          });
+      });
+    });
+  });
+
+  describe('=> Delete a product failed #1', () => {
+    describe('> Delete a product failed NOT an Admin', () => {
+      test('Should return unauthorized. Unauthorized error messages (401).', (done) => {
+        request(app)
+          .delete('/products/1')
+          .send(inputProduct)
+          .set('access_token', access_token_customer)
+          .expect((data) => {
+            const status = data.status;
+            const error = data.body;
+            expect(status).toEqual(401);
+            expect(error).toHaveProperty('code', 401);
+            expect(error).toHaveProperty('type', 'UNAUTHORIZED');
+            expect(error).toHaveProperty(
+              'message',
+              'Sorry, not authorized, you are not an admin'
+            );
+          })
+          .end((err) => {
+            if (err) {
+              done(err);
+            } else {
+              done();
+            }
+          });
+      });
+    });
+
+    describe('> Delete a product failed NOT signed in', () => {
+      test('Should return unauthorized. Unauthorized error messages (401).', (done) => {
+        request(app)
+          .delete('/products/1')
+          .expect((data) => {
+            const status = data.status;
+            const error = data.body;
+            expect(status).toEqual(401);
+            expect(error).toHaveProperty('code', 401);
+            expect(error).toHaveProperty('type', 'UNAUTHORIZED');
+            expect(error).toHaveProperty('message', 'Please signin first!');
+          })
+          .end((err) => {
+            if (err) {
+              done(err);
+            } else {
+              done();
+            }
+          });
+      });
+    });
+  });
+
+  describe('=> Delete a product success', () => {
+    describe('> Delete product success!', () => {
+      test('Should return DeletedProduct', (done) => {
+        request(app)
+          .delete('/products/1')
+          .set('access_token', access_token_admin)
+          .expect((data) => {
+            const status = data.status;
+            const DeletedProduct = data.body.DeletedProduct;
+            expect(status).toEqual(200);
+            expect(DeletedProduct).toHaveProperty('id');
+            expect(DeletedProduct).toHaveProperty('name', inputProduct.name);
+            expect(DeletedProduct).toHaveProperty(
+              'image_url',
+              inputProduct.image_url
+            );
+            expect(DeletedProduct).toHaveProperty('price', inputProduct.price);
+            expect(DeletedProduct).toHaveProperty('stock', inputProduct.stock);
+          })
+          .end((err) => {
+            if (err) {
+              done(err);
+            } else {
+              done();
+            }
+          });
+      });
+    });
+  });
+
+  describe('=> Delete a product failed #2', () => {
+    describe('> Delete product failed, not found', () => {
+      test('Should return bad request, not found error message (404).', (done) => {
+        request(app)
+          .delete('/products/1')
+          .set('access_token', access_token_admin)
+          .expect((data) => {
+            const status = data.status;
+            const body = data.body;
+            expect(status).toEqual(404);
+            expect(body).toHaveProperty('message', 'Sorry, not found');
           })
           .end((err) => {
             if (err) {
