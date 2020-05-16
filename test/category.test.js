@@ -42,129 +42,130 @@ describe('Category router', () => {
             })
     })
 
-    describe('Add new category', () => {
-        describe('Show All Categories', () => {
-            describe('Success', () => {
-                test('Should return status 200 OK along with all categories that exist', done => {
-                    let admin = user[0];
-                    let access_token = generateToken({
-                        id: admin.id,
-                        name: admin.name,
-                        email: admin.email
-                    })
-                    request(app)
-                        .get('/categories?sort=id|asc')
-                        .set('Accept', 'application/json')
-                        .set('access_token', access_token)
-                        .expect('Content-Type', /json/)
-                        .expect(200)
-                        .expect(res => {
-                            let { categories } = JSON.parse(res.text)
-                            expect(categories).toEqual([{
-                                    "id": 1,
-                                    "name": "Football",
-                                    "total_product": 0
-                                },
-                                {
-                                    "id": 2,
-                                    "name": "Basketball",
-                                    "total_product": 0
-                                },
-                                {
-                                    "id": 3,
-                                    "name": "American Football",
-                                    "total_product": 0
-                                },
-                                {
-                                    "id": 4,
-                                    "name": "Baseball",
-                                    "total_product": 0
-                                },
-                                {
-                                    "id": 5,
-                                    "name": "Ice Hockey",
-                                    "total_product": 0
-                                },
-                                {
-                                    "id": 6,
-                                    "name": "Cycling",
-                                    "total_product": 0
-                                },
-                                {
-                                    "id": 7,
-                                    "name": "Water Sport",
-                                    "total_product": 0
-                                },
-                                {
-                                    "id": 8,
-                                    "name": "Outdoor Sport",
-                                    "total_product": 0
-                                }
-                            ])
-                        })
-                        .end(err => {
-                            if (err) {
-                                done(err);
-                            } else {
-                                done();
-                            }
-                        })
+    describe('Show All Categories', () => {
+        describe('Success', () => {
+            test('Should return status 200 OK along with all categories that exist', done => {
+                let admin = user[0];
+                let access_token = generateToken({
+                    id: admin.id,
+                    name: admin.name,
+                    email: admin.email
                 })
-            })
-    
-            describe('fail', () => {
-                test('should return status code 401 unauthorized because user doesnt have permission to see all category', done => {
-                    let admin = user[0];
-                    let access_token = generateToken({
-                        id: 3,
-                        name: admin.name,
-                        email: admin.email
-                    })
-                    request(app)
-                        .get('/categories')
-                        .set('Accept', 'application/json')
-                        .set('access_token', access_token)
-                        .expect('Content-Type', /json/)
-                        .expect(401)
-                        .expect(res => {
-                            let product = res.body;
-                            expect(product.error).toContain('You dont have the authority to do this action')
-                        })
-                        .end(err => {
-                            if (err) {
-                                done(err);
-                            } else {
-                                done();
+                request(app)
+                    .get('/categories?sort=id|asc')
+                    .set('Accept', 'application/json')
+                    .set('access_token', access_token)
+                    .expect('Content-Type', /json/)
+                    .expect(200)
+                    .expect(res => {
+                        let { categories } = JSON.parse(res.text)
+                        expect(categories).toEqual([{
+                                "id": 1,
+                                "name": "Football",
+                                "total_product": 0
+                            },
+                            {
+                                "id": 2,
+                                "name": "Basketball",
+                                "total_product": 0
+                            },
+                            {
+                                "id": 3,
+                                "name": "American Football",
+                                "total_product": 0
+                            },
+                            {
+                                "id": 4,
+                                "name": "Baseball",
+                                "total_product": 0
+                            },
+                            {
+                                "id": 5,
+                                "name": "Ice Hockey",
+                                "total_product": 0
+                            },
+                            {
+                                "id": 6,
+                                "name": "Cycling",
+                                "total_product": 0
+                            },
+                            {
+                                "id": 7,
+                                "name": "Water Sport",
+                                "total_product": 0
+                            },
+                            {
+                                "id": 8,
+                                "name": "Outdoor Sport",
+                                "total_product": 0
                             }
-                        })
-                })
-    
-                test('should return status code 401 unauthorized because user is not registered or logged in', done => {
-                    let admin = user[0];
-                    let access_token = generateToken({
-                        id: 3,
-                        name: admin.name,
-                        email: admin.email
+                        ])
                     })
-                    request(app)
-                        .get('/categories')
-                        .set('Accept', 'application/json')
-                        .expect('Content-Type', /json/)
-                        .expect(401)
-                        .expect(res => {
-                            let product = res.body;
-                            expect(product.error).toContain('You have to login to access this page')
-                        })
-                        .end(err => {
-                            if (err) {
-                                done(err);
-                            } else {
-                                done();
-                            }
-                        })
-                })
+                    .end(err => {
+                        if (err) {
+                            done(err);
+                        } else {
+                            done();
+                        }
+                    })
             })
         })
+
+        describe('fail', () => {
+            test('should return status code 401 unauthorized because user doesnt have permission to see all category', done => {
+                let admin = user[0];
+                let access_token = generateToken({
+                    id: 3,
+                    name: admin.name,
+                    email: admin.email
+                })
+                request(app)
+                    .get('/categories')
+                    .set('Accept', 'application/json')
+                    .set('access_token', access_token)
+                    .expect('Content-Type', /json/)
+                    .expect(401)
+                    .expect(res => {
+                        let category = res.body;
+                        expect(category.error).toContain('You dont have the authority to do this action')
+                    })
+                    .end(err => {
+                        if (err) {
+                            done(err);
+                        } else {
+                            done();
+                        }
+                    })
+            })
+
+            test('should return status code 401 unauthorized because user is not registered or logged in', done => {
+                let admin = user[0];
+                let access_token = generateToken({
+                    id: 3,
+                    name: admin.name,
+                    email: admin.email
+                })
+                request(app)
+                    .get('/categories')
+                    .set('Accept', 'application/json')
+                    .expect('Content-Type', /json/)
+                    .expect(401)
+                    .expect(res => {
+                        let product = res.body;
+                        expect(product.error).toContain('You have to login to access this page')
+                    })
+                    .end(err => {
+                        if (err) {
+                            done(err);
+                        } else {
+                            done();
+                        }
+                    })
+            })
+        })
+    })
+    
+    describe('Add new category', () => {
 
         describe('Success', () => {
             test('should return status code 201 created along with json with key(id, name)', done => {
@@ -198,7 +199,7 @@ describe('Category router', () => {
         })
 
         describe('Fail', () => {
-            test('should return status 400 bad request because product name is empty', done => {
+            test('should return status 400 bad request because category name is empty', done => {
                 let admin = user[0];
             let access_token = generateToken({
                 id: admin.id,
@@ -227,7 +228,7 @@ describe('Category router', () => {
                 })
             })
 
-            test('should return status 400 bad request because product name is violating unique constraint', done => {
+            test('should return status 400 bad request because category name is violating unique constraint', done => {
                 let admin = user[0];
             let access_token = generateToken({
                 id: admin.id,
@@ -348,7 +349,7 @@ describe('Category router', () => {
         })
 
         describe('Fail', () => {
-            test('should return status 400 bad request because product name is empty', done => {
+            test('should return status 400 bad request because category name is empty', done => {
                 let admin = user[0];
             let access_token = generateToken({
                 id: admin.id,
@@ -377,7 +378,7 @@ describe('Category router', () => {
                 })
             })
 
-            test('should return status 400 bad request because product name is violating unique constraint', done => {
+            test('should return status 400 bad request because category name is violating unique constraint', done => {
                 let admin = user[0];
             let access_token = generateToken({
                 id: admin.id,
@@ -406,7 +407,7 @@ describe('Category router', () => {
                 })
             })
 
-            test('should return status code 401 unauthorized because user doesnt have permission to add category', done => {
+            test('should return status code 401 unauthorized because user doesnt have permission to update category', done => {
                 let admin = user[0];
                 let access_token = generateToken({
                     id: 3,
@@ -471,7 +472,7 @@ describe('Category router', () => {
                     email: admin.email
                 })
                 request(app)
-                    .put('/products/1')
+                    .put('/categories/1')
                     .send({
                         name: 'Soft Ball'
                     })
