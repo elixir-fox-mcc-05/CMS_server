@@ -2,7 +2,6 @@ const { Category } = require('../models');
 
 class CategoryController {
     static addNewCategory(req, res, next) {
-        console.log(req.body);
         const { name } = req.body;
 
         Category

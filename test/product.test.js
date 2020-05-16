@@ -12,7 +12,6 @@ describe('Product Router', () => {
     let user = [];
     let categories = [];
     productData.map(product => {
-        // delete product.id;
         product.createdAt = new Date();
         product.updatedAt = new Date();
         product.UserId = 1;
@@ -21,7 +20,6 @@ describe('Product Router', () => {
     });
 
     userData.map(user => {
-        // delete user.id;
         user.password = hashPassword(user.password);
         user.createdAt = new Date();
         user.updatedAt = new Date();
@@ -29,7 +27,6 @@ describe('Product Router', () => {
     })
 
     categoryData.map(category => {
-        // delete category.id;
         category.createdAt = new Date();
         category.updatedAt = new Date();
         return category
@@ -1452,7 +1449,7 @@ describe('Product Router', () => {
             .then(() => {
                 return queryInterface.bulkDelete('Categories')
             })
-            ,then(() => {
+            .then(() => {
                 done();
             })
             .catch(err => {

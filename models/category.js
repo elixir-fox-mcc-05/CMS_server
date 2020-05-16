@@ -15,7 +15,7 @@ module.exports = (sequelize, DataTypes) => {
       },
       validate: {
         notEmpty: {
-          msg: 'name can\'t be empty'
+          msg: 'category name can\'t be empty'
         }
       }
     },
@@ -32,7 +32,10 @@ module.exports = (sequelize, DataTypes) => {
     }
   }, {
     sequelize,
-    modelName: 'Category'
+    modelName: 'Category',
+    defaultScope: {
+      attributes: { exclude: ['createdAt', 'updatedAt'] }
+    }
   });
   Category.associate = function(models) {
     Category.hasMany(models.Product);
