@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start" : "node bin/http.js",
+    "start" : "node ./bin/http.js",
     "montest": "NODE_ENV=test nodemon ./bin/http.js",
     "test": "NODE_ENV=test jest  --detectOpenHandles --runInBand --forceExit",
     "ftest": "NODE_ENV=test jest",
