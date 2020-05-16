@@ -14,11 +14,17 @@ class UserCon {
                     msg : 'wrong username/password'
                 })
             } else {
-                let { id , username } = result
-                let token = getToken({id,username})
-                res.status(200).json({
-                    token
-                })
+                if (result.password === req.body.password) {
+                    let { id , username } = result
+                    let token = getToken({id,username})
+                    res.status(200).json({
+                        token
+                    })
+                } else {
+                    res.status(400).json({
+                        msg : 'wrong username/password'
+                    })
+                }
             }
         })
         .catch(err=>{

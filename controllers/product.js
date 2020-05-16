@@ -31,8 +31,7 @@ class ProductCon {
             })
             .then(result=>{
                 res.status(201).json({
-                    msg : 'successfully adding product',
-                    result
+                    msg : 'successfully adding product'
                 })
             })
             .catch(err=>{
@@ -70,8 +69,7 @@ class ProductCon {
                     .then(result=>{
                         if(result) {
                             res.status(201).json({
-                                msg : 'Product updated',
-                                result
+                                msg : 'Product updated'
                             })
                         } else {
                             res.status(400).json({
@@ -113,8 +111,7 @@ class ProductCon {
         })
         .catch(err=>{
             res.status(500).json({
-                msg : "failed to delete product",
-                err
+                msg : "failed to delete product"
             })
         })
     }

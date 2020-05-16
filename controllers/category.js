@@ -76,7 +76,7 @@ class CategoryCon {
                     msg : "Category id doesn't exists or has been deleted"
                 })
             } else {
-                res.status(201).json({
+                res.status(200).json({
                     msg : 'Category Deleted'
                 })
             }

@@ -9,7 +9,7 @@ router.get('/',(req,res)=>{
     res.send('masuk server')
 })
 router.use('/user',userRoutes)
-router.use(authentication)
+// router.use(authentication)
 router.use('/product',productRoutes)
 router.use('/category',categoryRoutes)
 
