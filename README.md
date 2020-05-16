@@ -345,7 +345,7 @@ Update a Product
 
 - ### Success Response
 
-  - #### Code: 200
+  - #### Code: 201
   - #### Content:
 
   ```
