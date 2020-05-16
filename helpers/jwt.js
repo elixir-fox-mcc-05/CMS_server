@@ -1,11 +1,11 @@
 let jwt = require('jsonwebtoken');
 
 function jwtToken (password) {
-    return jwt.sign(password, process.env.SECRET);
+    return jwt.sign(password, 'yadigituin');
 }
 
 function verifyToken (token) {
-    return jwt.verify(token, process.env.SECRET);
+    return jwt.verify(token, 'yadigituin');
 }
 
 module.exports = {jwtToken, verifyToken}

@@ -6,13 +6,53 @@ let {bcryptPass} = require('../helpers/bycrypt')
 let {queryInterface} = sequelize
 let {jwtToken} = require('../helpers/jwt')
 
-var access_token
+
+const dataUser = {
+  email: 'top@gmail.com',
+  password: 'test'
+};
+
+afterAll(done => {
+  queryInterface
+    .bulkDelete('Users')
+    .then(() => {
+      console.log('Db clean up ');
+      done();
+    })
+    .catch(err => {
+      console.log(err);
+      done(err);
+    });
+});
+
+beforeAll(done => {
+  const salt = bcrypt.genSaltSync(10);
+  const dataUserHashPassword = bcrypt.hashSync(dataUser.password, salt);
+  queryInterface
+    .bulkInsert('Users', [
+      {
+        email: dataUser.email,
+        password: dataUserHashPassword,
+        createdAt: new Date(),
+        updatedAt: new Date()
+      }
+    ])
+    .then(() => {
+      console.log('User created: ' + dataUser.email);
+      done();
+    })
+    .catch(err => {
+      done(err);
+    });
+});
+
 beforeAll((done) => {
   User.create({
     email: 'admin@gmail.com',
     password: 'digituin'
   })
   .then((result) => {
+    console.log(result);
     access_token = jwtToken(result.id, result.email)
     done()
   }).catch(err => {
@@ -43,7 +83,6 @@ describe('Tis On Product', ()=> {
         }
       request(app)
         .post('/product')
-        .set('access_token', access_token)
         .send(data)
         .end((err, res) => {
           if(err) {
@@ -64,7 +103,7 @@ describe('Tis On Product', ()=> {
   })
   describe('Fail Add Product', ()=> {
     describe('POST /product', ()=> {
-      test('Please Insert Correct Number code 400', done => {
+      test('Please Insert Correct Number code 400', (done) => {
         let errors = [
           {
             msg:'Incorect Price Number'
@@ -79,7 +118,6 @@ describe('Tis On Product', ()=> {
         }
       request(app)
         .post('/product')
-        .set('access_token', access_token)
         .send(data)
         .end((err, res) => {
           if(err) {
@@ -95,14 +133,14 @@ describe('Tis On Product', ()=> {
   })
 })
 
-afterAll((done) => {
-  queryInterface.bulkDelete('Users')
-    .then(() => {
-      done()
-    })
-    .catch(()=> {
-      done(err)
-    })
-})
+// afterAll((done) => {
+//   queryInterface.bulkDelete('Users')
+//     .then(() => {
+//       done()
+//     })
+//     .catch(()=> {
+//       done(err)
+//     })
+// })
 
 
