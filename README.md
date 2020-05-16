@@ -1,3 +1,5 @@
+Hosting URL: https://g-ecommers.web.app
+
 ENV {
 SECRET = HACKTIV8
 
