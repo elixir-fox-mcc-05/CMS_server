@@ -8,7 +8,7 @@ const {User, Task} = require('../models')
 
 router.get('/', (req, res) => {
     res.status(200).json({
-        msg: 'masuk'
+        msg: 'server connected'
     })
 });
 router.use('/user', userRouter);

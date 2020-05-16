@@ -85,7 +85,14 @@ module.exports = (sequelize, DataTypes) => {
       }
     }
   }, {
-    sequelize
+    sequelize,
+    hooks: {
+      beforeCreate: (product) => {
+        if(!product.image_url) {
+          product.image_url = "https://us.123rf.com/450wm/pavelstasevich/pavelstasevich1811/pavelstasevich181101065/112815953-stock-vector-no-image-available-icon-flat-vector.jpg?ver=6"
+        }
+      }
+    }
   })
   
   Product.associate = function(models) {
