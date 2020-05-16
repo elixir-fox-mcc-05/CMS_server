@@ -11,4 +11,4 @@ router.post('/add',CategoryController.add)
 router.put('/edit/:id',authorizationCategory,CategoryController.edit)
 router.delete('/delete/:id',authorizationCategory,CategoryController.delete)
 
-module.exports = router
+module.exports = router 
