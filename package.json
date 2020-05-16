@@ -2,7 +2,7 @@
   "name": "cms_server",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
     "test": "jest --detectOpenHandles --runInBand",
     "start": "node app.js"
