@@ -5,6 +5,9 @@ const ProductController = require(`../controllers/productcontroller`)
 const { authenticate, authorize } = require(`../middlewares/userauth`)
 
 router.get(`/`, ProductController.getAll)
+router.get(`/all/:categoryid`, ProductController.getAllbyCategory)
+router.get(`/single/:id`, ProductController.getOneProduct)
+router.get(`/owned`, authenticate, ProductController.getOneMerchant)
 
 router.post(`/add`, authenticate, ProductController.addProduct)
 router.put(`/edit`, authenticate, authorize, ProductController.editProduct)

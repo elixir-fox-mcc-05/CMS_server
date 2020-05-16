@@ -38,7 +38,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     role : {
       type : DataTypes.STRING,
-      defaultValue : `public`
+      defaultValue : `customer`
     }
   }, {
     sequelize,
@@ -56,6 +56,7 @@ module.exports = (sequelize, DataTypes) => {
   });
   User.associate = function(models) {
     // associations can be defined here
+    User.hasMany(models.ProductPicture)
   };
   return User;
 };

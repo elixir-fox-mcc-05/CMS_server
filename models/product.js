@@ -19,12 +19,6 @@ module.exports = (sequelize, DataTypes) => {
     },
     stock: {
       type : DataTypes.INTEGER,
-      validate : {
-        min : {
-          args : 0,
-          msg : `A stock for an item cannot be below 0`
-        }
-      }
     },
     CategoryId : {
       type : DataTypes.INTEGER
@@ -37,10 +31,16 @@ module.exports = (sequelize, DataTypes) => {
     modelName : `Product`,
     hooks : {
       beforeValidate (data, options) {
+        if(!data.name){
+          return Promise.reject(new Error("Product name is empty"));
+        }
+        if(data.CategoryId === 'default'){
+          return Promise.reject(new Error("Select a category!"));
+        }
         if(data.price < 1) {
           return Promise.reject(new Error("A price for an item cannot be below 0 or lower"));
         };
-        if(data.price < 0) {
+        if(data.stock < 0) {
           return Promise.reject(new Error("A stock for an item cannot be below 0"));
         };
       }

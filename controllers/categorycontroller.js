@@ -5,7 +5,9 @@ const { Category } = require(`../models`)
 class CategoryController {
 
     static getAll( req, res){
-        Category .findAll({})
+        Category .findAll({
+            order : [['name','asc']]
+        })
                 .then(result => {
                     res.status(201).json({
                         Category : result
@@ -60,12 +62,17 @@ class CategoryController {
             where : {
                 id : id
             }
-        })  .then( result ( {
-            message : `Item Deleted`
-        })) .catch ( err => {
-            error : err.message
+        })      .then( result => {
+            res.status(200).json({
+                id : id,
+                message : 'item deleted' 
+            })
+        })      .catch ( err => {
+                res.status(500).json({
+                    error : err.message
+                })
         })
-    }
+    }  
 }
 
 module.exports = CategoryController;

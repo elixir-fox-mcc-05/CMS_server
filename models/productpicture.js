@@ -6,7 +6,8 @@ module.exports = (sequelize, DataTypes) => {
 
   ProductPicture.init({
     filename: DataTypes.STRING,
-    UserId: {
+    UserId: DataTypes.STRING,
+    ProductId: {
       type : DataTypes.INTEGER
     }
   }, {
@@ -17,6 +18,7 @@ module.exports = (sequelize, DataTypes) => {
   ProductPicture.associate = function(models) {
     // associations can be defined here
     ProductPicture.belongsTo(models.Product)
+    ProductPicture.belongsTo(models.User)
   };
   return ProductPicture;
 };

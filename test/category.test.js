@@ -12,7 +12,7 @@ let mockUser = {
     name : `testadmin`,
     email : `testadmin@mail.com`,
     password : `12345`,
-    role : `Admin`
+    role : `admin`
 }
 let idUser  = ``;
 let idCategory  = ``;
@@ -43,7 +43,7 @@ describe(`Product router`, function() {
                     .expect( function (result)  {
                         let data = result.body;
                         expect(data).toHaveProperty(`error`);
-                        expect(data.error).toBe(`not logged in`);
+                        expect(data.error).toBe(`Not logged in`);
                     })
                     .end(function(err){
                         if(err){
@@ -96,7 +96,7 @@ describe(`Product router`, function() {
                     .expect( function (result)  {
                         let data = result.body;
                         // console.log(result)
-                        expect(data.error).toBe(`not logged in`);
+                        expect(data.error).toBe(`Not logged in`);
                     })
                     .end(function(err){
                         if(err){

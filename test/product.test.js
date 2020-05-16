@@ -15,7 +15,7 @@ let mockUser = {
     name : `test`,
     email : `testcat@mail.com`,
     password : `12345`,
-    role : `seller`
+    role : `merchant`
 }
 let mockCategories = [{
     id : `1`,
@@ -46,7 +46,6 @@ describe(`Product router`, function() {
     });
     /////////
     /////////
-    // CMSAccess_token : `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwibmFtZSI6IlRlc3QiLCJyb2xlIjoiQWRtaW4iLCJpYXQiOjE1ODkyNjk2NzV9.tkOOCjj7k0sqjMbGvo0g3OpJl4MDrDmYcLuNBlBcK_I`,
     describe(` create a product`, function() {
         // --> //
         describe(`Fail : `, function() {
@@ -60,7 +59,7 @@ describe(`Product router`, function() {
                     .expect( function (result)  {
                         let data = result.body;
                         expect(data).toHaveProperty(`error`);
-                        expect(data.error).toBe(`not logged in`);
+                        expect(data.error).toBe(`Not logged in`);
                     })
                     .end(function(err){
                         if(err){
@@ -87,6 +86,7 @@ describe(`Product router`, function() {
                         expect(data).toHaveProperty(`UserId`);
                     })
                     .end(function(err){
+                        // console.log(err)
                         if(err){
                             return done(err)
                         } else {
@@ -116,7 +116,7 @@ describe(`Product router`, function() {
                     .expect( function (result)  {
                         let data = result.body;
                         // console.log(result)
-                        expect(data.error).toBe(`not logged in`);
+                        expect(data.error).toBe(`Not logged in`);
                     })
                     .end(function(err){
                         if(err){
@@ -203,7 +203,7 @@ describe(`Product router`, function() {
                     .expect( function (result)  {
                         let data = result.body;
                         // console.log(result)
-                        expect(data.error).toBe(`not logged in`);
+                        expect(data.error).toBe(`Not logged in`);
                     })
                     .end(function(err){
                         if(err){

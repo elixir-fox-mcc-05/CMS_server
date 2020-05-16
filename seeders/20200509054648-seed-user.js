@@ -13,10 +13,24 @@ module.exports = {
       }], {});
     */
    return queryInterface.bulkInsert('Users', [{
-    name : `Test`,
-    email: 'test@mail.com',
+    name : `Admin`,
+    email: 'testadmin@mail.com',
     password: `$2a$10$IVLoBs6YWCjXy80qO3VR8O3uLiZHSFbD9hcPlMqW1QRbe5QIgxgLS`,
-    role : `Admin`,
+    role : `admin`,
+    createdAt : new Date(),
+    updatedAt : new Date()
+  },{
+    name : `Merchant`,
+    email: 'testmerchant@mail.com',
+    password: `$2a$10$IVLoBs6YWCjXy80qO3VR8O3uLiZHSFbD9hcPlMqW1QRbe5QIgxgLS`,
+    role : `merchant`,
+    createdAt : new Date(),
+    updatedAt : new Date()
+  },{
+    name : `Customer`,
+    email: 'testcustomer@mail.com',
+    password: `$2a$10$IVLoBs6YWCjXy80qO3VR8O3uLiZHSFbD9hcPlMqW1QRbe5QIgxgLS`,
+    role : `customer`,
     createdAt : new Date(),
     updatedAt : new Date()
   }], {});
@@ -30,6 +44,6 @@ module.exports = {
       Example:
       return queryInterface.bulkDelete('People', null, {});
     */
-   return queryInterface.bulkDelete('User', null, {});
+   return queryInterface.bulkDelete('Users', null, {});
   }
 };

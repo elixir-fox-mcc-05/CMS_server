@@ -26,15 +26,15 @@ function authenticate( req, res, next) {
             })
     } else {
         res.status(401).json({
-            error : `not logged in`
+            error : `Not logged in`
         })
     }
 }
 
 function authorize ( req, res, next) {
-    if(req.Role ===`Admin`) {
+    if(req.Role ===`admin`) {
         next()
-    } else if(req.Role ===`seller`) {
+    } else if(req.Role ===`merchant`) {
         Product.findOne({
             where : {
                 id : Number(req.body.id),
@@ -58,13 +58,13 @@ function authorize ( req, res, next) {
 
     } else {
         res.status(400).json({
-            error : `This feature is restricted to sellers and admin`
+            error : `This feature is restricted to merchant and admin`
         })
     }
 }
 
 function restricted ( req, res, next) {
-    if(req.Role ===`Admin`) {
+    if(req.Role ===`admin`) {
         next()
     } else {
         res.status(400).json({
