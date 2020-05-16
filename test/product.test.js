@@ -118,7 +118,7 @@ describe('Product Router', () => {
 
         describe('Fail create product', () => {
             describe('token are empty', () => {
-                test('Return status code 400 with keys err', (done) => {
+                test('Return status code 401 with keys err', (done) => {
                     let newProduct = {
                         name: 'Sepeda Ontel',
                         description: 'Sepeda ontel antik yang sudah dirawat selama 3 generasi',
@@ -135,7 +135,7 @@ describe('Product Router', () => {
                             if(err) {
                                 return done(err)
                             } else {
-                                expect(response.status).toBe(400)
+                                expect(response.status).toBe(401)
                                 expect(response.body).toHaveProperty('err', customErr)
                                 return done()
                             }
@@ -286,7 +286,7 @@ describe('Product Router', () => {
         })
         describe('fail update product', () => {
             describe('token are empty', () => {
-                test('Return status code 400 with keys err', (done) => {
+                test('Return status code 401 with keys err', (done) => {
                     let updatedProduct = {
                         name: 'Sepeda Ontel Biru',
                         description: 'Sepeda ontel biru antik yang sudah dirawat selama 3 generasi',
@@ -303,7 +303,7 @@ describe('Product Router', () => {
                             if(err) {
                                 return done(err)
                             } else {
-                                expect(response.status).toBe(400)
+                                expect(response.status).toBe(401)
                                 expect(response.body).toHaveProperty('err', 'Please login first')
                                 return done()
                             }
@@ -478,7 +478,7 @@ describe('Product Router', () => {
         })
         describe('fail get all product', () => {
             describe('token is empty', () => {
-                test('Return status code 400 with keys data', (done) => {
+                test('Return status code 401 with keys data', (done) => {
                     customErr = 'Please login first'
                     request(app)
                         .get(`/product`)
@@ -486,7 +486,7 @@ describe('Product Router', () => {
                             if(err) {
                                 return done(err)
                             } else {
-                                expect(response.status).toBe(400)
+                                expect(response.status).toBe(401)
                                 expect(response.body).toHaveProperty('err', customErr)
                                 return done()
                             }
@@ -515,7 +515,7 @@ describe('Product Router', () => {
         })
         describe('fail delete product', () => {
             describe('token are empty', () => {
-                test('Return status code 400 with keys err', (done) => {
+                test('Return status code 401 with keys err', (done) => {
                     customErr = 'Please login first'
                     request(app)
                     .delete(`/product/1`)
@@ -523,7 +523,7 @@ describe('Product Router', () => {
                         if(err) {
                             return done(err)
                         } else {
-                            expect(response.status).toBe(400)
+                            expect(response.status).toBe(401)
                             expect(response.body).toHaveProperty('err', customErr)
                             return done()
                         }
@@ -570,7 +570,7 @@ describe('Product Router', () => {
         })
         describe('fail to find product', () => {
             describe('token are empty', () => {
-                test('Return status code 400 with keys err', (done) => {
+                test('Return status code 401 with keys err', (done) => {
                     customErr = 'Please login first'
                     request(app)
                     .get(`/product/1`)
@@ -578,7 +578,7 @@ describe('Product Router', () => {
                         if(err) {
                             return done(err)
                         } else {
-                            expect(response.status).toBe(400)
+                            expect(response.status).toBe(401)
                             expect(response.body).toHaveProperty('err', customErr)
                             return done()
                         }

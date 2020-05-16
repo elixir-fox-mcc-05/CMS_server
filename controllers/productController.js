@@ -3,7 +3,11 @@ let { Product, User } = require('../models/index')
 class ProductController {
 
     static findAllProduct(req, res, next) {
-        Product.findAll()
+        Product.findAll({
+            order: [
+                ['id', 'ASC']
+            ]
+        })
             .then(data => {
                 res.status(200).json({
                     data

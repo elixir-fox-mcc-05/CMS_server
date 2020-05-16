@@ -9,7 +9,7 @@ module.exports = (err, req, res, next) => {
             err: errors
         })
     } else if(err.name == 'JsonWebTokenError'){
-        res.status(400).json({
+        res.status(401).json({
             err: 'Please login first'
         })
     } else if(err.code) {

@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-const productTRouter = require('./product');
+const productRouter = require('./product');
 const userRouter = require('./user.js');
 
 const {User, Task} = require('../models')
@@ -12,6 +12,6 @@ router.get('/', (req, res) => {
     })
 });
 router.use('/user', userRouter);
-router.use('/product', productTRouter);
+router.use('/product', productRouter);
 
 module.exports = router;
