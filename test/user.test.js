@@ -17,10 +17,34 @@ describe('User Sign In and Sign Up', () => {
     password: '123',
   };
 
-  const inputSignupEmpty = {
+  const inputSignupAllEmpty = {
     name: '',
     email: '',
     password: '',
+  };
+
+  const inputSignupNameEmpty = {
+    name: '',
+    email: 'yudha@mail.com',
+    password: '123',
+  };
+
+  const inputSignupEmailEmpty = {
+    name: 'Yudha',
+    email: '',
+    password: '123',
+  };
+
+  const inputSignupPasswordEmpty = {
+    name: 'Yudha',
+    email: 'yudha@mail.com',
+    password: '',
+  };
+
+  const inputSignupNull = {
+    name: null,
+    email: null,
+    password: null,
   };
 
   const inputSignin = {
@@ -28,8 +52,18 @@ describe('User Sign In and Sign Up', () => {
     password: '123',
   };
 
-  const inputSigninEmpty = {
+  const inputSigninAllEmpty = {
     email: '',
+    password: '',
+  };
+
+  const inputSigninEmailEmpty = {
+    email: '',
+    password: '123',
+  };
+
+  const inputSigninPasswordEmpty = {
+    email: 'yudha@mail.com',
     password: '',
   };
 
@@ -78,7 +112,7 @@ describe('User Sign In and Sign Up', () => {
       test('Should return bad request. All error messages (400).', (done) => {
         request(app)
           .post('/signup')
-          .send(inputSignupEmpty)
+          .send(inputSignupAllEmpty)
           .expect((data) => {
             const status = data.status;
             const error = data.body;
@@ -155,6 +189,115 @@ describe('User Sign In and Sign Up', () => {
           });
       });
     });
+
+    describe('> Sign Up failed input name empty', () => {
+      test('Should return bad request. name empty error messages (400).', (done) => {
+        request(app)
+          .post('/signup')
+          .send(inputSignupNameEmpty)
+          .expect((data) => {
+            const status = data.status;
+            const error = data.body;
+            const expected = [
+              { message: 'Please insert name' },
+              { message: 'Name at least 3 characters, max 15' },
+            ];
+            expect(status).toEqual(400);
+            expect(error).toHaveProperty('code', 400);
+            expect(error).toHaveProperty('type', 'BAD REQUEST');
+            expect(error).toHaveProperty('message', expected);
+          })
+          .end((err) => {
+            if (err) {
+              return done(err);
+            } else {
+              done();
+            }
+          });
+      });
+    });
+
+    describe('> Sign Up failed input email empty', () => {
+      test('Should return bad request. email empty error messages (400).', (done) => {
+        request(app)
+          .post('/signup')
+          .send(inputSignupEmailEmpty)
+          .expect((data) => {
+            const status = data.status;
+            const error = data.body;
+            const expected = [
+              { message: 'Please insert correct email format' },
+              { message: 'Please insert email' },
+            ];
+            expect(status).toEqual(400);
+            expect(error).toHaveProperty('code', 400);
+            expect(error).toHaveProperty('type', 'BAD REQUEST');
+            expect(error).toHaveProperty('message', expected);
+          })
+          .end((err) => {
+            if (err) {
+              return done(err);
+            } else {
+              done();
+            }
+          });
+      });
+    });
+
+    describe('> Sign Up failed input password empty', () => {
+      test('Should return bad request. password empty error messages (400).', (done) => {
+        request(app)
+          .post('/signup')
+          .send(inputSignupPasswordEmpty)
+          .expect((data) => {
+            const status = data.status;
+            const error = data.body;
+            const expected = [
+              { message: 'Please insert password' },
+              { message: 'Password at least 3 characters, max 15' },
+            ];
+            expect(status).toEqual(400);
+            expect(error).toHaveProperty('code', 400);
+            expect(error).toHaveProperty('type', 'BAD REQUEST');
+            expect(error).toHaveProperty('message', expected);
+          })
+          .end((err) => {
+            if (err) {
+              return done(err);
+            } else {
+              done();
+            }
+          });
+      });
+    });
+
+    describe('> Sign Up failed input all null', () => {
+      test('Should return bad request. All error messages (400).', (done) => {
+        request(app)
+          .post('/signup')
+          .send(inputSignupNull)
+          .expect((data) => {
+            const status = data.status;
+            const error = data.body;
+            const expected = [
+              { message: 'Please insert name' },
+              { message: 'Please insert email' },
+              { message: 'Please insert password' },
+            ];
+            expect(status).toEqual(400);
+            expect(error).toHaveProperty('code', 400);
+            expect(error).toHaveProperty('type', 'BAD REQUEST');
+            expect(error).toHaveProperty('message', expected);
+          })
+          .end((err) => {
+            if (err) {
+              return done(err);
+            } else {
+              done();
+            }
+          });
+      });
+    });
   });
 
   describe('=> Sign In success', () => {
@@ -185,7 +328,59 @@ describe('User Sign In and Sign Up', () => {
       test('Should return bad request. Invalid email/password error messages (400).', (done) => {
         request(app)
           .post('/signin')
-          .send(inputSigninEmpty)
+          .send(inputSigninAllEmpty)
+          .expect((data) => {
+            const status = data.status;
+            const error = data.body;
+            expect(status).toEqual(400);
+            expect(error).toHaveProperty('code', 400);
+            expect(error).toHaveProperty('type', 'BAD REQUEST');
+            expect(error).toHaveProperty(
+              'message',
+              'Opps!, invalid email / password'
+            );
+          })
+          .end((err) => {
+            if (err) {
+              done(err);
+            } else {
+              done();
+            }
+          });
+      });
+    });
+
+    describe('> Sign In failed input email empty', () => {
+      test('Should return bad request. Invalid email/password error messages (400).', (done) => {
+        request(app)
+          .post('/signin')
+          .send(inputSigninEmailEmpty)
+          .expect((data) => {
+            const status = data.status;
+            const error = data.body;
+            expect(status).toEqual(400);
+            expect(error).toHaveProperty('code', 400);
+            expect(error).toHaveProperty('type', 'BAD REQUEST');
+            expect(error).toHaveProperty(
+              'message',
+              'Opps!, invalid email / password'
+            );
+          })
+          .end((err) => {
+            if (err) {
+              done(err);
+            } else {
+              done();
+            }
+          });
+      });
+    });
+
+    describe('> Sign In failed input password empty', () => {
+      test('Should return bad request. Invalid email/password error messages (400).', (done) => {
+        request(app)
+          .post('/signin')
+          .send(inputSigninPasswordEmpty)
           .expect((data) => {
             const status = data.status;
             const error = data.body;
