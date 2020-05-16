@@ -420,7 +420,7 @@ describe(`Product feature`, () => {
     ////// Read all
     describe(`GET /products/`, () => {
         describe(`Success read all product`, () => {
-            test(`Should return array of object with name, description, image_url, price, stock from all product`, (done) => {
+            test(`Should return array of object with name, description, image_url, price, stock from all product and status 200`, (done) => {
                 request(app)
                     .get('/products/')
                     .set({'token':loginToken})
@@ -460,7 +460,7 @@ describe(`Product feature`, () => {
         })
     })
 
-    ///// Update
+    ///// Update by productId
     describe(`PUT /products/:productId`, () => {
         describe(`Success update product`, () => {
             test(`Should return object with update message and updated name and default value description, image_url, price, stock from updated product and status 200`, (done) => {
@@ -554,7 +554,7 @@ describe(`Product feature`, () => {
                     })
             })
         })
-        describe(`'Error update product`, () => {
+        describe(`'Error update product by productId`, () => {
             test(`Should return error with status 401 because no token in headers`, (done) => {
                 const productId = dummyProduct[0].id;
                 const errors = [
@@ -576,7 +576,7 @@ describe(`Product feature`, () => {
                         }
                     })                    
             })
-            test(`Should return error with status 404 because productId not found`, (done) => {
+            test(`Should return error with status 404 because product by productId not found`, (done) => {
                 const productId = 9;
                 const errors = [
                     {
@@ -830,7 +830,7 @@ describe(`Product feature`, () => {
         })
     })
 
-    ////// Delete
+    ////// Delete by productId
     describe(`DELETE /products/:productId`, () => {
         describe(`Success delete product`, () => {
             test(`Should return with delete message and status 200`, (done) => {
@@ -850,7 +850,7 @@ describe(`Product feature`, () => {
                     })
             })
         })
-        describe(`Error delete product`, () => {
+        describe(`Error delete product by productId`, () => {
             test(`Should return error with status 401 because no token in headers`, (done) => {
                 const productId = dummyProduct[0].id;
                 const errors = [
@@ -871,7 +871,7 @@ describe(`Product feature`, () => {
                          }
                      }) 
              })
-             test(`Should return error with status 404 because productId not found`, (done) => {
+             test(`Should return error with status 404 because product by productId not found`, (done) => {
                 const productId = 9;
                 const errors = [
                     {
@@ -892,6 +892,76 @@ describe(`Product feature`, () => {
                          }
                      }) 
              })
+        })
+    })
+
+    ////// Read product by product Id
+    describe(`GET /products/:productId`, () => {
+        describe(`Success read product by productId`, () => {
+            test(`Should return array of object with name, description, image_url, price, stock from spesific product by productId and status 200`, (done) => {
+                const productId = dummyProduct[1].id;
+                request(app)
+                    .get(`/products/${productId}`)
+                    .set({'token':loginToken})
+                    .end((err, res) => {
+                        if(err){
+                            return done(err)
+                        }
+                        else {
+                            expect(res.status).toBe(200);
+                            expect(res.body.product).toHaveProperty('id', dummyProduct[1].id)
+                            expect(res.body.product).toHaveProperty('name', dummyProduct[1].name)
+                            expect(res.body.product).toHaveProperty('description', dummyProduct[1].description)
+                            expect(res.body.product).toHaveProperty('image_url', dummyProduct[1].image_url)
+                            expect(res.body.product).toHaveProperty('price', dummyProduct[1].price)
+                            expect(res.body.product).toHaveProperty('stock', dummyProduct[1].stock)
+                            return done()
+                        }
+                    })
+            })
+        })
+        describe(`Error read product by productId`, () => {
+            test(`Should return error with status 401 because no token in headers`, (done) => {
+                const productId = dummyProduct[0].id;
+                const errors = [
+                     {
+                         message: "Unauthorized. Please login first"
+                     },
+                ]
+                request(app)
+                    .get(`/products/${productId}`)
+                    .end((err, res) => {
+                        if(err){
+                            return done(err);
+                        }
+                        else {
+                            expect(res.status).toBe(401);
+                            expect(res.body).toHaveProperty('errors', errors);                           
+                            return done()
+                        }
+                    }) 
+            })
+            test(`Should return error with status 404 because product by productId not found`, (done) => {
+                const productId = 9;
+                const errors = [
+                     {
+                         message: `Product with id ${productId} not found`
+                     },
+                ]
+                request(app)
+                    .get(`/products/${productId}`)
+                    .set({'token':loginToken})
+                    .end((err, res) => {
+                        if(err){
+                            return done(err);
+                        }
+                        else {
+                            expect(res.status).toBe(404);
+                            expect(res.body).toHaveProperty('errors', errors);                           
+                            return done()
+                        }
+                    }) 
+            })
         })
     })
 

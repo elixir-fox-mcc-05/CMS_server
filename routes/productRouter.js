@@ -8,6 +8,7 @@ router.post('/', ProductController.createProduct);
 router.get('/', ProductController.readAllProduct);
 router.put('/:productId', ProductController.updateProduct);
 router.delete('/:productId', ProductController.deleteProduct);
+router.get('/:productId', ProductController.searchProduct);
 
 module.exports = router;
 
@@ -15,5 +16,3 @@ module.exports = router;
 
 
 
-////NOTE: not using it now, maybe i'll use this later
-// router.get('/:productId', ProductController.searchProduct);

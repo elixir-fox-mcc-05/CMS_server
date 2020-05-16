@@ -101,38 +101,35 @@ class ProductController {
                 return next(err);
             })
     }
+
+    // router.get('/:productId', productController.searchProduct);
+    static searchProduct(req, res, next){
+        let { productId } = req.params;
+        let options = {
+            where: {
+                id:Number(productId)
+            }
+        }
+        Product.findOne(options)
+            .then(data => {
+                if(data){
+                    return res.status(200).json({product: data})
+                }
+                else {
+                    return next({ 
+                        name: 'NotFound',
+                        errors: [{
+                            message: `Product with id ${productId} not found`
+                        }]
+                    })
+                }
+            })
+            .catch(err => {
+                return next(err)
+            })
+    }
 }
 
 module.exports = ProductController
 
 
-
-
-
-////NOTE: not using it now, maybe i'll use this later
-// router.get('/:productId', productController.searchProduct);
-    // static searchProduct(req, res, next){
-    //     let { productId } = req.params;
-    //     let options = {
-    //         where: {
-    //             id:Number(productId)
-    //         }
-    //     }
-    //     Product.findOne(options)
-    //         .then(data => {
-    //             if(data){
-    //                 return res.status(200).json({product: data})
-    //             }
-    //             else {
-    //                 return next({ 
-    //                     name: 'NotFound',
-    //                     errors: [{
-    //                         message: `Product with id ${productId} not found`
-    //                     }]
-    //                 })
-    //             }
-    //         })
-    //         .catch(err => {
-    //             return next(err)
-    //         })
-    // }
