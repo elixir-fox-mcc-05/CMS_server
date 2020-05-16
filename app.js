@@ -2,10 +2,10 @@ if (process.env.NODE_ENV=="development" || process.env.NODE_ENV=="test") {
     require('dotenv').config()
 }
 
-let express = require('express')
-let app = express()
-let router = require('./routes')
-let cors = require('cors')
+const express = require('express')
+const app = express()
+const router = require('./routes')
+const cors = require('cors')
 
 app.use(express.urlencoded({ extended : false }))
 app.use(express.json())
