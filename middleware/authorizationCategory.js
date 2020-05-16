@@ -1,8 +1,8 @@
-const { Product } = require('../models')
+const { Category } = require('../models')
 
-function authorization(req, res, next) {
+function authorizationCategory(req, res, next) {
 
-    Product
+    Category
         .findByPk(req.params.id)
         .then(data => {
 
@@ -16,7 +16,7 @@ function authorization(req, res, next) {
             } else {
 
                 res.status(404).json({
-                    msg: 'not found'
+                    error : 'not found'
                 })
             }
 
@@ -25,4 +25,4 @@ function authorization(req, res, next) {
 }
 
 
-module.exports = authorization
+module.exports = authorizationCategory

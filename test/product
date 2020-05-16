@@ -20,6 +20,7 @@ const ProductController = require('../controllers/productController')
 // const { mockRequest, mockResponse } = require('mock-req-res')
 // const proxyquire = require('proxyquire')
 
+let token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwiZW1haWwiOiJtYWlsQG1haWwuY29tIiwicGFzc3dvcmQiOiIkMmIkMDQkZC9Lb0tVUTU3Z2lpUzhjR1dVQ0hYTzFrRU1pVjRKdElKbVlLaUZ5ZHVwRWpIOHZUa2VWbWkiLCJpYXQiOjE1ODkzNjcxNjd9.He_neKlcZ-q7uv_6ikyqlVxlc8-06P5CwY0Vd7tVTw4'
 
 afterAll(done => {
     queryInterface.bulkDelete('Products')
@@ -61,7 +62,6 @@ beforeAll((done) => {
             done()
         })
 })
-
 describe('POST /register then POST /login', () => {
     test('should return object with id, name,and email. status 201', (done) => {
         const userInput = {
@@ -94,6 +94,7 @@ describe('POST /register then POST /login', () => {
                 if (err) {
                     return done(err)
                 } else {
+                    token = response.body.token
                     console.log(response.body)
                     return done()
                 }
@@ -102,12 +103,13 @@ describe('POST /register then POST /login', () => {
     })
 })
 
-const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwiZW1haWwiOiJtYWlsQG1haWwuY29tIiwicGFzc3dvcmQiOiIkMmIkMDQkZC9Lb0tVUTU3Z2lpUzhjR1dVQ0hYTzFrRU1pVjRKdElKbVlLaUZ5ZHVwRWpIOHZUa2VWbWkiLCJpYXQiOjE1ODkzNjcxNjd9.He_neKlcZ-q7uv_6ikyqlVxlc8-06P5CwY0Vd7tVTw4'
+
 
 describe('test success /products', () => {
     let id;
     describe('GET /list', () => {
         test('should return objects status 200', (done) => {
+            console.log(token)
             request(app)
                 .get('/products/list')
                 .set('token',token)
@@ -116,7 +118,7 @@ describe('test success /products', () => {
                     if (err) {
                         return done(err)
                     } else {
-                        // console.log(response.body)
+                        console.log(response.body)
                         expect(response.status).toBe(200)
                         // expect(response.body).toHaveProperty('first_name', expect.any(String))
                         // expect(response.body).toHaveProperty('last_name', expect.any(String))
@@ -172,7 +174,7 @@ describe('test success /products', () => {
                     if (err) {
                         return done(err)
                     } else {
-                        // console.log(response.body)
+                        console.log(response.body)
                         expect(response.status).toBe(200)
                         expect(response.body).toHaveProperty('name', expect.any(String))
                         expect(response.body).toHaveProperty('image_url', expect.any(String))
@@ -197,7 +199,7 @@ describe('test success /products', () => {
                     if (err) {
                         return done(err)
                     } else {
-                        // console.log(response.body)
+                        console.log(response.body)
                         expect(response.status).toBe(200)
                         expect(response.body).toHaveProperty('name', expect.any(String))
                         expect(response.body).toHaveProperty('image_url', expect.any(String))
@@ -258,7 +260,7 @@ describe('test success /products', () => {
                     if (err) {
                         return done(err)
                     } else {
-                        // console.log(response.body)
+                        console.log(response.body)
                         expect(response.status).toBe(200)
                         expect(response.body).toHaveProperty('name', expect.any(String))
                         expect(response.body).toHaveProperty('image_url', expect.any(String))
@@ -344,7 +346,7 @@ describe('Test fail /products', () => {
                 })
         })
         test('should return image_url error with status 400', (done) => {
-            const error = "image_url is required field"
+            const error = ["image_url is required field", "image url must in URL format"]
             let newProduct = {
                 name : 'babydoll',
                 image_url : '',
@@ -460,7 +462,7 @@ describe('Test fail /products', () => {
         })
 
         test('should return error with all empty with status 400', (done) => {
-            const error = ["category is required field","Name is required field","Name must more than 3 letters", "image_url is required field",  "Price is required field", "Stock is required field"]
+            const error = ["category is required field","Name is required field","Name must more than 3 letters", "image_url is required field","image url must in URL format",  "Price is required field", "Stock is required field"]
             let newProduct = {
                 name : '',
                 image_url : '',
@@ -485,7 +487,7 @@ describe('Test fail /products', () => {
         })
 
         test('should return error with mix validation errors with status 400', (done) => {
-            const error = ["price can't below 0. are you nuts?","category is required field","Name must more than 3 letters", "image_url is required field"]
+            const error = ["price can't below 0. are you nuts?","category is required field","Name must more than 3 letters", "image_url is required field","image url must in URL format"]
             let newProduct = {
                 name : 'as',
                 image_url : '',

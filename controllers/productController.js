@@ -59,6 +59,7 @@ class ProductController{
             .findOne({where : {id : req.params.id}, include : [Category]})
             .then(data => {
                 res.status(200).json({
+                    id  : data.id,
                     name : data.name,
                     image_url : data.image_url,
                     price : data.price,

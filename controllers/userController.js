@@ -19,7 +19,7 @@ class UserController{
                                         email : data.email,
                                         password : data.password
                                     })
-                        res.status(200).json({token : token})
+                        res.status(200).json({token : token, first_name: data.first_name, last_name: data.last_name, roles: data.roles})
 
                     }else {
 
@@ -51,8 +51,7 @@ class UserController{
                     first_name : data.first_name,
                     last_name : data.last_name,
                     email : data.email,
-                    roles : data.roles,
-                    password : data.password
+                    roles : data.roles
                 })
             })
             .catch(err => {
