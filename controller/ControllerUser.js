@@ -1,5 +1,5 @@
 "use strict";
-const {User} = require("../models");
+const {User, Role} = require("../models");
 const {comparePassword} = require("../helpers/bcrypt");
 const {generateToken} = require("../helpers/jwt");
 
@@ -10,7 +10,8 @@ class ControllerUser {
             .findOne({
                 where : {
                     email
-                }
+                },
+                include : Role
             })
             .then(user => {
                 if(user) {
@@ -20,7 +21,8 @@ class ControllerUser {
                             email : user.email
                         });
                         res.status(202).json({
-                            acces_token : token
+                            acces_token : token,
+                            Role : user.Role
                         });
                     } else {
                         return next({

@@ -90,6 +90,10 @@
     Code : 202
     Content : {
       acces_token : some token
+      Role : {
+        id : id,
+        name : Role name
+      }
     }
   ```
 

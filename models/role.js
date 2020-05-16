@@ -13,7 +13,7 @@ module.exports = (sequelize, DataTypes) => {
     modelName : "Role"
   });
   Role.associate = function(models) {
-    Role.belongsTo(models.User);
+    Role.hasOne(models.User);
   };
   return Role;
 };
