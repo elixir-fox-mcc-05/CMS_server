@@ -27,6 +27,10 @@ module.exports = (sequelize, DataTypes) => {
         validate: {
           isInt: {
             msg: `Price must be integer`
+          },
+          min: {
+            args: [0],
+            msg: `Harga tidak boleh bernilai negatif`
           }
         }
       },
@@ -36,6 +40,10 @@ module.exports = (sequelize, DataTypes) => {
         validate: {
           isInt: {
             msg: `Stock must be integer`
+          },
+          min: {
+            args: [0],
+            msg: `Stock tidak boleh bernilai negatif`
           }
         }
       },
