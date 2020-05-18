@@ -1,5 +1,6 @@
 const { UserProduct } = require('../models')
 const { Product } = require('../models')
+
 class UserProductController {
   static add(req, res, next) {
     console.log('test controller');
@@ -23,6 +24,7 @@ class UserProductController {
           }
         })
       } else {
+        console.log('baru');
         return UserProduct.create(payload)
       }
     })
@@ -35,6 +37,7 @@ class UserProductController {
       })
     })
     .catch((err) => {
+      console.log(err)
       return next({
         name: 'InternalServerError',
         errors: [{ msg: 'Failed to Add.' }]
@@ -44,7 +47,7 @@ class UserProductController {
 
   static findAll(req, res, next) {
     UserProduct.findAll({
-        where: { userId: req.currentUserId },
+        where: { userId: req.currentUserId, checkout: false },
         include: [{ model: Product }],
         order: [
             ['id', 'DESC']
@@ -120,9 +123,45 @@ class UserProductController {
       .catch((err) => {
         return next({
           name: 'InternalServerError',
-          errors: [{ msg: 'Failed to Show.' }]
+          errors: [{ msg: 'Failed to Delete.' }]
         })
       })
+  }
+
+  static checkout (req,res,next) {
+    const id = req.params.id
+    UserProduct.findOne({ where: { id:id },
+    include: [{ model: Product }]
+    })
+    .then(data => {
+      let buyout = { stock: data.Product.stock - data.quantity}
+      return Product.update(buyout, { where: { id: data.Product.id } })
+    })
+    .then(data => {
+      let buyout = { checkout: true }
+      return UserProduct.update(buyout, {where : { id:id }})
+    })
+    .then(result =>{
+      return res.status(201).json({result})
+    })
+    .catch(err => {
+      next({
+          name: 'InternalServerError',
+          errors: [{ msg: 'Failed to Checkout.' }]
+        })
+    })
+  }
+
+  static showCheckout (req, res, next) {
+    UserProduct.findAll({ where: { userId: req.currentUserId, checkout: true }, include:[{model: Product}] })
+    .then(data => {
+      console.log(data)
+      return res.status(200).json(data)
+    })
+    .catch(err =>{
+      console.log(err)
+      next(err)
+    })
   }
 }
 module.exports = UserProductController

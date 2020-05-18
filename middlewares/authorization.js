@@ -10,12 +10,8 @@ function authorization(req, res, next) {
     })
     .then((data) => {
       console.log(data.userId);
-      if (data) {
         if (data.userId == req.currentUserId) next()
-        else return next({ name: 'Unauthorized' })
-      } else {
-        return next({ name: 'NotFound' })
-      }
+        else next({ name: 'Unauthorized' })
     })
     .catch(next)
 }

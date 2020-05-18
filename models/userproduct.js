@@ -8,8 +8,14 @@ module.exports = (sequelize, DataTypes) => {
     UserProduct.init({
         userId: DataTypes.INTEGER,
         productId: DataTypes.INTEGER,
-        quantity: DataTypes.INTEGER
-    }, { sequelize });
+        quantity: DataTypes.INTEGER,
+        checkout: DataTypes.BOOLEAN
+    }, { 
+        hooks:{
+        beforeCreate (UserProduct,options) {
+            UserProduct.checkout = false
+        }
+    }, sequelize });
     UserProduct.associate = function(models) {
         UserProduct.belongsTo(models.User, { foreignKey: "userId", targetKey: "id" });
         UserProduct.belongsTo(models.Product, { foreignKey: "productId", targetKey: "id" });
