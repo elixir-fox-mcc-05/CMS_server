@@ -1,0 +1,42 @@
+{
+  "name": "CMS_server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "NODE_ENV=development nodemon app.js",
+    "test": "NODE_ENV=test jest --detectOpenHandles",
+    "start": "node app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chairulakmal/CMS_server.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/chairulakmal/CMS_server/issues"
+  },
+  "homepage": "https://github.com/chairulakmal/CMS_server#readme",
+  "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^1.2.28",
+    "@fortawesome/vue-fontawesome": "^0.1.9",
+    "bcryptjs": "^2.4.3",
+    "bootstrap": "^4.5.0",
+    "bootstrap-vue": "^2.14.0",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "jquery": "^3.5.1",
+    "jsonwebtoken": "^8.5.1",
+    "pg": "^8.1.0",
+    "sequelize": "^5.21.8",
+    "vue": "^2.6.11"
+  },
+  "devDependencies": {
+    "dotenv": "^8.2.0",
+    "jest": "^26.0.1",
+    "supertest": "^4.0.2",
+    "watchman": "^1.0.0"
+  }
+}
