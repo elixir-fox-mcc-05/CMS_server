@@ -204,6 +204,36 @@ describe('Product Test', () => {
       test('Should return fail with status 400 and error message', done => {
         const errors = [
           {
+            message: `Harga tidak boleh bernilai negatif`
+          },
+          {
+            message: `Stock tidak boleh bernilai negatif`
+          }
+        ];
+        const newProduct = {
+          name: 'Bimoli',
+          image_url:
+            'https://img1.ralali.id/mediaflex/500/assets/img/Libraries/257613_Minyak-Goreng-Bimoli-Klasik-Pouch-2L-Minyak-Sayur-Bimoli-2000mL_e0U0AarHllkjKrYO_1549057560.png',
+          price: -1000,
+          stock: -200
+        };
+        request(app)
+          .post('/products')
+          .send(newProduct)
+          .set('token', token)
+          .end((err, response) => {
+            if (err) {
+              return done(err);
+            } else {
+              expect(response.status).toBe(400);
+              expect(response.body).toHaveProperty('errors', errors);
+              return done();
+            }
+          });
+      });
+      test('Should return fail with status 400 and error message', done => {
+        const errors = [
+          {
             message: `Price must be integer`
           },
           {
