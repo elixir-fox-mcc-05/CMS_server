@@ -3,7 +3,7 @@ const {verifyToken} = require("../helpers/jwt");
 const {User} = require("../models");
 
 function Authentication(req, res, next){
-    const {token} = req.headers;
+    const {token} = req.headers
     if(!token) {
         return next({
             type : "Bad Request",

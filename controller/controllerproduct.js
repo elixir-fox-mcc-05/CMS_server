@@ -53,9 +53,9 @@ class ControllerProduct {
             .create(value)
             .then(product => {
                 if(product){
-                    res.status(201).json({
-                        Product : product
-                    });
+                  return Product.findByPk(product.id, {
+                    include: Category
+                  })
                 } else {
                     return next({
                         type : "Not Implemented",
@@ -64,8 +64,13 @@ class ControllerProduct {
                     });
                 }
             })
+            .then(product => {
+              res.status(201).json({
+                  Product : product
+              });
+            })
             .catch(err => {
-                return next(err);
+              return next(err);
             });
     }
     static editData(req, res, next){
@@ -82,7 +87,8 @@ class ControllerProduct {
             .update(value, {
                 where : {
                     id
-                }
+                },
+                include: Category
             })
             .then(product => {
                 if(product){

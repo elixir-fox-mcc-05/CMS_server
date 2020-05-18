@@ -34,7 +34,9 @@ class ControllerCategory {
         const {name} = req.body;
         const value = {name};
         Category
-            .create(value)
+            .create(value, {
+              include: Product
+            })
             .then(category => {
                 res.status(201).json({
                     Category : category
@@ -55,7 +57,9 @@ class ControllerCategory {
                 }
             })
             .then(category => {
-                return Category.findByPk(id);
+                return Category.findByPk(id, {
+                  include: Product
+                });
             })
             .then(category => {
                 res.status(202).json({
