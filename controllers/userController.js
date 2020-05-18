@@ -40,8 +40,8 @@ class UserController{
     }
 
     static register(req,res){
-        let {first_name,last_name,email,password} = req.body
-        let roles = 'admin'
+        let {first_name,last_name,email,password,roles} = req.body
+        // let roles = 'admin'
 
         User
             .create({first_name,last_name,email,password,roles})
@@ -75,6 +75,61 @@ class UserController{
                 
                 
             })
+    }
+
+    static googleLogin(req,res){
+        let google_token = req.headers.google_token;
+            let email = null;
+            let newUser = false;
+            let first_name = null;
+            let last_name = null
+            let roles = null
+            // console.log(google_token)
+            googleVerification(google_token)
+              .then(payload => {
+                // console.log(payload)
+                email = payload.email;
+                first_name = payload.given_name;
+                last_name = payload.family_name;
+                roles = 'costumer'
+                return User
+                  .findOne({
+                    where: {
+                      email
+                    }
+                  })
+              })
+              .then(user => {
+                // console.log('errr')
+                if (user) {
+                  return user;
+                } else {
+                  newUser = true;
+                  
+                  return User
+                    .create({
+                        first_name,
+                        last_name,
+                      email,
+                      password: process.env.DEFAULT_GOOGLE_PASSWORD,
+                      roles
+                    });
+                }
+              })
+              .then(user => {
+                let code = newUser ? 201 : 200;
+        
+                res.status(code).json({
+                  token :  generateToken({data : {
+                                                id: user.id,
+                                                email: user.email
+                                              }})
+                });
+              })
+              .catch(err => {
+                // console.log('errrr')
+                next(err);
+              })
     }
 }
 
