@@ -11,11 +11,11 @@ module.exports = (sequelize, DataTypes) => {
       validate : {
         notNull: {
           args : true,
-          msg : 'product name is required'
+          message : 'product name is required'
         },
         notEmpty:{
           args : true,
-          msg : "Product name cannot be Empty"
+          message : "Product name cannot be Empty"
         }
       }
     },
@@ -25,7 +25,7 @@ module.exports = (sequelize, DataTypes) => {
       validate: {
         isInt : {
           args : true,
-          msg : 'Must be integer'
+          message : 'Must be integer'
         },
         min : {
           args : 1,
@@ -38,7 +38,7 @@ module.exports = (sequelize, DataTypes) => {
       validate : {
         isInt : {
           args : true,
-          msg : 'Must be integer'
+          message : 'Must be integer'
         },
         min : {
           args : 1,
@@ -49,7 +49,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       isUrl: {
         args : true,
-        msg : 'must be url input'
+        message : 'must be url input'
       }
     },
     UserId : {

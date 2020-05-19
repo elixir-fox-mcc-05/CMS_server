@@ -11,12 +11,12 @@ console.log(id)
                     next()
                 }else{
                     res.status(401).json({
-                        msg : 'Unauthorized to use this feature!'
+                        message : 'Unauthorized to use this feature!'
                     })
                 }
             }else{
                 res.status(404).json({
-                    msg : 'title not Found'
+                    message : 'title not Found'
                 })
             }
         })
