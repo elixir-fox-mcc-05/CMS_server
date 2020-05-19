@@ -2,11 +2,9 @@ const {Banner} = require('../models')
 
 class BannerController {
 
-    static create(req,res){
-        let {name,image_url} = req.body
-    
-        Banner  
-            .create({name,image_url})
+    static list (req,res){
+        Banner
+            .findAll()
             .then(data => {
                 res.status(200).json({
                     data
@@ -19,14 +17,34 @@ class BannerController {
             })
     }
 
-    static select(req,res){
+    static create(req,res){
+        let {name,image_url} = req.body
+    
+        Banner  
+            .create({name,image_url})
+            .then(data => {
+                res.status(200).json({
+                    id: data.id,
+                    name: data.name,
+                    image_url: data.image_url
+                })
+            })
+            .catch(err => {
+                res.status(400).json({
+                    error : err.message
+                })
+            })
+    }
 
+    static select(req,res){
 
         Banner
             .findOne({where: {id : req.params.id}})
             .then(data => {
                 res.status(200).json({
-                    data
+                    id: data.id,
+                    name: data.name,
+                    image_url: data.image_url
                 })
             })
             .catch(err => {
@@ -42,8 +60,14 @@ class BannerController {
         Banner
             .update({name,image_url}, {where : {id : req.params.id}})
             .then(data => {
+                
+                return Banner.findByPk(req.params.id)
+            })
+            .then(data => {
                 res.status(200).json({
-                    data
+                    id: data.id,
+                    name: data.name,
+                    image_url: data.image_url
                 })
             })
             .catch(err => {
