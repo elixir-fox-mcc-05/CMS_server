@@ -32,10 +32,10 @@ module.exports = {
       }
   ]
 
-  return queryInterface.bulkInsert('Products', data, {});
+  return queryInterface.bulkInsert('Banners', data, {});
   },
 
   down: (queryInterface, Sequelize) => {
-    return queryInterface.bulkDelete('Products', null, {});
+    return queryInterface.bulkDelete('Banners', null, {});
   }
 };

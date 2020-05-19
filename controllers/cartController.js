@@ -1,3 +1,5 @@
+const {Cart,Product} = require('../models')
+
 class CartController{
 
     static list (req,res){
@@ -37,10 +39,10 @@ class CartController{
     static add (req,res){
 
         let newCart = {
-            ProductId = req.body.ProductId,
-            UserId = req.body.LoginId,
-            quantity = req.body.quantity,
-            isPaid = false
+            ProductId : req.body.ProductId,
+            UserId : req.body.LoginId,
+            quantity : req.body.quantity,
+            isPaid : false
         }
 
         Cart
@@ -58,10 +60,10 @@ class CartController{
     }
 
     static confirm(req,res){
-        let {name , image_url, price ,stock, CategoryId} = req.body 
+        // let {id} = req.body 
         // console.log(req.params.id)
-        Product 
-            .update({ 'name' : name ,'image_url' : image_url, 'price':price ,'stock':stock, 'CategoryId':CategoryId},{where : {id : req.params.id}})
+        Cart
+            .update({isPaid : true},{where : {id : req.params.id}})
             .then(data => {
                 // console.log(data)
                 return Product.findByPk(req.params.id) 
@@ -69,11 +71,11 @@ class CartController{
             .then(data => {
                 // console.log(data)
                 res.status(200).json({
-                    name : data.name,
-                    image_url : data.image_url,
-                    price : data.price,
-                    stock : data.stock,
-                    CategoryId : data.CategoryId
+                    id : req.body.id,
+                    ProductId : req.body.ProductId,
+                    UserId : req.body.LoginId,
+                    quantity : req.body.quantity,
+                    isPaid : req.body.isPaid
                 })
             })
             .catch(err => {
@@ -101,23 +103,23 @@ class CartController{
     static delete (req,res){
         let results;
 
-        Product
+        Cart
             .findByPk(req.params.id)
             .then(data1 => {
                 console.log(data1.id)
                 if(data1.id == req.params.id){
                     results = Object.assign(data1)
-                    return Product.destroy({where : {id : req.params.id},returning : true})
+                    return Cart.destroy({where : {id : req.params.id},returning : true})
                 }else{
                     res.status(404).json({error : "not found"})
                 }
                         })
             .then(data2 => {
-                res.status(200).json({name : results.name,
-                                        image_url : results.image_url,
-                                        price : results.price,
+                res.status(200).json({  id : results.id,
+                                        ProductId : results.ProductId,
+                                        UserId : results.UserId,
                                         stock : results.stock,
-                                        CategoryId : results.CategoryId})
+                                        isPaid : results.isPaid})
             })
             .catch(err => {
                 console.log(err.message)
@@ -125,3 +127,5 @@ class CartController{
             })
     }
 }
+
+module.exports = CartController
