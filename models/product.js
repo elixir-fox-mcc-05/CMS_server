@@ -26,7 +26,7 @@ module.exports = (sequelize, DataTypes) => {
     hooks : {
       beforeCreate(product) {
         if(!product.category_id) {
-          product.category_id = 0
+          product.category_id = -1
         }
       }
     }
