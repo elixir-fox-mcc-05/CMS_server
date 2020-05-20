@@ -24,19 +24,63 @@
 
 * **Data Params**
 
-  email=[string]
-  password=[string]
 
 * **Success Response:**
 
   * **Code:** 200 <br />
-    **Content:** `{ id:12,
-                    name: 'asdasd',
-                    image_url: 'http://localhost:3000/pic/asd.jpg',
-                    stock: 2000,
-                    price: 1000,
-                    CategoryId: 1
-                    }`
+    **Content:** `{
+                    "data": [
+                        {
+                            "id": 1,
+                            "quantity": null,
+                            "isPaid": false,
+                            "UserId": null,
+                            "ProductId": 1,
+                            "createdAt": "2020-05-20T08:24:26.029Z",
+                            "updatedAt": "2020-05-20T08:24:26.029Z",
+                            "Product": {
+                                "id": 1,
+                                "name": "water",
+                                "image_url": "https://www.w3schools.com/w3css/img_lights.jpg",
+                                "price": 15000,
+                                "stock": 12,
+                                "CategoryId": 1,
+                                "createdAt": "2020-05-20T07:48:50.894Z",
+                                "updatedAt": "2020-05-20T07:48:50.894Z"
+                            },
+                            "User": null
+                        },
+                        {
+                            "id": 2,
+                            "quantity": 2,
+                            "isPaid": false,
+                            "UserId": 1,
+                            "ProductId": 1,
+                            "createdAt": "2020-05-20T08:27:23.985Z",
+                            "updatedAt": "2020-05-20T08:27:23.985Z",
+                            "Product": {
+                                "id": 1,
+                                "name": "water",
+                                "image_url": "https://www.w3schools.com/w3css/img_lights.jpg",
+                                "price": 15000,
+                                "stock": 12,
+                                "CategoryId": 1,
+                                "createdAt": "2020-05-20T07:48:50.894Z",
+                                "updatedAt": "2020-05-20T07:48:50.894Z"
+                            },
+                            "User": {
+                                "id": 1,
+                                "first_name": "bolu",
+                                "last_name": "bolu",
+                                "email": "bolu12@bolu.com",
+                                "password": "$2b$04$fQ.LJm63bscPbzDVKzspjuPLSZI1FFqqsCuXkUZr5g.ZqLRb9exlu",
+                                "roles": "admin",
+                                "createdAt": "2020-05-20T07:25:49.329Z",
+                                "updatedAt": "2020-05-20T07:25:49.329Z"
+                            }
+                        }
+                    ]
+                }`
  
 * **Error Response:**
 
@@ -83,19 +127,15 @@
 * **Data Params**
 
     ProductId=[integer]
-    UserId=[integer]
     quantity=[integer]
 
 * **Success Response:**
 
   * **Code:** 201 <br />
     **Content:** `{
-                    "id": 1,
-                    "name": "water",
-                    "image_url": "https://www.w3schools.com/w3css/img_lights.jpg",
-                    "price": 15000,
-                    "stock": 12,
-                    "CategoryId": 1
+                    "id": 2,
+                    "ProductId": 1,
+                    "UserId": 1
                 }`
  
 * **Error Response:**
@@ -113,12 +153,8 @@
           token : localStorage.token
       }
       data: {
-          id: 1,
-        name: 'buah',
-        image_url: 'https://buefy.org/static/img/buefy.1d65c18.png',
-        stock: 12,
-        price: 120000,
-        CategoryId: 12 
+          ProductId : 1,
+          quantity: 2 
       }
   }
 
@@ -155,12 +191,19 @@
 * **Success Response:**
 
   * **Code:** 200 <br />
-    **Content:** `{ id: 1,
-                    name: 'buah',
-                    image_url: 'https://buefy.org/static/img/buefy.1d65c18.png',
-                    stock: 12,
-                    price: 120000,
-                    CategoryId: 12}`
+    **Content:** `{
+                        "data": [
+                            {
+                                "id": 2,
+                                "quantity": 2,
+                                "isPaid": false,
+                                "UserId": 1,
+                                "ProductId": 1,
+                                "createdAt": "2020-05-20T08:27:23.985Z",
+                                "updatedAt": "2020-05-20T08:27:23.985Z"
+                            }
+                        ]
+                    }`
  
 * **Error Response:**
 
@@ -175,9 +218,6 @@
       url: 'http://localhost:3000/cart/checkout',
       headers : {
           token : localStorage.token
-      }
-      params : {
-          id : 1
       }
   }
 
@@ -213,12 +253,12 @@
 * **Success Response:**
 
   * **Code:** 200 <br />
-    **Content:** `{ id: 1,
-                    name: 'buah',
-                    image_url: 'https://buefy.org/static/img/buefy.1d65c18.png',
-                    stock: 12,
-                    price: 120000,
-                    CategoryId: 12}`
+    **Content:** `{
+                        "id": 2,
+                        "ProductId": 1,
+                        "quantity": 2,
+                        "isPaid": true
+                    }`
  
 * **Error Response:**
 
@@ -230,7 +270,7 @@
 
   $.ajax{
       method:'put',
-      url: 'http://localhost:3000/products/edit/1',
+      url: 'http://localhost:3000/cart/confirm/1',
       headers : {
           token : localStorage.token
       },
@@ -238,12 +278,76 @@
           id : 1
       },
       data: {
-          id: this.id,
-            name: this.name,
-            image_url: this.image_url,
-            stock: this.stock,
-            price: this.price,
-            CategoryId: this.selectId
+            id: 2,
+            ProductId: 1,
+            quantity: 2,
+            isPaid: true
+      }
+  }
+
+-------------------------------------------------------------------------------------------------------
+
+**Title**
+----
+  Edit Cart
+
+* **URL**
+
+  /carts/edit/:id
+
+* **Method:**
+  
+  PUT
+  
+*  **URL Params**
+
+
+   **Required:**
+ 
+    token=[string]
+    id=[number]
+
+   **Optional:**
+ 
+   
+
+* **Data Params**
+
+    quantity=[integer]
+    isPaid=[boolean]
+
+* **Success Response:**
+
+  * **Code:** 200 <br />
+    **Content:** `{
+                        "id": 2,
+                        "ProductId": 1,
+                        "quantity": 2,
+                        "isPaid": false
+                    }`
+ 
+* **Error Response:**
+
+  * **Code:** 400 BAD REQUEST <br />
+    **Content:** `{ error : 'image_url is required field' }`
+
+
+* **Sample Call:**
+
+  $.ajax{
+      method:'put',
+      url: 'http://localhost:3000/cart/edit/1',
+      headers : {
+          token : localStorage.token
+      },
+      params : {
+          id : 1
+      },
+      data: {
+            id: 2,
+            ProductId: 1,
+            quantity: 2,
+            isPaid: true
       }
   }
 
@@ -280,12 +384,12 @@
 * **Success Response:**
 
   * **Code:** 200 <br />
-    **Content:** `{ id: 1,
-                    name: 'buah',
-                    image_url: 'https://buefy.org/static/img/buefy.1d65c18.png',
-                    stock: 12,
-                    price: 120000,
-                    CategoryId: 12}`
+    **Content:** `{
+                    "id": 1,
+                    "ProductId": 1,
+                    "UserId": null,
+                    "isPaid": true
+                }`
  
 * **Error Response:**
 
@@ -297,7 +401,7 @@
 
   $.ajax{
       method:'delete',
-      url: 'http://localhost:3000/products/delete/1',
+      url: 'http://localhost:3000/cart/delete/1',
       headers : {
           token : localStorage.token
       },

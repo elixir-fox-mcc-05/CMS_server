@@ -1,10 +1,10 @@
-const {Cart,Product} = require('../models')
+const {Cart,Product,User} = require('../models')
 
 class CartController{
 
     static list (req,res){
         Cart
-            .findAll()
+            .findAll({order : [['id','ASC']],include : [Product,User]})
             .then(data => {
                 res.status(200).json({
                     data
@@ -26,12 +26,12 @@ class CartController{
                                 }})
             .then(data => {
                 res.status(200).json({
-
+                    data
                 })
             })
             .catch(err => {
                 res.status(400).json({
-
+                    error : err.message
                 })
             })
     }
@@ -40,7 +40,7 @@ class CartController{
 
         let newCart = {
             ProductId : req.body.ProductId,
-            UserId : req.body.LoginId,
+            UserId : req.LoginId,
             quantity : req.body.quantity,
             isPaid : false
         }
@@ -49,12 +49,14 @@ class CartController{
             .create(newCart)
             .then(data => {
                 res.status(201).json({
-
+                    id: data.id,
+                    ProductId: data.ProductId,
+                    UserId: data.UserId
                 })
             })
             .catch(err => {
                 res.status(404).json({
-
+                    error : err.message
                 })
             })
     }
@@ -66,16 +68,16 @@ class CartController{
             .update({isPaid : true},{where : {id : req.params.id}})
             .then(data => {
                 // console.log(data)
-                return Product.findByPk(req.params.id) 
+                return Cart.findByPk(req.params.id) 
             })
             .then(data => {
                 // console.log(data)
                 res.status(200).json({
-                    id : req.body.id,
-                    ProductId : req.body.ProductId,
-                    UserId : req.body.LoginId,
-                    quantity : req.body.quantity,
-                    isPaid : req.body.isPaid
+                    id : data.id,
+                    ProductId : data.ProductId,
+                    UserId : data.LoginId,
+                    quantity : data.quantity,
+                    isPaid : data.isPaid
                 })
             })
             .catch(err => {
@@ -98,6 +100,51 @@ class CartController{
                     error : errorfix
                 })
             })
+    }
+
+    static edit(req,res){
+
+        let { quantity, isPaid} = req.body
+
+        Cart
+        .update({
+            'quantity': quantity,
+            'isPaid': isPaid
+        },{where : {id : req.params.id}})
+        .then(data => {
+            // console.log(data)
+            return Cart.findByPk(req.params.id) 
+        })
+        .then(data => {
+            // console.log(data)
+            res.status(200).json({
+                id : data.id,
+                ProductId : data.ProductId,
+                UserId : data.LoginId,
+                quantity : data.quantity,
+                isPaid : data.isPaid
+            })
+        })
+        .catch(err => {
+            let errorfix = err.message
+            if(errorfix.includes(',')){
+                errorfix = errorfix.split(',')
+                for (let i=0 ; i <errorfix.length ; i++){
+                    errorfix[i] = errorfix[i].replace('Validation error: ','').replace('\n','')
+                    errorfix[i] = errorfix[i].replace('notNull Violation: ','')
+                    if (errorfix[i].charAt(errorfix[i].length-1) == ' '){
+                        errorfix[i] = errorfix[i].slice(0, -1); 
+                    }
+                }
+
+            }else {
+                errorfix = errorfix.replace('Validation error: ','')
+                errorfix = errorfix.replace('notNull Violation: ','')
+            }
+            res.status(400).json({
+                error : errorfix
+            })
+        })
     }
 
     static delete (req,res){
