@@ -1,12 +1,30 @@
 'use strict'
 
-const { Product, Category, ProductPicture } = require(`../models`)
+const { Product, Category, User } = require(`../models`)
 const { readToken } = require(`../helpers/jwt`)
 
 class ProductController {
 
     static getAll( req, res){
-        Product .findAll({})
+        Product .findAll({
+            include : [{ model : Category }]
+        })
+                .then(result => {
+                    res.status(201).json({
+                        result
+                    })
+                })
+                .catch( err => {
+                    res.status(500).json({
+                        error : err.message
+                    })
+                })
+    }
+    static getLimitedAll( req, res){
+        Product .findAll({
+            include : [{ model : Category },{ model : User }],
+            limit : Number[req.params.amount]
+        })
                 .then(result => {
                     res.status(201).json({
                         result

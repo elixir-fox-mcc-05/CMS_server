@@ -95,14 +95,20 @@ class ProductController {
 
     static removePicture( req, res) {
         const { id } = req.body
-        Product.destroy({
+        ProductPicture.destroy({
             where : {
                 id : id
             }
-        })  .then( _=> {
-            res.status(200).json({
-                message : `Item deleted`
-            })
+        })  .then( (result)=> {
+            if(result) {
+                res.status(200).json({
+                    message : `Item deleted`
+                })
+            } else {
+                res.status(404).json({
+                    message : `Item not found`
+                })
+            }
         })  .catch( err => {
             res.status(500).json({
                 error : err.message
