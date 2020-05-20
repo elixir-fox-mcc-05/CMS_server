@@ -23,6 +23,7 @@ class ProductController {
     static getLimitedAll( req, res){
         Product .findAll({
             include : [{ model : Category },{ model : User }],
+            order : [['updatedAt','asc'], ['stock','desc']],
             limit : Number[req.params.amount]
         })
                 .then(result => {
