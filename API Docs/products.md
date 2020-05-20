@@ -91,12 +91,14 @@
 * **Success Response:**
 
   * **Code:** 201 <br />
-    **Content:** `{ id: 1,
-                    name: 'buah',
-                    image_url: 'https://buefy.org/static/img/buefy.1d65c18.png',
-                    stock: 12,
-                    price: 120000,
-                    CategoryId: 12}`
+    **Content:** `{
+                    "id": 1,
+                    "name": "water",
+                    "image_url": "https://www.w3schools.com/w3css/img_lights.jpg",
+                    "price": 15000,
+                    "stock": 12,
+                    "CategoryId": 1
+                }`
  
 * **Error Response:**
 

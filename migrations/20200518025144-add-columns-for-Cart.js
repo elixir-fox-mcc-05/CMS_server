@@ -13,7 +13,7 @@ module.exports = {
       onDelete: 'cascade'
     })
   
-      const p2 = queryInterface.addColumn('Carts', 'SupplyId', {
+      const p2 = queryInterface.addColumn('Carts', 'ProductId', {
         type: Sequelize.INTEGER,
         references: {
           model: 'Products',
@@ -29,6 +29,8 @@ module.exports = {
   down: (queryInterface, Sequelize) => {
     const p1 = queryInterface.removeColumn('Carts', 'UserId');
 
-    const p2 = queryInterface.removeColumn('Carts', 'SupplyId');
+    const p2 = queryInterface.removeColumn('Carts', 'ProductId');
+
+    return Promise.all([p1,p2])
   }
 };
