@@ -34,15 +34,15 @@ http://localhost:3000/users/
     **Content:** `{ message : "Internal Server Error" }`
 
 - **Sample Call:**
-
+```
   http://localhost:3000/users
-
+```
 ## User Register
 
 - **URL**
-
+```
   http://localhost:3000/users/register
-
+```
 - **Method:**
 
   `POST`
@@ -72,15 +72,15 @@ http://localhost:3000/users/
     **Content:** `{ message : "Internal Server Error" }`
 
 - **Sample Call:**
-
+```
   http://localhost:3000/users/register
-
+```
 ## GET ALL PRODUCT
 
 - **URL**
-
+```
   http://localhost:3000/products/
-
+```
 - **Method:**
 
   `GET`
@@ -121,15 +121,15 @@ http://localhost:3000/users/
     **Content:** `{ Message : "Internal Server Error" }`
 
 - **Sample Call:**
-
+```
   http://localhost:3000/products/
-
+```
 ## GET PRODUCT By ID
 
 - **URL**
-
+```
   http://localhost:3000/products/:id
-
+```
 - **Method:**
 
   `GET`
@@ -170,9 +170,9 @@ http://localhost:3000/users/
     **Content:** `{ message : "Internal Server Error" }`
 
 - **Sample Call:**
-
+```
   http://localhost:3000/products/2
-
+```
 ## ADD NEW PRODUCT
 
 - **URL**
@@ -222,15 +222,15 @@ http://localhost:3000/users/
     **Content:** `{ message : "Internal Server Error" }`
 
 - **Sample Call:**
-
+```
   http://localhost:3000/products/
-
+```
 ## UPDATE PRODUCT
 
 - **URL**
-
+```
   http://localhost:3000/products/:id
-
+```
 - **Method:**
 
   `PUT`
@@ -274,15 +274,15 @@ http://localhost:3000/users/
     **Content:** `{ message : "Internal Server Error" }`
 
 - **Sample Call:**
-
+```
   http://localhost:3000/products/2
-
+```
 ## DELETE PRODUCT
 
 - **URL**
-
+```
   http://localhost:3000/products/2
-
+```
 - **Method:**
 
   `DELETE`
@@ -311,5 +311,6 @@ http://localhost:3000/users/
     **Content:** `{ message : "Internal Server Error" }`
 
 - **Sample Call:**
-
+```
   http://localhost:3000/products/1
+```
