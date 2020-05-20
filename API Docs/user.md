@@ -30,10 +30,12 @@
 * **Success Response:**
 
   * **Code:** 200 <br />
-    **Content:** `{ token:'asdasdasdasdasdasdasdasd',
-                    first_name: 'asdasd',
-                    last_name: 'asdasd,
-                    roles: 'admin'}`
+    **Content:** `{
+                    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTIxLCJlbWFpbCI6ImJvbHVAYm9sdS5jb20iLCJwYXNzd29yZCI6IiQyYiQwNCQ0dUpuNzdsQWZXVUsvTTZsNVR1S3N1dEFmSTVKUHhPUU9CU3owT3E4T01aM3FRalFadGJXYSIsImlhdCI6MTU4OTk1MDQ3MX0.mOwhK_UbLrUEK2Eay_ud_LTiZVRRxGSWrAd4_aDe9lQ",
+                    "first_name": "bolu",
+                    "last_name": "",
+                    "roles": null
+                }`
  
 * **Error Response:**
 
@@ -88,11 +90,13 @@
 * **Success Response:**
 
   * **Code:** 201 <br />
-    **Content:** `{ id: 1,
-                    first_name: 'asdasd',
-                    last_name: 'asdasd,
-                    email: 'asd@asd.com,
-                    roles: 'admin'}`
+    **Content:** `{
+                      "id": 123,
+                      "first_name": "bolu",
+                      "last_name": "bolu",
+                      "email": "bolu12@bolu.com",
+                      "roles": "admin"
+                  }`
  
 * **Error Response:**
 

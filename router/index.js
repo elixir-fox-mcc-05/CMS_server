@@ -1,6 +1,6 @@
 const router = require('express').Router()
 const UserController = require('../controllers/userController')
-const CostumerController = require('../controllers/costumerController')
+// const CostumerController = require('../controllers/costumerController')
 const products = require('./products')
 const categories = require('./categories')
 const carts = require('./carts')

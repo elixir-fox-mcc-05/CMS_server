@@ -35,14 +35,14 @@ module.exports = (sequelize, DataTypes) => {
     modelName: 'User',
     hooks: {
       beforeCreate: (user) => {
-        if (user.last_name == null) {
+        if (user.last_name == null || user.last_name == '') {
           user.last_name = user.first_name
         }
         let cryptPassword = encrypt(user.password)
         user.password = cryptPassword
       },
       beforeUpdate: (user) => {
-        if (user.last_name == null) {
+        if (user.last_name == null || user.last_name == '') {
           user.last_name = user.first_name
         }
         let cryptPassword = encrypt(user.password)

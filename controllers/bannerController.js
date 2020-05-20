@@ -30,8 +30,24 @@ class BannerController {
                 })
             })
             .catch(err => {
+                console.log(err.message)
+                let errorfix = err.message
+                if(errorfix.includes(',')){
+                    errorfix.replace('category is required field','')
+                    errorfix = errorfix.split(',')
+                    for (let i=0 ; i <errorfix.length ; i++){
+                        errorfix[i] = errorfix[i].replace('Validation error: ','').replace('\n','')
+                        errorfix[i] = errorfix[i].replace('notNull Violation: ','')
+                        if (errorfix[i].charAt(errorfix[i].length-1) == ' '){
+                            errorfix[i] = errorfix[i].slice(0, -1); 
+                        }
+                    }
+
+                }else {
+                    errorfix = errorfix.replace('Validation error: ','')
+                }
                 res.status(400).json({
-                    error : err.message
+                    error : errorfix
                 })
             })
     }
