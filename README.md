@@ -30,10 +30,12 @@
 * **Success Response:**
 
   * **Code:** 200 <br />
-    **Content:** `{ token:'asdasdasdasdasdasdasdasd',
-                    first_name: 'asdasd',
-                    last_name: 'asdasd,
-                    roles: 'admin'}`
+    **Content:** `{
+                    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTIxLCJlbWFpbCI6ImJvbHVAYm9sdS5jb20iLCJwYXNzd29yZCI6IiQyYiQwNCQ0dUpuNzdsQWZXVUsvTTZsNVR1S3N1dEFmSTVKUHhPUU9CU3owT3E4T01aM3FRalFadGJXYSIsImlhdCI6MTU4OTk1MDQ3MX0.mOwhK_UbLrUEK2Eay_ud_LTiZVRRxGSWrAd4_aDe9lQ",
+                    "first_name": "bolu",
+                    "last_name": "",
+                    "roles": null
+                }`
  
 * **Error Response:**
 
@@ -88,11 +90,13 @@
 * **Success Response:**
 
   * **Code:** 201 <br />
-    **Content:** `{ id: 1,
-                    first_name: 'asdasd',
-                    last_name: 'asdasd,
-                    email: 'asd@asd.com,
-                    roles: 'admin'}`
+    **Content:** `{
+                      "id": 123,
+                      "first_name": "bolu",
+                      "last_name": "bolu",
+                      "email": "bolu12@bolu.com",
+                      "roles": "admin"
+                  }`
  
 * **Error Response:**
 
@@ -117,27 +121,16 @@
 
 **Title**
 ----
-  Product List
+  Banner List
 
 * **URL**
 
-  /products
+  /banner/list
 
 * **Method:**
   
   GET
   
-*  **URL Params**
-
-  
-
-   **Required:**
- 
-    token=[string]
-
-   **Optional:**
- 
-   
 
 * **Data Params**
 
@@ -147,13 +140,17 @@
 * **Success Response:**
 
   * **Code:** 200 <br />
-    **Content:** `{ id:12,
-                    name: 'asdasd',
-                    image_url: 'http://localhost:3000/pic/asd.jpg',
-                    stock: 2000,
-                    price: 1000,
-                    CategoryId: 1
-                    }`
+    **Content:** `{
+                    "data": [
+                                {
+                                    "id": 1,
+                                    "name": "asd",
+                                    "image_url": "https://www.w3schools.com/w3css/img_lights.jpg",
+                                    "createdAt": "2020-05-20T05:23:33.872Z",
+                                    "updatedAt": "2020-05-20T05:23:33.872Z"
+                                }
+                            ]
+                        }`
  
 * **Error Response:**
 
@@ -165,7 +162,7 @@
 
   $.ajax{
       method:'get',
-      url: 'http://localhost:3000/product',
+      url: 'http://localhost:3000/banner/list',
       headers: {
           token : localStorage.token
       }
@@ -175,11 +172,11 @@
 
 **Title**
 ----
-  Add Product
+  Add Banner
 
 * **URL**
 
-  /products/add
+  /banner/add
 
 * **Method:**
   
@@ -193,27 +190,21 @@
  
     token=[string]
 
-   **Optional:**
- 
-   
 
 * **Data Params**
 
     name=[string]
     image_url=[string]
-    stock=[integer]
-    price=[integer]
-    CategoryId=[integer]
+
 
 * **Success Response:**
 
   * **Code:** 201 <br />
-    **Content:** `{ id: 1,
-                    name: 'buah',
-                    image_url: 'https://buefy.org/static/img/buefy.1d65c18.png',
-                    stock: 12,
-                    price: 120000,
-                    CategoryId: 12}`
+    **Content:** `{
+                        "id": 1,
+                        "name": "asd",
+                        "image_url": "https://www.w3schools.com/w3css/img_lights.jpg"
+                    }`
  
 * **Error Response:**
 
@@ -225,7 +216,7 @@
 
   $.ajax{
       method:'post',
-      url: 'http://localhost:3000/products/add',
+      url: 'http://localhost:3000/banner/add',
       headers : {
           token : localStorage.token
       }
@@ -243,11 +234,11 @@
 
 **Title**
 ----
-  Select Product
+  Select banner
 
 * **URL**
 
-  /products/:id
+  /banner/:id
 
 * **Method:**
   
@@ -272,12 +263,11 @@
 * **Success Response:**
 
   * **Code:** 200 <br />
-    **Content:** `{ id: 1,
-                    name: 'buah',
-                    image_url: 'https://buefy.org/static/img/buefy.1d65c18.png',
-                    stock: 12,
-                    price: 120000,
-                    CategoryId: 12}`
+    **Content:** `{
+                        "id": 1,
+                        "name": "asd",
+                        "image_url": "https://www.w3schools.com/w3css/img_lights.jpg"
+                    }`
  
 * **Error Response:**
 
@@ -289,7 +279,7 @@
 
   $.ajax{
       method:'post',
-      url: 'http://localhost:3000/products/1',
+      url: 'http://localhost:3000/banner/1',
       headers : {
           token : localStorage.token
       }
@@ -302,11 +292,11 @@
 
 **Title**
 ----
-  Edit Product
+  Edit Banner
 
 * **URL**
 
-  /products/edit/:id
+  /banner/:id
 
 * **Method:**
   
@@ -329,19 +319,15 @@
 
     name=[string]
     image_url=[string]
-    stock=[integer]
-    price=[integer]
-    CategoryId=[integer]
 
 * **Success Response:**
 
   * **Code:** 200 <br />
-    **Content:** `{ id: 1,
-                    name: 'buah',
-                    image_url: 'https://buefy.org/static/img/buefy.1d65c18.png',
-                    stock: 12,
-                    price: 120000,
-                    CategoryId: 12}`
+    **Content:** `{
+                        "id": 1,
+                        "name": "boluzzz",
+                        "image_url": "https://www.w3schools.com/w3css/img_lights.jpg"
+                    }`
  
 * **Error Response:**
 
@@ -361,12 +347,8 @@
           id : 1
       },
       data: {
-          id: this.id,
             name: this.name,
             image_url: this.image_url,
-            stock: this.stock,
-            price: this.price,
-            CategoryId: this.selectId
       }
   }
 
@@ -374,11 +356,11 @@
 
 **Title**
 ----
-  Delete Product
+  Delete Banner
 
 * **URL**
 
-  /products/delete/:id
+  /banner/delete/:id
 
 * **Method:**
   
@@ -403,12 +385,11 @@
 * **Success Response:**
 
   * **Code:** 200 <br />
-    **Content:** `{ id: 1,
-                    name: 'buah',
-                    image_url: 'https://buefy.org/static/img/buefy.1d65c18.png',
-                    stock: 12,
-                    price: 120000,
-                    CategoryId: 12}`
+    **Content:** `{
+                    "id": 1,
+                    "name": "boluzzz",
+                    "image_url": "https://www.w3schools.com/w3css/img_lights.jpg"
+                }`
  
 * **Error Response:**
 
@@ -420,7 +401,7 @@
 
   $.ajax{
       method:'delete',
-      url: 'http://localhost:3000/products/delete/1',
+      url: 'http://localhost:3000/banner/delete/1',
       headers : {
           token : localStorage.token
       },
@@ -431,6 +412,480 @@
 
 -------------------------------------------------------------------------------------------------------
 
+**Title**
+----
+  Cart List
+
+* **URL**
+
+  /cart/list
+
+* **Method:**
+  
+  GET
+  
+*  **URL Params**
+
+  
+
+   **Required:**
+ 
+    token=[string]
+
+   **Optional:**
+ 
+   
+
+* **Data Params**
+
+
+* **Success Response:**
+
+  * **Code:** 200 <br />
+    **Content:** `{
+                    "data": [
+                        {
+                            "id": 1,
+                            "quantity": null,
+                            "isPaid": false,
+                            "UserId": null,
+                            "ProductId": 1,
+                            "createdAt": "2020-05-20T08:24:26.029Z",
+                            "updatedAt": "2020-05-20T08:24:26.029Z",
+                            "Product": {
+                                "id": 1,
+                                "name": "water",
+                                "image_url": "https://www.w3schools.com/w3css/img_lights.jpg",
+                                "price": 15000,
+                                "stock": 12,
+                                "CategoryId": 1,
+                                "createdAt": "2020-05-20T07:48:50.894Z",
+                                "updatedAt": "2020-05-20T07:48:50.894Z"
+                            },
+                            "User": null
+                        },
+                        {
+                            "id": 2,
+                            "quantity": 2,
+                            "isPaid": false,
+                            "UserId": 1,
+                            "ProductId": 1,
+                            "createdAt": "2020-05-20T08:27:23.985Z",
+                            "updatedAt": "2020-05-20T08:27:23.985Z",
+                            "Product": {
+                                "id": 1,
+                                "name": "water",
+                                "image_url": "https://www.w3schools.com/w3css/img_lights.jpg",
+                                "price": 15000,
+                                "stock": 12,
+                                "CategoryId": 1,
+                                "createdAt": "2020-05-20T07:48:50.894Z",
+                                "updatedAt": "2020-05-20T07:48:50.894Z"
+                            },
+                            "User": {
+                                "id": 1,
+                                "first_name": "bolu",
+                                "last_name": "bolu",
+                                "email": "bolu12@bolu.com",
+                                "password": "$2b$04$fQ.LJm63bscPbzDVKzspjuPLSZI1FFqqsCuXkUZr5g.ZqLRb9exlu",
+                                "roles": "admin",
+                                "createdAt": "2020-05-20T07:25:49.329Z",
+                                "updatedAt": "2020-05-20T07:25:49.329Z"
+                            }
+                        }
+                    ]
+                }`
+ 
+* **Error Response:**
+
+  * **Code:** 400 BAD REQUEST <br />
+    **Content:** `{ error : 'internal server error' }`
+
+
+* **Sample Call:**
+
+  $.ajax{
+      method:'get',
+      url: 'http://localhost:3000/cart',
+      headers: {
+          token : localStorage.token
+      }
+  }
+
+-------------------------------------------------------------------------------------------------------
+
+**Title**
+----
+  Add Cart
+
+* **URL**
+
+  /products/add
+
+* **Method:**
+  
+  POST
+  
+*  **URL Params**
+
+  
+
+   **Required:**
+ 
+    token=[string]
+
+   **Optional:**
+ 
+   
+
+* **Data Params**
+
+    ProductId=[integer]
+    quantity=[integer]
+
+* **Success Response:**
+
+  * **Code:** 201 <br />
+    **Content:** `{
+                    "id": 2,
+                    "ProductId": 1,
+                    "UserId": 1
+                }`
+ 
+* **Error Response:**
+
+  * **Code:** 400 BAD REQUEST <br />
+    **Content:** `{ error : 'image_url is required field' }`
+
+
+* **Sample Call:**
+
+  $.ajax{
+      method:'post',
+      url: 'http://localhost:3000/cart/add',
+      headers : {
+          token : localStorage.token
+      }
+      data: {
+          ProductId : 1,
+          quantity: 2 
+      }
+  }
+
+-------------------------------------------------------------------------------------------------------
+
+**Title**
+----
+  Checkout Cart
+
+* **URL**
+
+  /cart/checkout
+
+* **Method:**
+  
+  Get
+  
+*  **URL Params**
+
+  
+
+   **Required:**
+ 
+    token=[string]
+    id=[number]
+
+   **Optional:**
+ 
+   
+
+* **Data Params**
+
+
+* **Success Response:**
+
+  * **Code:** 200 <br />
+    **Content:** `{
+                        "data": [
+                            {
+                                "id": 2,
+                                "quantity": 2,
+                                "isPaid": false,
+                                "UserId": 1,
+                                "ProductId": 1,
+                                "createdAt": "2020-05-20T08:27:23.985Z",
+                                "updatedAt": "2020-05-20T08:27:23.985Z"
+                            }
+                        ]
+                    }`
+ 
+* **Error Response:**
+
+  * **Code:** 404 NOT FOUND <br />
+    **Content:** `{ error : "not found" }`
+
+
+* **Sample Call:**
+
+  $.ajax{
+      method:'post',
+      url: 'http://localhost:3000/cart/checkout',
+      headers : {
+          token : localStorage.token
+      }
+  }
+
+-------------------------------------------------------------------------------------------------------
+
+**Title**
+----
+  Confirm Cart
+
+* **URL**
+
+  /carts/confirm/:id
+
+* **Method:**
+  
+  PUT
+  
+*  **URL Params**
+
+
+   **Required:**
+ 
+    token=[string]
+    id=[number]
+
+   **Optional:**
+ 
+   
+
+* **Data Params**
+
+
+* **Success Response:**
+
+  * **Code:** 200 <br />
+    **Content:** `{
+                        "id": 2,
+                        "ProductId": 1,
+                        "quantity": 2,
+                        "isPaid": true
+                    }`
+ 
+* **Error Response:**
+
+  * **Code:** 400 BAD REQUEST <br />
+    **Content:** `{ error : 'image_url is required field' }`
+
+
+* **Sample Call:**
+
+  $.ajax{
+      method:'put',
+      url: 'http://localhost:3000/cart/confirm/1',
+      headers : {
+          token : localStorage.token
+      },
+      params : {
+          id : 1
+      },
+      data: {
+            id: 2,
+            ProductId: 1,
+            quantity: 2,
+            isPaid: true
+      }
+  }
+
+-------------------------------------------------------------------------------------------------------
+
+**Title**
+----
+  Edit Cart
+
+* **URL**
+
+  /carts/edit/:id
+
+* **Method:**
+  
+  PUT
+  
+*  **URL Params**
+
+
+   **Required:**
+ 
+    token=[string]
+    id=[number]
+
+   **Optional:**
+ 
+   
+
+* **Data Params**
+
+    quantity=[integer]
+    isPaid=[boolean]
+
+* **Success Response:**
+
+  * **Code:** 200 <br />
+    **Content:** `{
+                        "id": 2,
+                        "ProductId": 1,
+                        "quantity": 2,
+                        "isPaid": false
+                    }`
+ 
+* **Error Response:**
+
+  * **Code:** 400 BAD REQUEST <br />
+    **Content:** `{ error : 'image_url is required field' }`
+
+
+* **Sample Call:**
+
+  $.ajax{
+      method:'put',
+      url: 'http://localhost:3000/cart/edit/1',
+      headers : {
+          token : localStorage.token
+      },
+      params : {
+          id : 1
+      },
+      data: {
+            id: 2,
+            ProductId: 1,
+            quantity: 2,
+            isPaid: true
+      }
+  }
+
+-------------------------------------------------------------------------------------------------------
+
+**Title**
+----
+  Delete Cart
+
+* **URL**
+
+  /cart/delete/:id
+
+* **Method:**
+  
+  DELETE
+  
+*  **URL Params**
+
+  
+
+   **Required:**
+ 
+    token=[string]
+    id=[number]
+
+   **Optional:**
+ 
+   
+
+* **Data Params**
+
+
+* **Success Response:**
+
+  * **Code:** 200 <br />
+    **Content:** `{
+                    "id": 1,
+                    "ProductId": 1,
+                    "UserId": null,
+                    "isPaid": true
+                }`
+ 
+* **Error Response:**
+
+  * **Code:** 404 NOT FOUND <br />
+    **Content:** `{ error : 'not found' }`
+
+
+* **Sample Call:**
+
+  $.ajax{
+      method:'delete',
+      url: 'http://localhost:3000/cart/delete/1',
+      headers : {
+          token : localStorage.token
+      },
+      params : {
+          id : 1
+      }
+  }
+
+-------------------------------------------------------------------------------------------------------
+
+**Title**
+----
+  Select Cart
+
+* **URL**
+
+  /cart/:id
+
+* **Method:**
+  
+  GET
+  
+*  **URL Params**
+
+  
+
+   **Required:**
+ 
+    token=[string]
+    id=[integer]
+
+   **Optional:**
+ 
+   
+
+* **Data Params**
+
+
+* **Success Response:**
+
+  * **Code:** 200 <br />
+    **Content:** `{
+                      "data": {
+                          "id": 1,
+                          "quantity": 2,
+                          "isPaid": false,
+                          "UserId": 1,
+                          "ProductId": 1,
+                          "createdAt": "2020-05-20T14:00:51.550Z",
+                          "updatedAt": "2020-05-20T14:00:51.550Z"
+                      }
+                  }`
+ 
+* **Error Response:**
+
+  * **Code:** 400 BAD REQUEST <br />
+    **Content:** `{ error : 'internal server error' }`
+
+
+* **Sample Call:**
+
+  $.ajax{
+      method:'get',
+      url: 'http://localhost:3000/cart/1',
+      headers: {
+          token : localStorage.token
+      }
+  }
+
+-------------------------------------------------------------------------------------------------------
 
 **Title**
 ----
@@ -462,10 +917,17 @@
 * **Success Response:**
 
   * **Code:** 200 <br />
-    **Content:** `{ id: 121,
-                    name: 'asdasd'
-                    }`
- 
+    **Content:** `{
+                    "data": [
+                        {
+                            "id": 1,
+                            "name": "test",
+                            "createdAt": "2020-05-20T07:30:07.360Z",
+                            "updatedAt": "2020-05-20T07:30:07.360Z"
+                        }
+                    ]
+                }`
+                
 * **Error Response:**
 
   * **Code:** 500 INTERNAL SERVER ERROR <br />
@@ -698,6 +1160,324 @@
   $.ajax{
       method:'delete',
       url: 'http://localhost:3000/category/delete/1',
+      headers : {
+          token : localStorage.token
+      },
+      params : {
+          id : 1
+      }
+  }
+
+-------------------------------------------------------------------------------------------------------
+
+**Title**
+----
+  Product List
+
+* **URL**
+
+  /products
+
+* **Method:**
+  
+  GET
+  
+*  **URL Params**
+
+  
+
+   **Required:**
+ 
+    token=[string]
+
+   **Optional:**
+ 
+   
+
+* **Data Params**
+
+  email=[string]
+  password=[string]
+
+* **Success Response:**
+
+  * **Code:** 200 <br />
+    **Content:** `{ id:12,
+                    name: 'asdasd',
+                    image_url: 'http://localhost:3000/pic/asd.jpg',
+                    stock: 2000,
+                    price: 1000,
+                    CategoryId: 1
+                    }`
+ 
+* **Error Response:**
+
+  * **Code:** 400 BAD REQUEST <br />
+    **Content:** `{ error : 'internal server error' }`
+
+
+* **Sample Call:**
+
+  $.ajax{
+      method:'get',
+      url: 'http://localhost:3000/product',
+      headers: {
+          token : localStorage.token
+      }
+  }
+
+-------------------------------------------------------------------------------------------------------
+
+**Title**
+----
+  Add Product
+
+* **URL**
+
+  /products/add
+
+* **Method:**
+  
+  POST
+  
+*  **URL Params**
+
+  
+
+   **Required:**
+ 
+    token=[string]
+
+   **Optional:**
+ 
+   
+
+* **Data Params**
+
+    name=[string]
+    image_url=[string]
+    stock=[integer]
+    price=[integer]
+    CategoryId=[integer]
+
+* **Success Response:**
+
+  * **Code:** 201 <br />
+    **Content:** `{
+                    "id": 1,
+                    "name": "water",
+                    "image_url": "https://www.w3schools.com/w3css/img_lights.jpg",
+                    "price": 15000,
+                    "stock": 12,
+                    "CategoryId": 1
+                }`
+ 
+* **Error Response:**
+
+  * **Code:** 400 BAD REQUEST <br />
+    **Content:** `{ error : 'image_url is required field' }`
+
+
+* **Sample Call:**
+
+  $.ajax{
+      method:'post',
+      url: 'http://localhost:3000/products/add',
+      headers : {
+          token : localStorage.token
+      }
+      data: {
+          id: 1,
+        name: 'buah',
+        image_url: 'https://buefy.org/static/img/buefy.1d65c18.png',
+        stock: 12,
+        price: 120000,
+        CategoryId: 12 
+      }
+  }
+
+-------------------------------------------------------------------------------------------------------
+
+**Title**
+----
+  Select Product
+
+* **URL**
+
+  /products/:id
+
+* **Method:**
+  
+  Get
+  
+*  **URL Params**
+
+  
+
+   **Required:**
+ 
+    token=[string]
+    id=[number]
+
+   **Optional:**
+ 
+   
+
+* **Data Params**
+
+
+* **Success Response:**
+
+  * **Code:** 200 <br />
+    **Content:** `{ id: 1,
+                    name: 'buah',
+                    image_url: 'https://buefy.org/static/img/buefy.1d65c18.png',
+                    stock: 12,
+                    price: 120000,
+                    CategoryId: 12}`
+ 
+* **Error Response:**
+
+  * **Code:** 404 NOT FOUND <br />
+    **Content:** `{ error : "not found" }`
+
+
+* **Sample Call:**
+
+  $.ajax{
+      method:'post',
+      url: 'http://localhost:3000/products/1',
+      headers : {
+          token : localStorage.token
+      }
+      params : {
+          id : 1
+      }
+  }
+
+-------------------------------------------------------------------------------------------------------
+
+**Title**
+----
+  Edit Product
+
+* **URL**
+
+  /products/edit/:id
+
+* **Method:**
+  
+  PUT
+  
+*  **URL Params**
+
+  
+
+   **Required:**
+ 
+    token=[string]
+    id=[number]
+
+   **Optional:**
+ 
+   
+
+* **Data Params**
+
+    name=[string]
+    image_url=[string]
+    stock=[integer]
+    price=[integer]
+    CategoryId=[integer]
+
+* **Success Response:**
+
+  * **Code:** 200 <br />
+    **Content:** `{ id: 1,
+                    name: 'buah',
+                    image_url: 'https://buefy.org/static/img/buefy.1d65c18.png',
+                    stock: 12,
+                    price: 120000,
+                    CategoryId: 12}`
+ 
+* **Error Response:**
+
+  * **Code:** 400 BAD REQUEST <br />
+    **Content:** `{ error : 'image_url is required field' }`
+
+
+* **Sample Call:**
+
+  $.ajax{
+      method:'put',
+      url: 'http://localhost:3000/products/edit/1',
+      headers : {
+          token : localStorage.token
+      },
+      params : {
+          id : 1
+      },
+      data: {
+          id: this.id,
+            name: this.name,
+            image_url: this.image_url,
+            stock: this.stock,
+            price: this.price,
+            CategoryId: this.selectId
+      }
+  }
+
+-------------------------------------------------------------------------------------------------------
+
+**Title**
+----
+  Delete Product
+
+* **URL**
+
+  /products/delete/:id
+
+* **Method:**
+  
+  DELETE
+  
+*  **URL Params**
+
+  
+
+   **Required:**
+ 
+    token=[string]
+    id=[number]
+
+   **Optional:**
+ 
+   
+
+* **Data Params**
+
+
+* **Success Response:**
+
+  * **Code:** 200 <br />
+    **Content:** `{ id: 1,
+                    name: 'buah',
+                    image_url: 'https://buefy.org/static/img/buefy.1d65c18.png',
+                    stock: 12,
+                    price: 120000,
+                    CategoryId: 12}`
+ 
+* **Error Response:**
+
+  * **Code:** 404 NOT FOUND <br />
+    **Content:** `{ error : 'not found' }`
+
+
+* **Sample Call:**
+
+  $.ajax{
+      method:'delete',
+      url: 'http://localhost:3000/products/delete/1',
       headers : {
           token : localStorage.token
       },
