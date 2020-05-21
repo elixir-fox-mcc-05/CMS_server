@@ -18,5 +18,20 @@
   "bugs": {
     "url": "https://github.com/azka-art/CMS_server/issues"
   },
-  "homepage": "https://github.com/azka-art/CMS_server#readme"
+  "homepage": "https://github.com/azka-art/CMS_server#readme",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "heroku-cli": "^7.0.9",
+    "jsonwebtoken": "^8.5.1",
+    "pg": "^8.1.0",
+    "sequelize": "^5.21.8"
+  },
+  "devDependencies": {
+    "dotenv": "^8.2.0",
+    "jest": "^26.0.1",
+    "supertest": "^4.0.2"
+  }
 }
