@@ -4,7 +4,7 @@ class BannerController {
 
     static list (req,res){
         Banner
-            .findAll()
+            .findAll({order : [['id','ASC']]})
             .then(data => {
                 res.status(200).json({
                     data
@@ -30,7 +30,7 @@ class BannerController {
                 })
             })
             .catch(err => {
-                console.log(err.message)
+                // console.log(err.message)
                 let errorfix = err.message
                 if(errorfix.includes(',')){
                     errorfix.replace('category is required field','')
@@ -100,7 +100,7 @@ class BannerController {
         Banner
             .findByPk(req.params.id)
             .then(data1 => {
-                console.log(data1.id)
+                // console.log(data1.id)
                 if(data1.id == req.params.id){
                     results = Object.assign(data1)
                     return Banner.destroy({where : {id : req.params.id},returning : true})
@@ -115,7 +115,7 @@ class BannerController {
                                     })
             })
             .catch(err => {
-                console.log(err.message)
+                // console.log(err.message)
                 res.status(404).json({error : "not found"})
             })
 

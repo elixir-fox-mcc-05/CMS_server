@@ -28,10 +28,17 @@
 * **Success Response:**
 
   * **Code:** 200 <br />
-    **Content:** `{ id: 121,
-                    name: 'asdasd'
-                    }`
- 
+    **Content:** `{
+                    "data": [
+                        {
+                            "id": 1,
+                            "name": "test",
+                            "createdAt": "2020-05-20T07:30:07.360Z",
+                            "updatedAt": "2020-05-20T07:30:07.360Z"
+                        }
+                    ]
+                }`
+                
 * **Error Response:**
 
   * **Code:** 500 INTERNAL SERVER ERROR <br />

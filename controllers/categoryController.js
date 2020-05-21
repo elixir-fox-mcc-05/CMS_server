@@ -1,4 +1,4 @@
-const { Category } = require('../models')
+const { Category,Product } = require('../models')
 
 class CategoryController {
     static list(req, res) {
@@ -87,7 +87,7 @@ class CategoryController {
                 })
             })
             .catch(err => {
-                console.log(err.message)
+                // console.log(err.message)
                 let errorfix = err.message
                 if (errorfix.includes(',')) {
                     errorfix = errorfix.split(',')

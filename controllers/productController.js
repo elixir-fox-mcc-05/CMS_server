@@ -10,7 +10,7 @@ class ProductController{
                 })
             })
             .catch(err => {
-                console.log(err.message)
+                // console.log(err.message)
                 next(err)
             })
     }
@@ -31,7 +31,7 @@ class ProductController{
                 })
             })
             .catch(err => {
-                console.log(err.message)
+                // console.log(err.message)
                 let errorfix = err.message
                 if(errorfix.includes(',')){
                     errorfix.replace('category is required field','')
@@ -123,7 +123,7 @@ class ProductController{
         Product
             .findByPk(req.params.id)
             .then(data1 => {
-                console.log(data1.id)
+                // console.log(data1.id)
                 if(data1.id == req.params.id){
                     results = Object.assign(data1)
                     return Product.destroy({where : {id : req.params.id},returning : true})
@@ -139,7 +139,7 @@ class ProductController{
                                         CategoryId : results.CategoryId})
             })
             .catch(err => {
-                console.log(err.message)
+                // console.log(err.message)
                 res.status(404).json({error : "not found"})
             })
 

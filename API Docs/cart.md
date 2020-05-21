@@ -411,3 +411,64 @@
   }
 
 -------------------------------------------------------------------------------------------------------
+
+**Title**
+----
+  Select Cart
+
+* **URL**
+
+  /cart/:id
+
+* **Method:**
+  
+  GET
+  
+*  **URL Params**
+
+  
+
+   **Required:**
+ 
+    token=[string]
+    id=[integer]
+
+   **Optional:**
+ 
+   
+
+* **Data Params**
+
+
+* **Success Response:**
+
+  * **Code:** 200 <br />
+    **Content:** `{
+                      "data": {
+                          "id": 1,
+                          "quantity": 2,
+                          "isPaid": false,
+                          "UserId": 1,
+                          "ProductId": 1,
+                          "createdAt": "2020-05-20T14:00:51.550Z",
+                          "updatedAt": "2020-05-20T14:00:51.550Z"
+                      }
+                  }`
+ 
+* **Error Response:**
+
+  * **Code:** 400 BAD REQUEST <br />
+    **Content:** `{ error : 'internal server error' }`
+
+
+* **Sample Call:**
+
+  $.ajax{
+      method:'get',
+      url: 'http://localhost:3000/cart/1',
+      headers: {
+          token : localStorage.token
+      }
+  }
+
+-------------------------------------------------------------------------------------------------------

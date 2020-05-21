@@ -17,6 +17,21 @@ class CartController{
             })
     }
 
+    static select(req,res){
+        Cart
+            .findOne({ where: { id: req.params.id } })
+            .then(data => {
+                res.status(200).json({
+                    data
+                })
+            })
+            .catch(err => {
+                res.status(404).json({
+                    error: 'not found'
+                })
+            })
+    }
+
     static checkout (req,res){
 
         Cart
