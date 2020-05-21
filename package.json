@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "set NODE_ENV=test&&jest",
+    "test": "set NODE_ENV=test&&jest --detectOpenHandles --runInBand --verbose --forceExit",
     "dev": "set NODE_ENV=development&&nodemon ./bin/http.js"
   },
   "repository": {

@@ -22,10 +22,7 @@ class ControllerUser{
             })
         })
         .catch(err => {
-            return next({
-                name: "InternalServerError",
-                errors: [{message: err}]
-            });
+            next(err);
         })
     }
     static signin(req, res, next){
@@ -40,7 +37,6 @@ class ControllerUser{
           if(result){
             let compare = checkPassword(password, result.password);
             
-            console.log(compare)
             if(compare){
                     let token = generateToken({
                         id: result.id,

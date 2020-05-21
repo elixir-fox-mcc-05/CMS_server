@@ -37,15 +37,15 @@ module.exports = (sequelize, DataTypes) => {
       validate: {
         notNull: {
           args: true,
-          msg: "Email is required"
+          msg: "Password is required"
         },
         notEmpty: {
           args: true,
           msg: "Password is required"
         },
         len: {
-          args: [7],
-          msg: "Password has minimal length 7 characters"
+          args: [7, 15],
+          msg: "Password length should between 7 and 15"
         }
       }
     }
@@ -81,6 +81,7 @@ module.exports = (sequelize, DataTypes) => {
   
   User.associate = function(models) {
     // associations can be defined here
+    User.hasMany(models.Product);
   };
   return User;
 };
