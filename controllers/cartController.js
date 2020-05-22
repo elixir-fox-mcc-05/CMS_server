@@ -34,10 +34,10 @@ class CartController{
     }
 
     static checkout (req,res){
-        console.log('checkout')
+        // console.log('checkout')
         Cart
             .findAll({where : {
-                                UserId: req.LoginId,
+                                'UserId': req.LoginId,
                                 isPaid: false
                                 },include : [Product,User]})
             .then(data => {
