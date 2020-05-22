@@ -1,26 +1,10 @@
 const app = require('../app')
 const request = require('supertest')
-// var request = require('dupertest');
 const { sequelize } = require('../models')
 const { queryInterface } = sequelize
-// const { mockRequest, mockResponse } = require('util/interceptor')
 const ProductController = require('../controllers/productController')
 
-// const mockRequest = (sessionData) => ({
-//     session: { data: sessionData }
-//   });
-  
-//   const mockResponse = () => {
-//     const res = {};
-//     res.status = jest.fn().mockReturnValue(res);
-//     res.json = jest.fn().mockReturnValue(res);
-//     return res;
-//   };
 
-// const { mockRequest, mockResponse } = require('mock-req-res')
-// const proxyquire = require('proxyquire')
-
-// let token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwiZW1haWwiOiJtYWlsQG1haWwuY29tIiwicGFzc3dvcmQiOiIkMmIkMDQkZC9Lb0tVUTU3Z2lpUzhjR1dVQ0hYTzFrRU1pVjRKdElKbVlLaUZ5ZHVwRWpIOHZUa2VWbWkiLCJpYXQiOjE1ODkzNjcxNjd9.He_neKlcZ-q7uv_6ikyqlVxlc8-06P5CwY0Vd7tVTw4'
 
 afterAll(done => {
     queryInterface.bulkDelete('Products')
