@@ -2,12 +2,20 @@ const app = require('../app')
 const request = require('supertest')
 const { sequelize } = require('../models')
 const { queryInterface } = sequelize
-const ProductController = require('../controllers/productController')
-
+// const ProductController = require('../controllers/productController')
+let categorynum;
+let token;
 
 
 afterAll(done => {
     queryInterface.bulkDelete('Products')
+        .then(() => {
+            console.log('cleaned db')
+        })
+        .catch(err => {
+            done(err)
+        })
+        queryInterface.bulkDelete('Categories')
         .then(() => {
             console.log('cleaned db')
             done()
@@ -17,38 +25,39 @@ afterAll(done => {
         })
 })
 
-beforeAll((done) => {
+// beforeAll((done) => {
+
+//     queryInterface.bulkInsert('Categories', [{
+//         name: 'buah1',
+//         createdAt: new Date(),
+//         updatedAt: new Date()
+//     }])
+//     .then((data) => {
+//         console.log('beforeAll process complete')
+//         done()
+//     })
     
-    queryInterface.bulkInsert('Products', [{
-        name : 'balll',
-        image_url: 'bb.jps',
-        price : 8000,
-        stock : 90,
-        CategoryId : 1,
-        createdAt: new Date(),
-        updatedAt: new Date()
-    }])
-        // .then(() => {
-        //     console.log('user created bolu!')
-        //     done()
-        // })
-        // .catch(err => {
-        //     done(err)
-        // })
+//     queryInterface.bulkInsert('Products', [{
+//         name : 'balll',
+//         image_url: 'bb.jps',
+//         price : 8000,
+//         stock : 90,
+//         CategoryId : 1,
+//         createdAt: new Date(),
+//         updatedAt: new Date()
+//     }])
+//         // .then(() => {
+//         //     console.log('user created bolu!')
+//         //     done()
+//         // })
+//         // .catch(err => {
+//         //     done(err)
+//         // })
 
-        queryInterface.bulkInsert('Categories', [{
-            name: 'buah',
-            createdAt: new Date(),
-            updatedAt: new Date()
-        }])
-        .then(() => {
-            console.log('beforeAll process complete')
-            done()
-        })
-})
+        
+// })
 
-let categorynum;
-let token;
+
 describe('POST /register then POST /login', () => {
     test('should return object with id, name,and email. status 201', (done) => {
         const userInput = {
@@ -63,7 +72,7 @@ describe('POST /register then POST /login', () => {
                 if (err) {
                     return done(err)
                 } else {
-                    console.log(response.body)
+                    // console.log(response.body)
                     return done()
                 }
             })
@@ -82,7 +91,7 @@ describe('POST /register then POST /login', () => {
                     return done(err)
                 } else {
                     token = response.body.token
-                    console.log(response.body)
+                    // console.log(response.body)
                     return done()
                 }
             })
@@ -130,7 +139,7 @@ describe('test success /products', () => {
                     if (err) {
                         return done(err)
                     } else {
-                        console.log(response.body)
+                        // console.log(response.body)
                         expect(response.status).toBe(200)
                         // expect(response.body).toHaveProperty('first_name', expect.any(String))
                         // expect(response.body).toHaveProperty('last_name', expect.any(String))
@@ -160,7 +169,7 @@ describe('test success /products', () => {
                     if (err) {
                         return done(err)
                     } else {
-                        console.log(response.body)
+                        // console.log(response.body)
                         expect(response.status).toBe(201)
                         expect(response.body).toHaveProperty('name', expect.any(String))
                         expect(response.body).toHaveProperty('image_url', expect.any(String))
@@ -186,7 +195,7 @@ describe('test success /products', () => {
                     if (err) {
                         return done(err)
                     } else {
-                        console.log(response.body)
+                        // console.log(response.body)
                         expect(response.status).toBe(200)
                         expect(response.body).toHaveProperty('name', expect.any(String))
                         expect(response.body).toHaveProperty('image_url', expect.any(String))
@@ -211,7 +220,7 @@ describe('test success /products', () => {
                     if (err) {
                         return done(err)
                     } else {
-                        console.log(response.body)
+                        // console.log(response.body)
                         expect(response.status).toBe(200)
                         expect(response.body).toHaveProperty('name', expect.any(String))
                         expect(response.body).toHaveProperty('image_url', expect.any(String))
@@ -245,7 +254,7 @@ describe('test success /products', () => {
                     if (err) {
                         return done(err)
                     } else {
-                        console.log(response.body)
+                        // console.log(response.body)
                         expect(response.status).toBe(200)
                         expect(response.body).toHaveProperty('name', expect.any(String))
                         expect(response.body).toHaveProperty('image_url', expect.any(String))
@@ -272,7 +281,7 @@ describe('test success /products', () => {
                     if (err) {
                         return done(err)
                     } else {
-                        console.log(response.body)
+                        // console.log(response.body)
                         expect(response.status).toBe(200)
                         expect(response.body).toHaveProperty('name', expect.any(String))
                         expect(response.body).toHaveProperty('image_url', expect.any(String))
@@ -301,7 +310,7 @@ describe('Test fail /products', () => {
                 if (err) {
                     return done(err)
                 } else {
-                    console.log(response.body)
+                    // console.log(response.body)
                     expect(response.status).toBe(404)
                     expect(response.body).toHaveProperty('error', error)
                     return done()
@@ -323,7 +332,7 @@ describe('Test fail /products', () => {
                 if (err) {
                     return done(err)
                 } else {
-                    console.log(response.body)
+                    // console.log(response.body)
                     expect(response.status).toBe(404)
                     expect(response.body).toHaveProperty('error', error)
                     return done()
@@ -350,7 +359,7 @@ describe('Test fail /products', () => {
                     if (err) {
                         return done(err)
                     } else {
-                        console.log(response.body)
+                        // console.log(response.body)
                         expect(response.status).toBe(400)
                         expect(response.body).toHaveProperty('error', error)
                         return done()
@@ -374,7 +383,7 @@ describe('Test fail /products', () => {
                     if (err) {
                         return done(err)
                     } else {
-                        console.log(response.body)
+                        // console.log(response.body)
                         expect(response.status).toBe(400)
                         expect(response.body).toHaveProperty('error', error)
                         return done()
@@ -398,7 +407,7 @@ describe('Test fail /products', () => {
                     if (err) {
                         return done(err)
                     } else {
-                        console.log(response.body)
+                        // console.log(response.body)
                         expect(response.status).toBe(400)
                         expect(response.body).toHaveProperty('error', error)
                         return done()
@@ -422,7 +431,7 @@ describe('Test fail /products', () => {
                     if (err) {
                         return done(err)
                     } else {
-                        console.log(response.body)
+                        // console.log(response.body)
                         expect(response.status).toBe(400)
                         expect(response.body).toHaveProperty('error', error)
                         return done()
@@ -447,7 +456,7 @@ describe('Test fail /products', () => {
                     if (err) {
                         return done(err)
                     } else {
-                        console.log(response.body)
+                        // console.log(response.body)
                         expect(response.status).toBe(400)
                         expect(response.body).toHaveProperty('error', error)
                         return done()
@@ -465,7 +474,7 @@ describe('Test fail /products', () => {
                     if (err) {
                         return done(err)
                     } else {
-                        console.log(response.body)
+                        // console.log(response.body)
                         expect(response.status).toBe(400)
                         expect(response.body).toHaveProperty('error', error)
                         return done()
@@ -490,7 +499,7 @@ describe('Test fail /products', () => {
                     if (err) {
                         return done(err)
                     } else {
-                        console.log(response.body)
+                        // console.log(response.body)
                         expect(response.status).toBe(400)
                         expect(response.body).toHaveProperty('error', error)
                         return done()
@@ -515,7 +524,7 @@ describe('Test fail /products', () => {
                     if (err) {
                         return done(err)
                     } else {
-                        console.log(response.body)
+                        // console.log(response.body)
                         expect(response.status).toBe(400)
                         expect(response.body).toHaveProperty('error', error)
                         return done()

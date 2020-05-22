@@ -1,6 +1,5 @@
 const app = require('../app')
 const request = require('supertest')
-// var request = require('dupertest');
 const { sequelize } = require('../models')
 const { queryInterface } = sequelize
 

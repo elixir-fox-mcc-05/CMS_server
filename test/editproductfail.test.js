@@ -8,6 +8,13 @@ afterAll(done => {
     queryInterface.bulkDelete('Products')
         .then(() => {
             console.log('cleaned db')
+        })
+        .catch(err => {
+            done(err)
+        })
+        queryInterface.bulkDelete('Categories')
+        .then(() => {
+            console.log('cleaned db')
             done()
         })
         .catch(err => {
