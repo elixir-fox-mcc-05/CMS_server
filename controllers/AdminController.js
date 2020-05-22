@@ -1,6 +1,6 @@
 const { Admin } = require('../models')
 const { generateToken } = require('../helpers/jwt.js')
-const compare = require('../helpers/bcrypt.js').compare
+const comparePassword = require('../helpers/bcrypt.js').comparePassword
 class AdminController {
   static login(req, res, next) {
     const getdata = {
@@ -16,7 +16,7 @@ class AdminController {
         console.log('masuk login');
         if (result) {
           console.log('result ketemu');
-          let decode = compare(getdata.password, result.password)
+          let decode = comparePassword(getdata.password, result.password)
           console.log(decode);
           if (decode) {
             console.log('berhasil login');

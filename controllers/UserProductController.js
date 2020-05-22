@@ -7,22 +7,31 @@ class UserProductController {
     const payload = {
       userId: req.currentUserId,
       productId: req.body.productId,
-      quantity: +req.body.quantity
+      quantity: +req.body.quantity,
+      checkout: false
     }
-    UserProduct.findOne({where: {
+    UserProduct.findOne({ where: {
       userId: payload.userId,
       productId: payload.productId
-    }})
+    },
+    include: [{model: Product}] })
     .then((result) => {
       if(result) {
         let newdata = {
           quantity: result.quantity + payload.quantity
         }
-        return UserProduct.update(newdata, {
-          where: {
-            id: result.id  
-          }
-        })
+        if (newdata.quantity <= result.Product.stock) {
+          return UserProduct.update(newdata, {
+            where: {
+              id: result.id  
+            }
+          })
+        } else {
+          return next({
+              name: 'BadRequest',
+              errors: [{ message: 'Quantity limit exceed.' }]
+            })
+        }
       } else {
         console.log('baru');
         return UserProduct.create(payload)
@@ -95,19 +104,26 @@ class UserProductController {
       id: req.params.id,
       quantity: +req.body.quantity
     }
-    UserProduct.findOne({where:{id: payload.id}})
+    UserProduct.findOne({where:{ id: payload.id }, include:[ { model: Product } ] })
     .then((data)=>{
-      let newdata = {
-            quantity: +data.quantity + (+payload.quantity)
-          }
-      UserProduct.update(newdata, {
-        where: {
-          id: data.id
+        if (newdata.quantity <= result.Product.stock) {
+          let newdata = {
+                quantity: +data.quantity + (+payload.quantity)
+              }
+          UserProduct.update(newdata, {
+            where: {
+              id: data.id
+            }
+          })
+          .then((result) => {
+            return res.status(201).json({result})
+          })
+        } else {
+          return next({
+            name: 'BadRequest',
+            errors: [{ msg: 'Quantity limit exceed.' }]
+          })
         }
-      })
-      .then((result) => {
-        return res.status(201).json({result})
-      })
     })
     .catch((err)=>{
       next(err)

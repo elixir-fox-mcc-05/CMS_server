@@ -6,6 +6,7 @@ function Auth(req, res, next) {
     console.log('auth test admin');
     if (req.headers.access_token) {
       let verify = verifyToken(req.headers.access_token)
+      console.log(verify);
       req.currentUserId = verify.id
       Admin.findOne({
           where: {

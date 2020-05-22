@@ -81,6 +81,7 @@ class ProductController {
   }
 
   static addProduct(req, res, next) {
+    console.log('masuk add');
     const payload = {
       name: req.body.name,
       image_url: req.body.image_url,
@@ -153,6 +154,37 @@ class ProductController {
         next({
           name: 'InternalServerError',
           errors: [{ msg: 'Failed to Delete.' }]
+        })
+      })
+  }
+
+  static editStock (req,res,next) {
+    Product.findOne({ where: { id: req.params.id } })
+    .then(data => {
+      let payload = {
+        stock: data.stock + +req.body.stock
+      }
+      Product.update(payload, {
+        where: {
+          id: req.params.id
+        }
+      })
+      .then((result) => {
+        return res.status(201).json({
+          id: data.id,
+          name: data.name,
+          image_url: data.image_url,
+          stock: payload.stock,
+          description: data.description,
+          price: data.price,
+          genre: data.genre
+        })
+      })
+    })
+    .catch((err) => {
+        next({
+          name: 'InternalServerError',
+          errors: [{ msg: 'Failed to Update.' }]
         })
       })
   }
