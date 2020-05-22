@@ -18,6 +18,7 @@ class CartController{
     }
 
     static select(req,res){
+        // console.log('check')
         Cart
             .findOne({ where: { id: req.params.id } })
             .then(data => {
@@ -33,12 +34,12 @@ class CartController{
     }
 
     static checkout (req,res){
-
+        console.log('checkout')
         Cart
             .findAll({where : {
                                 UserId: req.LoginId,
                                 isPaid: false
-                                }})
+                                },include : [Product,User]})
             .then(data => {
                 res.status(200).json({
                     data
@@ -79,6 +80,18 @@ class CartController{
     static confirm(req,res){
         // let {id} = req.body 
         // console.log(req.params.id)
+        // Cart
+        //     .findByPk(req.params.id)
+        //     .then(data => {
+        //         if(data.UserId == req.LoginId){
+        //             return  Cart.update({isPaid : true},{where : {id : req.params.id}})
+        //         }else{
+        //             res.status(400).json({
+        //                 error: 'unable confirm cart which not yours'
+        //             })
+        //         }
+                
+        //     }) 
         Cart
             .update({isPaid : true},{where : {id : req.params.id}})
             .then(data => {

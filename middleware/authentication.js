@@ -1,6 +1,6 @@
 const {verifyToken} = require('../helpers/jwt')
 const {User} = require('../models')
-function authentication(req,res,next){
+function authentication(err,req,res,next){
     // console.log(req.headers.token)
     let token = req.headers.token
     try{
