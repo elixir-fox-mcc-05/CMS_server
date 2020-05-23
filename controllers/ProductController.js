@@ -1,4 +1,6 @@
 const { Product } = require('../models');
+const AWS = require('aws-sdk');
+const faker = require('faker');
 
 class ProductController {
     static create(req, res, next) {
@@ -74,6 +76,31 @@ class ProductController {
                 .catch(err => {
                     next(err);
                 })
+    }
+
+    static uploadFile(req, res, next) {
+        const s3 = new AWS.S3({
+            accessKeyId: process.env.ACCESSKEY,
+            secretAccessKey: process.env.SECRETACCESSKEY
+        });
+
+        const encoded = req.file.buffer;
+
+        const randomName = faker.name.findName();
+
+        const params = {
+            Bucket: 'ecommerceimage',
+            Key: `${randomName}.jpeg`,
+            Body: encoded
+        }
+
+        s3.upload(params, (error, data) => {
+            if (error) {
+                res.status(500).send(error)
+            } else {
+                res.status(200).send(data)
+            }
+        })
     }
 }
 
