@@ -1,4 +1,4 @@
-const { User, Product } = require('../models');
+const { User, Product, Cart, ProductCart } = require('../models');
 
 module.exports = {
     authorizeAdmin: (req, res, next) => {
@@ -42,6 +42,34 @@ module.exports = {
             })
             .catch(err => {
                 next(err)
+            })
+    },
+    authorizeCustomer: (req, res, next) => {
+        const { id } = req.params;
+
+        ProductCart
+            .findByPk(id, {
+                include: [Cart]
+            })
+            .then(cartProduct => {
+                if(cartProduct) {
+                    if(cartProduct.Cart.CustomerId === req.uid) {
+                        next();
+                    } else {
+                        throw{
+                            msg: 'You dont have the authority to do this action',
+                            code: 401
+                        }
+                    }
+                } else {
+                    throw{
+                        msg: `no product with id ${id} found in your cart`,
+                        code: 404
+                    }
+                }
+            })
+            .catch(err => {
+                next(err);
             })
     }
 }

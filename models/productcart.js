@@ -9,10 +9,13 @@ module.exports = (sequelize, DataTypes) => {
     quantity: {
       type: DataTypes.INTEGER,
       allowNull: false,
-      defaultValue: 1,
       validate: {
         notEmpty: {
           msg: 'Product quantity can\'t be empty'
+        },
+        min: {
+          args: [1],
+          msg: 'Product quantity can\'t be lest than 1'
         },
         isInt: {
           msg: 'Product quantity must be an integer value'

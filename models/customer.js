@@ -1,4 +1,7 @@
 'use strict';
+
+const { hashPassword } = require('../helpers/bcrypt.js');
+
 module.exports = (sequelize, DataTypes) => {
 
   const Model = sequelize.Sequelize;
@@ -96,6 +99,23 @@ module.exports = (sequelize, DataTypes) => {
     modelName: 'Customer',
     defaultScope: {
       attributes: { exclude: ['createdAt', 'updatedAt'] }
+    },
+    hooks: {
+      beforeCreate(customer) {
+        customer.password = hashPassword(customer.password);
+
+        const { models } = sequelize;
+        return models.Cart
+          .create({
+            CustomerId: customer.id
+          })
+          .then(cart => {
+            console.log(cart);
+          })
+          .catch(err => {
+            throw(err);
+          })
+      }
     }
   });
   Customer.associate = function(models) {
