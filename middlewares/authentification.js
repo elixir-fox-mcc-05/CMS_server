@@ -2,7 +2,7 @@ let { verifyToken } = require('../helpers/jwt')
 let { User } = require('../models/index')
 
 function authentification (req, res, next) { 
-  let decode = verifyToken(req.headers.token)
+  let decode = verifyToken(req.headers.access_token)
     try{
         User.findOne({
             where:{
@@ -10,9 +10,9 @@ function authentification (req, res, next) {
             }
         })
         .then(result=>{
-            req.currentUserId = result.id
-            console.log('authen sucess');
-            return next()
+          // console.log(result);
+          req.currentUserId = result.id
+          return next()
         })
         .catch(err=>{
           console.log(err);

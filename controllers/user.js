@@ -20,13 +20,13 @@ class UserController {
       });
   }
   static login(req, res, next) {
-    // console.log(req.body);
     User.findOne({
       where: {
         email: req.body.email
       }
     })
       .then((result) => {
+        console.log(result);
         let status = result.dataValues.status
         let data = {
           id: result.id,
@@ -35,7 +35,8 @@ class UserController {
         let access_token = jwtToken(data)
         res.status(200).json({
           access_token,
-          status
+          status,
+          email: req.body.email
         })
       })
       .catch((err) => {
