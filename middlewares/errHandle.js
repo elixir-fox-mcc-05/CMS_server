@@ -13,8 +13,8 @@ module.exports = (err, req, res, next) => {
         return res.status(400).json({
             errors
         })
-    } else if (err.name == 'Wrong Pass Or Email') {
-        let errors = [{msg: "Wrong Pass Or Email"}]
+    } else if (err.name == 'Wrong Password Or Email') {
+        let errors = [{msg: "Wrong Password Or Email"}]
         return res.status(404).json({
             errors
         })
