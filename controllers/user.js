@@ -31,6 +31,7 @@ class UserCon {
             res.status(500).json({
                 msg : 'Internal server error'
             })
+            console.log(err)
         })
     }
 
