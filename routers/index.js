@@ -9,6 +9,6 @@ router.use('/customers', customerRoute);
 router.use('/users', userRoute);
 router.use('/products', productRoute);
 router.use('/categories', categoryRoute);
-router.use('/cart', cartRoute);
+router.use('/carts', cartRoute);
 
 module.exports = router;

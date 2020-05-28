@@ -48,7 +48,10 @@ module.exports = {
         const { id } = req.params;
 
         ProductCart
-            .findByPk(id, {
+            .findOne({
+                where: {
+                    id
+                },
                 include: [Cart]
             })
             .then(cartProduct => {

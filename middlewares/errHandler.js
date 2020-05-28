@@ -14,7 +14,7 @@ module.exports = {
             })
         } else {
             res.status(err.code || 500).json({
-                error: err.msg || err.message
+                error: err.msg || err.message || err
             })
         }
     }

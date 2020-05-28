@@ -7,6 +7,6 @@ router.use(authenticateCustomer);
 router.get('/', CartController.showCart);
 router.post('/', CartController.addProduct);
 router.patch('/:id', authorizeCustomer, CartController.changeQuantity);
-router.delete('/:id', authorizeCustomer, CartController.deleteProduct);
+router.delete('/:id', authorizeCustomer, CartController.removeProduct);
 
 module.exports = router;

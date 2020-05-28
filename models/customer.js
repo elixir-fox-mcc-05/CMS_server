@@ -4,7 +4,7 @@ const { hashPassword } = require('../helpers/bcrypt.js');
 
 module.exports = (sequelize, DataTypes) => {
 
-  const Model = sequelize.Sequelize;
+  const { Model } = sequelize.Sequelize;
 
   class Customer extends Model {}
 
@@ -21,6 +21,10 @@ module.exports = (sequelize, DataTypes) => {
     email: {
       type: DataTypes.STRING,
       allowNull: false,
+      unique: {
+        args: true,
+        msg: 'email already exist'
+      },
       validate: {
         notEmpty: {
           msg: "your email can\'t be empty"
@@ -47,49 +51,23 @@ module.exports = (sequelize, DataTypes) => {
         }
       }
     },
-    street_address: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      validate: {
-        notEmpty: {
-          msg: 'your street address can\'t be empty'
-        }
-      }
-    },
-    city: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      validate: {
-        notEmpty: {
-          msg: 'your city address can\'t be empty'
-        }
-      }
-    },
-    zip: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      validate: {
-        notEmpty: {
-          msg: 'your zip codes can\'t be empty'
-        },
-        len: {
-          args: [5],
-          msg: 'invalid zip code format'
-        },
-        isInt: {
-          msg: 'invalid zip code format'
-        }
-      }
-    },
     phone_number: {
       type: DataTypes.STRING,
       allowNull: false,
+      unique: {
+        args: true,
+        msg: 'phone_number already exist'
+      },
       validate: {
         notEmpty: {
           msg: 'your phone number can\'t be empty'
         },
+        len: {
+          args: [10,14],
+          msg: 'phone number length must between 10-14 digits (may include country code)'
+        },
         is: {
-          args: /^\+?\d{10}/gi,
+          args: /^\+?\d{10,14}$/gi,
           msg: 'Invalid phone number format'
         }
       }
@@ -103,7 +81,8 @@ module.exports = (sequelize, DataTypes) => {
     hooks: {
       beforeCreate(customer) {
         customer.password = hashPassword(customer.password);
-
+      },
+      afterCreate(customer) {
         const { models } = sequelize;
         return models.Cart
           .create({

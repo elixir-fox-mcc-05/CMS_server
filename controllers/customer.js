@@ -4,16 +4,13 @@ const { generateToken } = require('../helpers/jwt.js');
 
 class CustomerController {
     static register(req, res, next) {
-        const { name, email, password, street_address, city, zip, phone_number } = req.body;
+        const { name, email, password, phone_number } = req.body;
 
         Customer
             .create({
                 name,
                 email,
                 password,
-                street_address,
-                city,
-                zip,
                 phone_number
             })
             .then(customer => {

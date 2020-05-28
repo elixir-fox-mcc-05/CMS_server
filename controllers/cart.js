@@ -2,7 +2,8 @@ const { Cart, ProductCart, Product } = require('../models');
 
 class CartController {
     static addProduct(req, res, next) {
-        const { id } = req.cartId;
+        const id = req.cartId;
+        console.log(req.cartId);
         const { productId, quantity } = req.body;
 
         ProductCart
@@ -26,14 +27,14 @@ class CartController {
     }
 
     static showCart(req, res, next) {
-        const { CartId } = req.cartId;
+        const CartId = req.cartId;
 
-        ProductCart
+        Cart
             .findAll({
                 where: {
-                    CartId
+                    id: CartId
                 },
-                include: [Cart, Product]
+                include: [Product]
             })
             .then(cart => {
                 res.status(200).json({
@@ -46,11 +47,46 @@ class CartController {
     }
 
     static changeQuantity(req, res, next) {
+        const { quantity } = req.body;
+        const { id } = req.params;
+        console.log(quantity);
 
+        ProductCart
+            .update({
+                quantity
+            },{
+                where: {
+                    id
+                },
+                returning: true
+            })
+            .then(result => {
+                res.status(200).json({
+                    cartProduct: result[1]
+                })
+            })
+            .catch(err => {
+                next(err);
+            })
     }
 
-    static deleteProduct(req, res, next) {
+    static removeProduct(req, res, next) {
+        const { id } = req.params;
 
+        ProductCart
+            .destroy({
+                where: {
+                    id
+                }
+            })
+            .then(() => {
+                res.status(200).json({
+                    msg: `Success remove product from cart`
+                })
+            })
+            .catch(err => {
+                next(err);
+            })
     }
 }
 

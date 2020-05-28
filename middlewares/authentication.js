@@ -36,7 +36,7 @@ module.exports = {
         try {
             const decoded = verifyToken(access_token);
             const { id } = decoded;
-            const customerId;
+            let customerId;
 
             Customer
                 .findByPk(id)
