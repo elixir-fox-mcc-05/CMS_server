@@ -2,10 +2,24 @@ const { Product, Category } = require('../models');
 
 class ProductController {
   static findAll(req, res, next) {
+    Product.findAll({
+      include: {
+        model: Category
+      }
+    })
+      .then(result => {
+        res.status(200).json({
+          Products: result
+        });
+      })
+      .catch(err => {
+        return next(err);
+      })
+  }
+  static findAllByUser(req, res, next) {
     let UserId = req.UserId;
     let UserRole = req.UserRole;
     let search = {};
-    console.log(UserRole);
     if(UserRole == 'member') {
       search = {
         UserId

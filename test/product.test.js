@@ -79,10 +79,23 @@ afterAll(done => {
 
 describe('Product Test', () => {
   describe('Get All Product', () => {
-    test('Should return all products from database', done => {
+    test('Should return all products of User from database', done => {
       request(app)
         .get('/products')
         .set('token', token)
+        .end((err, response) => {
+          if (err) {
+            return done(err);
+          } else {
+            expect(response.status).toBe(200);
+            expect(response.body).toHaveProperty('Products');
+            return done();
+          }
+        });
+    });
+    test('Should return all products from database', done => {
+      request(app)
+        .get('/products/all')
         .end((err, response) => {
           if (err) {
             return done(err);

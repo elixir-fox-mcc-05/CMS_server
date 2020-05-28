@@ -89,6 +89,32 @@ class CategoryController {
       return next(err);
     });
   }
+  static getProducts(req, res, next) {
+    let { id } = req.params;
+    Category.findOne({
+      where: {
+        id
+      },
+      include: {
+        model: Product
+      }
+    })
+      .then(result => {
+        if(result) {
+          res.status(200).json({
+            Category: result
+          })
+        } else {
+          return next({
+            code: 404,
+            message: `Category Not Found`
+          })
+        }
+      })
+      .catch(err => {
+        return next(err)
+      })
+  }
 }
 
 module.exports = CategoryController;

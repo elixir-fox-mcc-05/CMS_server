@@ -69,7 +69,6 @@ describe("Category Test", () => {
       test(`Should return all categories with status 200`, done => {
         request(app)
           .get('/categories')
-          .set('token', token)
           .end((err, response) => {
             if (err) {
               return done(err);
