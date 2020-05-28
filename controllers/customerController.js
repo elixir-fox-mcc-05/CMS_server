@@ -74,7 +74,9 @@ class CustomerController {
 
     static getCustomerDetail (req, res, next) {
         let { customerId } = req.params
-        Customer.findByPk(customerId)
+        Customer.findByPk(customerId, {
+            attributes: {exclude: ['password']}
+        })
             .then(data => {
                 if(data) {
                     res.status(200).json({
@@ -108,7 +110,7 @@ class CustomerController {
             .then(result => {
                 if(result[0] == 1 ) {
                     res.status(200).json({
-                        notif: 'Customer successfully updated!'
+                        notif: 'Customer info successfully updated!'
                     })
                 } else {
                     throw {
@@ -124,13 +126,26 @@ class CustomerController {
     
     static findAllCustomerCart (req, res, next) {
         let { customerId } = req.params
-        CustomerCart.findAll({
-            order: [
-                ['id', 'ASC']
-            ],
-            where: {
-                id: customerId
-            }
+        CartProduct.findAll({
+            include: [Product, {
+                model: Cart,
+                where: {
+                    CustomerId: customerId
+                }
+            }]
+            // include: [ CartProduct, {
+            //     model: Cart,
+            //     include: [{
+            //         model: Customer,
+            //         attributes: {exclude: ['password']}
+            //     }]
+            // }],
+            // order: [
+            //     ['id', 'ASC']
+            // ],
+            // where: {
+            //     CustomerId: customerId
+            // }
         })
             .then(data => {
                 res.status(200).json({
@@ -143,9 +158,9 @@ class CustomerController {
     }
 
     static createCart (req, res, next) {
-        let { customerId } = req.params
+        let { CustomerId } = req.body
         Cart.create({
-            CustomerId: customerId
+            CustomerId
         })
             .then(data => {
                 res.status(201).json({
@@ -160,7 +175,7 @@ class CustomerController {
 
     static findCartById (req, res, next) {
         let { cartId } = req.params
-        CustomerCart.findAll({
+        CartProduct.findAll({
             where: {
                 CartId: cartId
             }
@@ -184,7 +199,7 @@ class CustomerController {
 
     static addProductToCart (req, res, next) {
         let { cartId } = req.params
-        let { ProductId, quantity, status } = req,body
+        let { ProductId, quantity, status } = req.body
         CartProduct.create({
             quantity,
             status,
@@ -204,7 +219,7 @@ class CustomerController {
     }
     static updateCartProduct (req, res, next) {
         let { cartId } = req.params
-        let { id, ProductId, quantity, status } = req,body
+        let { id, ProductId, quantity, status } = req.body
         CartProduct.update({
             quantity,
             status,
@@ -219,6 +234,27 @@ class CustomerController {
                 res.status(200).json({
                     data,
                     notif: 'Cart successfully updated!'
+                })
+            })
+            .catch(err => {
+                next(err)
+            })
+    }
+
+    static updateCartStatus (req, res, next) {
+        let { cartId } = req.params
+        let { status } = req.body
+        CartProduct.update({
+            status
+        }, {
+            where: {
+                CartId: cartId
+            }
+        })
+            .then(data => {
+                res.status(200).json({
+                    data,
+                    notif: 'Cart status successfully updated!'
                 })
             })
             .catch(err => {

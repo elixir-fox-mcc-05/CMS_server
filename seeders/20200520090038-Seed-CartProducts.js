@@ -90,6 +90,46 @@ module.exports = {
         status: 'Finish',
         createdAt: new Date(),
         updatedAt: new Date()
+      },
+      {
+        CartId: 7,
+        ProductId: 2,
+        quantity: 1,
+        status: 'Finish',
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        CartId: 8,
+        ProductId: 6,
+        quantity: 1,
+        status: 'Finish',
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        CartId: 9,
+        ProductId: 9,
+        quantity: 1,
+        status: 'Finish',
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        CartId: 10,
+        ProductId: 15,
+        quantity: 1,
+        status: 'Finish',
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        CartId: 11,
+        ProductId: 1,
+        quantity: 1,
+        status: 'Finish',
+        createdAt: new Date(),
+        updatedAt: new Date()
       }
     ], {});
   },

@@ -32,6 +32,31 @@ module.exports = {
         CustomerId: 3,
         createdAt: new Date(),
         updatedAt: new Date()
+      },
+      {
+        CustomerId: 1,
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        CustomerId: 2,
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        CustomerId: 3,
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        CustomerId: 4,
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        CustomerId: 5,
+        createdAt: new Date(),
+        updatedAt: new Date()
       }
     ], {});
   },
