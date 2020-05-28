@@ -65,6 +65,47 @@ class UserController {
         next(err);
       });
   }
+
+  static findAllUsers(req, res, next) {
+    let options = {
+      where: {
+        role: 'customer',
+      },
+    };
+
+    User.findAll(options)
+      .then((data) => {
+        res.status(200).json({
+          Users: data,
+        });
+      })
+      .catch((err) => {
+        next(err);
+      });
+  }
+
+  static banUser(req, res, next) {
+    let options = {
+      where: {
+        id: req.params.id,
+      },
+    };
+    let choosed = null;
+
+    User.findOne(options)
+      .then((data) => {
+        choosed = data;
+        User.destroy(options);
+      })
+      .then((_) => {
+        res.status(200).json({
+          BannedUser: choosed,
+        });
+      })
+      .catch((err) => {
+        next(err);
+      });
+  }
 }
 
 module.exports = UserController;

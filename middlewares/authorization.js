@@ -2,6 +2,34 @@ const Model = require('../models/index.js');
 const Product = Model.Product;
 const User = Model.User;
 
+const authorizationSpecial = (req, res, next) => {
+  let id = req.signedInUserId;
+
+  User.findByPk(id)
+    .then((data) => {
+      if (data) {
+        if (data.role === 'admin') {
+          next();
+        } else {
+          throw {
+            code: 401,
+            type: 'UNAUTHORIZED',
+            message: 'Sorry, not authorized, you are not an admin',
+          };
+        }
+      } else {
+        throw {
+          code: 401,
+          type: 'UNAUTHORIZED',
+          message: 'Sorry, not authorized, you are not an admin',
+        };
+      }
+    })
+    .catch((err) => {
+      next(err);
+    });
+}
+
 const authorization = (req, res, next) => {
   if (req.params.id) {
     let id = req.params.id;
@@ -30,32 +58,11 @@ const authorization = (req, res, next) => {
         next(err);
       });
   } else {
-    let id = req.signedInUserId;
-
-    User.findByPk(id)
-      .then((data) => {
-        if (data) {
-          if (data.role === 'admin') {
-            next();
-          } else {
-            throw {
-              code: 401,
-              type: 'UNAUTHORIZED',
-              message: 'Sorry, not authorized, you are not an admin',
-            };
-          }
-        } else {
-          throw {
-            code: 401,
-            type: 'UNAUTHORIZED',
-            message: 'Sorry, not authorized, you are not an admin',
-          };
-        }
-      })
-      .catch((err) => {
-        next(err);
-      });
+    authorizationSpecial()
   }
 };
 
-module.exports = authorization;
+module.exports = {
+  authorization,
+  authorizationSpecial
+};
