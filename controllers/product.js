@@ -59,6 +59,7 @@ class ProductController {
   }
 
   static addCart (req, res, next) {
+    console.log(req.currentUserId);
     let data = {UserId: req.currentUserId, ProductId: req.body.id}
     Cart.create(data)
     .then((result) => {
@@ -71,6 +72,7 @@ class ProductController {
 
   static myCart (req, res, next) {
     Cart.findAll({
+    order:[['id']],
     include: [Product, User],
         where: {
           UserId: req.currentUserId,
@@ -107,6 +109,11 @@ class ProductController {
           id: req.params.id
       }
     })
+      .then((result) => {
+        res.status(200).json(result)
+      }).catch((err) => {
+        console.log(err);
+      })
   }
 
   static delCart (req, res, next) {
@@ -118,7 +125,6 @@ class ProductController {
       }
     })
       .then((result) => {
-        console.log(result);
         res.status(200).json(result)
       }).catch((err) => {
         console.log(err);
@@ -170,32 +176,62 @@ class ProductController {
       }
     })
       .then((result) => {
-        if (result)
-        for (let i in result) {
-          if(result[i].dataValues.Product.dataValues.stock >= result[i].dataValues.demand) {
-            let newStock = result[i].dataValues.Product.dataValues.stock - result[i].dataValues.demand
-            Product.update(
-              {
-                stock: newStock
-              },
-              {returning: true, where: {id: result[i].dataValues.Product.id}}
-            ).then((prod) => {
-              Cart.update(
-                {
-                  payed: true
-                },
-                {returning: true, where: {idCart: result[i].dataValues.idCart}}
-              )
-              res.status(200).json(result)
-            }).catch((err) => {
-              console.log(err);
-            });
-          } else {
-            next({
-              name: 'SequelizeValidationError',
-              errors: [{msg: `${result[i].dataValues.Product.dataValues.name} is out of stock`}]
-            })
+
+        if (result) {
+          let newBal = 0
+          for(let j in result) {
+            newBal += result[j].dataValues.subTotal
           }
+          User.findOne({where: {id: req.currentUserId}})
+          .then((thisUser) => {
+            let temp = thisUser.dataValues.balance - newBal
+            console.log(newBal);
+            if (thisUser.dataValues.balance >= newBal) {
+              for (let i in result) { 
+                console.log(result[i].dataValues.demand);
+                if (result[i].dataValues.demand !== 0) {
+                  if(result[i].dataValues.Product.dataValues.stock >= result[i].dataValues.demand) {
+                    let newStock = result[i].dataValues.Product.dataValues.stock - result[i].dataValues.demand
+                    Product.update(
+                      {
+                        stock: newStock
+                      },
+                      {returning: true, where: {id: result[i].dataValues.Product.id}}
+                    ).then((prod) => {
+                      Cart.update(
+                        {
+                          payed: true
+                        },
+                        {returning: true, where: {idCart: result[i].dataValues.idCart}}
+                      )
+                      User.update(
+                        {
+                          balance: temp
+                        },
+                        {returning: true, where: {id: req.currentUserId}}
+                      )
+                      res.status(200).json(result)
+                    })
+                  } else {
+                    next({
+                      name: 'SequelizeValidationError',
+                      errors: [{msg: `${result[i].dataValues.Product.dataValues.name} is out of stock`}]
+                    })
+                  }
+                } else {
+                  next({
+                    name: 'Quantity cannot be 0',
+                    errors: [{msg: 'Quantity cannot be 0'}]
+                  })
+                }
+              }
+            } else {
+              next({
+                name: 'We Need More Gold',
+                errors: [{msg: 'We Need More Gold'}]
+              })
+            }
+          })
         }
       }).catch((err) => {
         console.log(err);

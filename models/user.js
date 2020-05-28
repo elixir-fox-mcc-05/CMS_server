@@ -35,6 +35,7 @@ module.exports = (sequelize, DataTypes) => {
         },
     },
     status: DataTypes.STRING,
+    balance: DataTypes.STRING,
   }, {
     sequelize,
     hooks: {
@@ -43,6 +44,7 @@ module.exports = (sequelize, DataTypes) => {
         if (user.status == null) {
           user.status = 'user'
         }
+        user.balance = 5000000
       }
     }
   });
