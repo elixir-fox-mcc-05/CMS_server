@@ -1,5 +1,5 @@
 let { verifyToken } = require('../helpers/jwt.js')
-let { User } = require('../models')
+let { Customer } = require('../models')
 
 function authentication (req,res,next) {
     let token = req.headers.token
@@ -10,9 +10,11 @@ function authentication (req,res,next) {
         })
     } else {
         let user = verifyToken(token)
-        User.findByPk(user.id)
+        let { id } = user
+        Customer.findByPk(id)
         .then(result=>{
             if(result) {
+                req.body.user_id = user.id
                 next()
             } else {
                 res.status(401).json({
