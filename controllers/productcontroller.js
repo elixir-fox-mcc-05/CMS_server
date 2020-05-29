@@ -7,7 +7,7 @@ class ProductController {
 
     static getAll( req, res){
         Product .findAll({
-            include : [{ model : Category }]
+            include : [{ model : Category },{ model : User }]
         })
                 .then(result => {
                     res.status(201).json({
@@ -23,7 +23,7 @@ class ProductController {
     static getLimitedAll( req, res){
         Product .findAll({
             include : [{ model : Category },{ model : User }],
-            order : [['updatedAt','asc'], ['stock','desc']],
+            order : [['stock','desc'],['updatedAt','asc']],
             limit : Number[req.params.amount]
         })
                 .then(result => {
@@ -79,8 +79,7 @@ class ProductController {
     static getOneProduct( req, res){
         Product .findOne({
             where : {
-                id : Number(req.params.id),
-                UserId : req.UserId
+                id : Number(req.params.id)
             }
         })
                 .then(result => {
@@ -142,6 +141,39 @@ class ProductController {
                         CategoryId : CategoryId
                     })
         })      .catch( err => {
+            console.log(err)
+                    res.status(500).json({
+                        error : err.message
+                    })
+        })
+    }
+
+    static checkoutProduct (req, res) {
+        const { id, amount, name } = req.body
+        Product.findOne({
+            where : {
+                id : id
+            }
+        })  .then( result => {
+            Product.update({
+                name : name,
+                stock : result.stock - amount
+            }, {
+                where  : {
+                    id : result.id
+                }
+            })  .then( data => {
+                    res.status(200).json({
+                        data
+                    })
+            })  .catch( err => {
+                console.log(err)
+                res.status(500).json({
+                    err
+                })
+            })
+
+        })  .catch( err => {
             console.log(err)
                     res.status(500).json({
                         error : err.message

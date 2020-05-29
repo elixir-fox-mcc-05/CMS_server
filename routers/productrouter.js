@@ -11,6 +11,7 @@ router.get(`/single/:id`, ProductController.getOneProduct)
 router.get(`/owned`, authenticate, ProductController.getOneMerchant)
 
 router.post(`/add`, authenticate, ProductController.addProduct)
+router.post(`/checkout`, authenticate, ProductController.checkoutProduct)
 router.put(`/edit`, authenticate, authorize, ProductController.editProduct)
 router.delete(`/delete`, authenticate, authorize, ProductController.removeProduct)
 
