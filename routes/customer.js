@@ -8,5 +8,6 @@ customerRoutes.use(authentication)
 customerRoutes.post('/addPaymentAddress',CustomerCon.addPaymentAddres)
 customerRoutes.get('/getPaymentAddress',CustomerCon.getPaymentAddress)
 customerRoutes.post('/confirmPayment',CustomerCon.addOrder)
+customerRoutes.get('/orders',CustomerCon.getOrders)
 
 module.exports = customerRoutes

@@ -173,6 +173,23 @@ class CustomerCon {
             })
         })
     }
+    static getOrders (req,res) {
+        Order.findAll({
+            where: {
+                user_id: req.body.user_id
+            }
+        })
+        .then(result =>{
+            res.status(200).json(
+                result
+            )
+        })
+        .catch(err =>{
+            res.status(500).json({
+                err
+            })
+        })
+    }
 }
 
 
