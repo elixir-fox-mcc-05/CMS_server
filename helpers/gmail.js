@@ -12,7 +12,7 @@ function send(to, text, value) {
   var mailOptions = {
     from: 'pairprojectgroup5@gmail.com',
     to: to,
-    subject: `YOU'VE GOT TOKEN, LET'S CLAIM IT!👊`,
+    subject: `YOU'VE GOT TOKEN, LET'S CLAIM IT!`,
     text: `YOUR TOKEN : ${text}\n VALUE: ${value}`
   };
   

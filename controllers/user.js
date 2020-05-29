@@ -123,6 +123,8 @@ class UserController {
       }
     })
       .then((result) => {
+        console.log('masukkkk login')
+        console.log(result)
         if(result) {
           let temp = compare (req.body.password, result.dataValues.password)
           if(temp) {
