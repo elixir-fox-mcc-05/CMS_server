@@ -17,15 +17,6 @@ module.exports = {
       stock: {
         type: Sequelize.INTEGER
       },
-      UserId: {
-        type: Sequelize.INTEGER,
-        references: {
-          model: 'Users',
-          key: 'id'
-        },
-        onUpdate: 'cascade',
-        onDelete: 'cascade'
-      },
       category: {
         type: Sequelize.STRING
       },

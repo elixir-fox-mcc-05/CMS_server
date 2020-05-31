@@ -1,7 +1,7 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
 
-  const Model = sequelize.Sequelize.Model;
+  const Model = sequelize.Sequelize.Model
   
   class Product extends Model {}
 
@@ -41,7 +41,6 @@ module.exports = (sequelize, DataTypes) => {
         }
       }
     },
-    UserId: DataTypes.INTEGER,
     category: {
       type: DataTypes.STRING,
       validate: {
@@ -58,7 +57,7 @@ module.exports = (sequelize, DataTypes) => {
   })
 
   Product.associate = function(models) {
-    Product.belongsTo(models.User, { foreignKey: 'UserId', targetKey: 'id' })
+    Product.belongsToMany(models.User, { through: 'ShoppingCharts'})
   };
   return Product;
 };
