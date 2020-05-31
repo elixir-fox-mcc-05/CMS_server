@@ -1,6 +1,7 @@
 const { Product } = require('../models');
 const AWS = require('aws-sdk');
 const faker = require('faker');
+const Sequelize = require('sequelize');
 
 class ProductController {
     static create(req, res, next) {
@@ -25,8 +26,17 @@ class ProductController {
     }
 
     static read(req, res, next) {
+        const parameter = req.query.s;
+        const options = {
+            order: [['id', 'asc']],
+            where: {
+                name: {
+                    [Sequelize.Op.iLike]: `%${parameter}%`
+                }
+            }
+        }
         Product
-            .findAll({ order: [['id', 'asc']] })
+            .findAll(options)
                 .then(products => {
                     res.status(200).json({ Products: products });
                 })
