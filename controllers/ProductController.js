@@ -1,4 +1,5 @@
 const { Product } = require('../models');
+const { User } = require('../models');
 const AWS = require('aws-sdk');
 const faker = require('faker');
 const Sequelize = require('sequelize');

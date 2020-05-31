@@ -20,5 +20,10 @@ module.exports = (sequelize, DataTypes) => {
     sequelize,
     modelName: 'ShoppingChart'
   })
+
+  ShoppingChart.associate = function(models) {
+    ShoppingChart.belongsTo(models.User, { foreignKey: 'UserId', targetKey: 'id' })
+    ShoppingChart.belongsTo(models.Product, { foreignKey: 'ProductId', targetKey: 'id' })
+  };
   return ShoppingChart;
 };
