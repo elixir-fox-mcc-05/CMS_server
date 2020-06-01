@@ -4,9 +4,10 @@ const router = express.Router();
 const ProductController = require('../controllers/product');
 const authentication = require('../middlewares/authentication');
 const { authorization } = require('../middlewares/authorization');
+const { authorizationSpecial } = require('../middlewares/authorization');
 
 // create
-router.post('/', authentication, authorization, ProductController.addProduct);
+router.post('/', authentication, authorizationSpecial, ProductController.addProduct);
 
 // fetch & find one
 router.get('/', ProductController.findAllProducts);

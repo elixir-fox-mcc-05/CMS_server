@@ -93,9 +93,8 @@ class ProductController {
         id: req.params.id,
       },
     };
-    console.log(id);
     let choosed = null;
-
+    
     Product.findOne(options)
       .then((data) => {
         choosed = data;
