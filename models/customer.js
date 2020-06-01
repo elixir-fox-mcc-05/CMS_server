@@ -68,7 +68,7 @@ module.exports = (sequelize, DataTypes) => {
             CustomerId: customer.id
           })
           .then(cart => {
-            console.log(cart);
+            // console.log(cart);
           })
           .catch(err => {
             throw(err);

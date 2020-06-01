@@ -41,7 +41,12 @@ module.exports = (sequelize, DataTypes) => {
       },
       onDelete: 'cascade',
       onUpdate: 'cascade',
-      hooks: true
+      hooks: true,
+      validate: {
+        notEmpty: {
+          msg: 'Product id can\'t be empty'
+        }
+      }
     },
     CartId: {
       type: DataTypes.INTEGER,

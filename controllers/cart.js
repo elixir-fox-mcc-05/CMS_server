@@ -88,7 +88,7 @@ class CartController {
             })
             .then(() => {
                 res.status(200).json({
-                    msg: `Success remove product from cart`
+                    msg: `Success remove product with id ${id} from your cart`
                 })
             })
             .catch(err => {
