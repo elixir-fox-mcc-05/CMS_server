@@ -32,15 +32,57 @@ class ShoppingChartController {
         
         async function createNewShoppingChart () {
             try {
-                const shoppingChartvalues = {
-                    UserId,
-                    ProductId,
-                    quantity
+                const options = {
+                    where: {
+                        UserId,
+                        ProductId
+                    },
+                    attributes: ['id', 'UserId', 'quantity', 'ProductId']
                 }
-                const newShopingChart = await ShoppingChart.create(shoppingChartvalues)
-
-                const currentStock = await Product.decrement({ stock: Number(quantity) }, { where: { id: ProductId } })
-                res.status(201).json({ ShoppingChart: newShopingChart })
+                const currentShoppingChart = await ShoppingChart.findOne(options)
+                if (currentShoppingChart) {
+                    if (quantity == 1) {
+                        const shoppingChartvalues = {
+                            UserId,
+                            ProductId,
+                            quantity: Number(quantity) + Number(currentShoppingChart.quantity)
+                        }
+                        const options = {
+                            where: {
+                                id: currentShoppingChart.id,
+                            },
+                            returning: true
+                        }
+                        const updatedShoppingChart = await ShoppingChart.update(shoppingChartvalues, options)
+                        const currentStock = await Product.decrement({ stock: Number(quantity) }, { where: { id: ProductId } })
+                        res.status(201).json({ ShoppingChart: updatedShoppingChart })
+                    } else {
+                        const shoppingChartvalues = {
+                            UserId,
+                            ProductId,
+                            quantity
+                        }
+                        const options = {
+                            where: {
+                                id: currentShoppingChart.id,
+                            },
+                            returning: true
+                        }
+                        const updatedShoppingChart = await ShoppingChart.update(shoppingChartvalues, options)
+                        const currentStock = await Product.decrement({ stock: Number(quantity) }, { where: { id: ProductId } })
+                        res.status(201).json({ ShoppingChart: updatedShoppingChart })
+                    }
+                } else {
+                    const shoppingChartvalues = {
+                        UserId,
+                        ProductId,
+                        quantity
+                    }
+                    const newShopingChart = await ShoppingChart.create(shoppingChartvalues)
+    
+                    const currentStock = await Product.decrement({ stock: Number(quantity) }, { where: { id: ProductId } })
+                    res.status(201).json({ ShoppingChart: newShopingChart })
+                }
             }
             catch(error) {
                 next(error)
