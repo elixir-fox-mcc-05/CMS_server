@@ -1,7 +1,9 @@
 const router = require('express').Router()
 const BannerController = require('../controllers/bannerController')
 const authentication = require('../middleware/authentication')
-const authorizationBanner = require('../middleware/authorizationBanner') 
+const authorizationBanner = require('../middleware/authorizationBanner')
+const multer  = require('multer')
+const upload = multer({}) 
 
 router.get('/list',BannerController.list)
 

@@ -1,4 +1,5 @@
 const {Product, Category} = require('../models')
+let imgur = require('imgur')
 
 class ProductController{
     static list(req,res,next){
@@ -15,42 +16,86 @@ class ProductController{
             })
     }
     static add(req,res,next){
-        let {name , image_url, price ,stock, CategoryId} = req.body 
-
-        Product
-            .create({name,image_url,price,stock,CategoryId})
+        console.log(req.file)
+        let {name, price ,stock, CategoryId} = req.body 
+        
+        const encoded = req.file.buffer.toString('base64')
+        
+        imgur.uploadBase64(encoded)
+            .then( json => {
+                // res.status(201).json({
+                //     url: json.data.link
+                // })
+                console.log(json.data.link)
+                return Product.create({name,'image_url': json.data.link,price,stock,CategoryId})
+            })
             .then(data => {
-                // console.log(data)
-                res.status(201).json({
-                    id : data.id,
-                    name:data.name,
-                    image_url : data.image_url,
-                    price : data.price,
-                    stock : data.stock,
-                    CategoryId : data.CategoryId
-                })
-            })
+                        // console.log(data)
+                        res.status(201).json({
+                            id : data.id,
+                            name:data.name,
+                            image_url : data.image_url,
+                            price : data.price,
+                            stock : data.stock,
+                            CategoryId : data.CategoryId
+                        })
+                    })
             .catch(err => {
-                // console.log(err.message)
-                let errorfix = err.message
-                if(errorfix.includes(',')){
-                    errorfix.replace('category is required field','')
-                    errorfix = errorfix.split(',')
-                    for (let i=0 ; i <errorfix.length ; i++){
-                        errorfix[i] = errorfix[i].replace('Validation error: ','').replace('\n','')
-                        errorfix[i] = errorfix[i].replace('notNull Violation: ','')
-                        if (errorfix[i].charAt(errorfix[i].length-1) == ' '){
-                            errorfix[i] = errorfix[i].slice(0, -1); 
+                        // console.log(err.message)
+                        let errorfix = err.message
+                        if(errorfix.includes(',')){
+                            errorfix.replace('category is required field','')
+                            errorfix = errorfix.split(',')
+                            for (let i=0 ; i <errorfix.length ; i++){
+                                errorfix[i] = errorfix[i].replace('Validation error: ','').replace('\n','')
+                                errorfix[i] = errorfix[i].replace('notNull Violation: ','')
+                                if (errorfix[i].charAt(errorfix[i].length-1) == ' '){
+                                    errorfix[i] = errorfix[i].slice(0, -1); 
+                                }
+                            }
+        
+                        }else {
+                            errorfix = errorfix.replace('Validation error: ','')
                         }
-                    }
+                        res.status(400).json({
+                            error : errorfix
+                        })
+                    })
 
-                }else {
-                    errorfix = errorfix.replace('Validation error: ','')
-                }
-                res.status(400).json({
-                    error : errorfix
-                })
-            })
+        // Product
+        //     .create({name,image_url,price,stock,CategoryId})
+        //     .then(data => {
+        //         // console.log(data)
+        //         res.status(201).json({
+        //             id : data.id,
+        //             name:data.name,
+        //             image_url : data.image_url,
+        //             price : data.price,
+        //             stock : data.stock,
+        //             CategoryId : data.CategoryId
+        //         })
+        //     })
+        //     .catch(err => {
+        //         // console.log(err.message)
+        //         let errorfix = err.message
+        //         if(errorfix.includes(',')){
+        //             errorfix.replace('category is required field','')
+        //             errorfix = errorfix.split(',')
+        //             for (let i=0 ; i <errorfix.length ; i++){
+        //                 errorfix[i] = errorfix[i].replace('Validation error: ','').replace('\n','')
+        //                 errorfix[i] = errorfix[i].replace('notNull Violation: ','')
+        //                 if (errorfix[i].charAt(errorfix[i].length-1) == ' '){
+        //                     errorfix[i] = errorfix[i].slice(0, -1); 
+        //                 }
+        //             }
+
+        //         }else {
+        //             errorfix = errorfix.replace('Validation error: ','')
+        //         }
+        //         res.status(400).json({
+        //             error : errorfix
+        //         })
+        //     })
 
     }
     static select (req,res,next){
@@ -145,7 +190,7 @@ class ProductController{
 
     }
     static search(req,res){
-        console.log(req.body.name)
+        // console.log(req.body.name)
         Product
             .findOne({where:{name : req.body.name}})
             .then(data => {
