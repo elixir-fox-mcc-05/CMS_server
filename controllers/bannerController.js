@@ -1,4 +1,5 @@
 const {Banner} = require('../models')
+let imgur = require('imgur')
 
 class BannerController {
 
@@ -18,10 +19,15 @@ class BannerController {
     }
 
     static create(req,res){
-        let {name,image_url} = req.body
-    
-        Banner  
-            .create({name,image_url})
+
+        let encoded = req.file.buffer.toString('base64')
+
+        let {name} = req.body
+
+        imgur.uploadBase64(encoded)
+            .then(json => {
+                return Banner.create({name,'image_url': json.data.link})
+            })
             .then(data => {
                 res.status(201).json({
                     id: data.id,
