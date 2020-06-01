@@ -51,27 +51,6 @@ module.exports = (sequelize, DataTypes) => {
         }
       }
     },
-    phone_number: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      unique: {
-        args: true,
-        msg: 'phone_number already exist'
-      },
-      validate: {
-        notEmpty: {
-          msg: 'your phone number can\'t be empty'
-        },
-        len: {
-          args: [10,14],
-          msg: 'phone number length must between 10-14 digits (may include country code)'
-        },
-        is: {
-          args: /^\+?\d{10,14}$/gi,
-          msg: 'Invalid phone number format'
-        }
-      }
-    }
   }, {
     sequelize,
     modelName: 'Customer',

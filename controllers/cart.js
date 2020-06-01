@@ -3,7 +3,6 @@ const { Cart, ProductCart, Product } = require('../models');
 class CartController {
     static addProduct(req, res, next) {
         const id = req.cartId;
-        console.log(req.cartId);
         const { productId, quantity } = req.body;
 
         ProductCart
@@ -13,12 +12,17 @@ class CartController {
                 quantity
             })
             .then(cartProduct => {
-                return Product
-                    .findByPk(cartProduct.ProductId)
+                return ProductCart
+                    .findOne({
+                        where: {
+                            id: cartProduct.id
+                        },
+                        include: [Product]
+                    })
             })
             .then(product => {
                 res.status(201).json({
-                    msg: `success add ${product.name} to your cart`
+                    product
                 })
             })
             .catch(err => {
@@ -27,12 +31,12 @@ class CartController {
     }
 
     static showCart(req, res, next) {
-        const CartId = req.cartId;
+        const cartId = req.cartId;
 
         Cart
-            .findAll({
+            .findOne({
                 where: {
-                    id: CartId
+                    id: cartId
                 },
                 include: [Product]
             })
@@ -49,14 +53,15 @@ class CartController {
     static changeQuantity(req, res, next) {
         const { quantity } = req.body;
         const { id } = req.params;
-        console.log(quantity);
+        const cartId = req.cartId;
 
         ProductCart
             .update({
                 quantity
             },{
                 where: {
-                    id
+                    ProductId: id,
+                    CartId: cartId
                 },
                 returning: true
             })
@@ -72,11 +77,13 @@ class CartController {
 
     static removeProduct(req, res, next) {
         const { id } = req.params;
+        const cartId = req.cartId;
 
         ProductCart
             .destroy({
                 where: {
-                    id
+                    ProductId: id,
+                    CartId: cartId
                 }
             })
             .then(() => {

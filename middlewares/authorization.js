@@ -50,7 +50,8 @@ module.exports = {
         ProductCart
             .findOne({
                 where: {
-                    id
+                    ProductId: id,
+                    CartId: req.cartId
                 },
                 include: [Cart]
             })

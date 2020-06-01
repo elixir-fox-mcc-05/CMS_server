@@ -1,0 +1,14 @@
+[
+    {
+        "id": 1,
+        "name": "Pata McMeow",
+        "email": "pataboy@mail.com",
+        "password": "blackpatuy"
+    },
+    {
+        "id": 2,
+        "name": "Puma McMeow",
+        "email": "pumaboyboy@mail.com",
+        "password": "pampampuma"
+    }
+]

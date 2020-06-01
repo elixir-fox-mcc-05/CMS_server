@@ -27,7 +27,6 @@ class ProductController {
     }
 
     static showAllProducts(req, res, next) {
-        console.log(req.query);
         const { search, per_page, categoryId, page } = req.query;
         const sort  = req.query.sort.split('|');
         const sortField = sort[0];

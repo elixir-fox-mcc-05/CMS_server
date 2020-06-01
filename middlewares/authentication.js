@@ -4,6 +4,7 @@ const { verifyToken } = require('../helpers/jwt');
 module.exports = {
     authenticateUser: (req, res, next) => {
         const { access_token } = req.headers;
+        
 
         try {
             let decoded = verifyToken(access_token);
