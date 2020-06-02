@@ -1,6 +1,6 @@
-'use strict';
+"use strict";
 
-const { generatePassword } = require('../helpers/bcrypt');
+const { generatePassword } = require("../helpers/bcrypt");
 
 module.exports = (sequelize, DataTypes) => {
   const Model = sequelize.Sequelize.Model;
@@ -11,70 +11,70 @@ module.exports = (sequelize, DataTypes) => {
     {
       name: {
         type: DataTypes.STRING,
-        allowNull: false,
         validate: {
           notEmpty: {
             args: true,
-            msg: 'Name is required',
+            msg: "Name is required"
           },
-          len: {
-            args: [3],
-            msg: 'Name must include minimum 3 characters',
-          },
-        },
+        }
       },
       email: {
         type: DataTypes.STRING,
-        allowNull: false,
-        unique: true,
+        unique: {
+          args: true,
+          msg: "Email already in use"
+        },
         validate: {
           notEmpty: {
             args: true,
-            msg: 'Email is required',
+            msg: "Email is required"
           },
           isEmail: {
             args: true,
-            msg: 'Incorrect email format',
-          },
-        },
+            msg: "Incorrect email format"
+          }
+        }
       },
       role: {
-        type: DataTypes.STRING,
-        allowNull: false,
-        validate:{
-          notEmpty: {
-            args: true,
-            msg: 'Role is required'
+        type: DataTypes.ENUM("Super-admin", "Admin", "Member"),
+        defaultValue: "Member",
+        validate: {
+          isIn: {
+            args: [['Super-admin','Admin', 'Member']],
+            msg: "Role must be either 'Super-admin', 'Admin' or 'Member'"
           }
         }
       },
       password: {
-        allowNull: false,
         type: DataTypes.STRING,
         validate: {
           notEmpty: {
             args: true,
-            msg: 'Password is required',
+            msg: "Password is required"
           },
           len: {
-            args: [5],
-            msg: 'Password must include minimum 5 characters',
-          },
-        },
+            args: [5, 30]
+          }
+        }
       },
+      image_url: {
+        allowNull: false,
+        type: DataTypes.STRING
+      }
     },
     {
       sequelize,
       hooks: {
         beforeCreate: (user) => {
           user.password = generatePassword(user.password);
-        },
-      },
+        }
+      }
     }
   );
 
   User.associate = function (models) {
     // associations can be defined here
+    User.hasMany(models.Product);
   };
   return User;
 };

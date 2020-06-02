@@ -1,0 +1,23 @@
+[
+  {
+    "name": "imac",
+    "image_url": "https://ibox.co.id/media/catalog/product/cache/3/image/9df78eab33525d08d6e5fb8d27136e95/i/m/imac-27-cto-hero-201903_1_1.jpeg",
+    "price": 20202,
+    "stock": 12,
+    "UserId": 8
+  },
+  {
+    "name": "iphone",
+    "image_url": "https://ibox.co.id/media/catalog/product/cache/3/image/9df78eab33525d08d6e5fb8d27136e95/i/m/imac-27-cto-hero-201903_1_1.jpeg",
+    "price": 20202,
+    "stock": 12,
+    "UserId": 8
+  },
+  {
+    "name": "ipad",
+    "image_url": "https://ibox.co.id/media/catalog/product/cache/3/image/9df78eab33525d08d6e5fb8d27136e95/i/m/imac-27-cto-hero-201903_1_1.jpeg",
+    "price": 20202,
+    "stock": 12,
+    "UserId": 8
+  }
+]

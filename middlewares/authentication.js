@@ -1,31 +1,32 @@
-const { verifyToken } = require('../helpers/jwt');
-const { User } = require('../models');
+const { User } = require("../models");
+const { verifyToken } = require("../helpers/jwt");
 
 function authentication(req, res, next) {
-  let token = req.headers.token;
+  const { token } = req.headers;
+  if (!token) {
+    return next({
+      type: "Bad Request",
+      code: 400,
+      message: "Please Login First"
+    });
+  } 
   try {
-    let decoded = verifyToken(token);
-    let { id } = decoded;
-    User.findByPk(id)
-      .then((data) => {
-        if (data) {
-          req.currentUserId = id;
-          next();
-        } else {
-          throw {
-            msg: "Unauthorized, please login first",
-            code: 401,
-          };
-        }
-      })
-      .catch((err) => {
-        throw err;
-      });
-  } catch (err) {
-    next(err);
+    const decode = verifyToken(token);
+    const { id } = decode;
+    User.findByPk(id).then((user) => {
+      if (user) {
+        req.currentUserId = user.id;
+        next();
+      } else {
+        return next({
+          type: "Bad Request",
+          code: 400,
+          message: "Please Login First"
+        });
+      }
+    });
+  } catch (error) {
+    return next(error);
   }
 }
-
-module.exports = {
-  authentication,
-};
+module.exports = authentication;
