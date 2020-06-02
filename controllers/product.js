@@ -27,7 +27,7 @@ class ProductController {
     }
 
     static showAllProducts(req, res, next) {
-        const { search, per_page, categoryId, page } = req.query;
+        const { search, per_page, categoryId, page, stock } = req.query;
         const sort  = req.query.sort.split('|');
         const sortField = sort[0];
         const sortDirection = sort[1].toUpperCase();
@@ -38,6 +38,12 @@ class ProductController {
         }
         if (categoryId) {
             whereClause.CategoryId = categoryId;
+        }
+
+        if (stock) {
+            whereClause.stock = {
+                [Op.gt]: stock
+            }
         }
 
         const startIndex = (page - 1) * per_page;

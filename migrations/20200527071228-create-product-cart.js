@@ -16,6 +16,11 @@ module.exports = {
         type: Sequelize.NUMERIC,
         allowNull: false
       },
+      paidStatus: {
+        type: Sequelize.BOOLEAN,
+        allowNull: false,
+        defaultValue: false
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

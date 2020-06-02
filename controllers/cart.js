@@ -1,4 +1,4 @@
-const { Cart, ProductCart, Product } = require('../models');
+const { Cart, ProductCart, Product, sequelize } = require('../models');
 
 class CartController {
     static addProduct(req, res, next) {
@@ -41,8 +41,16 @@ class CartController {
                 include: [Product]
             })
             .then(cart => {
+                const unpaid = cart.Products.filter(product => {
+                    return !product.ProductCart.paidStatus
+                })
                 res.status(200).json({
-                    cart
+                    cart: {
+                        id: cart.id,
+                        CustomerId: cart.CustomerId,
+                        total_price: cart.total_price,
+                        Products: unpaid
+                    }
                 })
             })
             .catch(err => {
@@ -68,6 +76,45 @@ class CartController {
             .then(result => {
                 res.status(200).json({
                     cartProduct: result[1]
+                })
+            })
+            .catch(err => {
+                next(err);
+            })
+    }
+
+    static checkOut(req, res, next) {
+        const CartId = req.cartId;
+        const checkOut = [];
+
+        ProductCart
+            .findAll({
+                where: {
+                    CartId,
+                    paidStatus: false
+                }
+            })
+            .then(product => {
+                return sequelize.transaction(t => {
+                    product.forEach(prod => {
+                        checkOut.push(
+                            ProductCart
+                                .update({
+                                    paidStatus: true
+                                },{
+                                    where: {
+                                        CartId: prod.CartId,
+                                        ProductId: prod.ProductId
+                                    }
+                                })
+                        )
+                    })
+                    return Promise.all(checkOut)
+                })
+            })
+            .then(() => {
+                res.status(200).json({
+                    msg: 'Checkout Success'
                 })
             })
             .catch(err => {

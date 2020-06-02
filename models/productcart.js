@@ -58,6 +58,11 @@ module.exports = (sequelize, DataTypes) => {
       onDelete: 'cascade',
       onUpdate: 'cascade',
       hooks: true
+    },
+    paidStatus: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: false
     }
   }, {
     sequelize,
@@ -74,7 +79,7 @@ module.exports = (sequelize, DataTypes) => {
             }
           })
           .then(cartProduct => {
-            if(cartProduct) {
+            if(cartProduct && !cartProduct.paidStatus) {
               throw('Product already added to your cart')
             }
           })
@@ -96,7 +101,10 @@ module.exports = (sequelize, DataTypes) => {
           .findByPk(productId)
           .then(product => {
             if (cartProduct.quantity > product.stock) {
-              throw(`only ${product.stock} ${product.name} is available on the stock`)
+              throw({
+                msg: `only ${product.stock} ${product.name} is available on the stock`,
+                code: 400
+              })
             } else {
               cartProduct.price = cartProduct.quantity * product.price
 
@@ -131,38 +139,84 @@ module.exports = (sequelize, DataTypes) => {
         const cartId = cartProduct.CartId;
         const newQuantity = cartProduct.dataValues.quantity;
         const prevQuantity = cartProduct._previousDataValues.quantity;
-        const diff = newQuantity - prevQuantity;
-        let productPrice;
-
-        return models.Product
-          .findByPk(productId)
-          .then(product => {
-            if(newQuantity > product.stock) {
-              throw(`only ${product.stock} ${product.name} is available on the stock`)
-            } else {
-              productPrice = +product.price
-              cartProduct.price = +cartProduct.price + (diff * productPrice);
-
+        const newPaidStatus = cartProduct.dataValues.paidStatus;
+        const prevPaidStatus = cartProduct._previousDataValues.paidStatus;
+        if (newQuantity !== prevQuantity) {
+          const diff = newQuantity - prevQuantity;
+          let productPrice;
+          return models.Product
+            .findByPk(productId)
+            .then(product => {
+              if(newQuantity > product.stock) {
+                throw({
+                  msg: `only ${product.stock} ${product.name} is available on the stock`,
+                  code: 400
+                })
+              } else {
+                productPrice = +product.price
+                cartProduct.price = +cartProduct.price + (diff * productPrice);
+  
+                return models.Cart
+                  .findByPk(cartId) 
+              }
+            })
+            .then(cart => {
+              let total_price = +cart.total_price;
+              total_price += diff * productPrice;
+  
               return models.Cart
-                .findByPk(cartId) 
-            }
-          })
-          .then(cart => {
-            let total_price = +cart.total_price;
-            total_price += diff * productPrice;
-
-            return models.Cart
-              .update({
-                total_price
-              },{
-                where: {
-                  id: cartId
-                }
-              })
-          })
-          .catch(err => {
-            throw(err);
-          })
+                .update({
+                  total_price
+                },{
+                  where: {
+                    id: cartId
+                  }
+                })
+            })
+            .catch(err => {
+              throw(err);
+            })
+        } else if (newPaidStatus !== prevPaidStatus) {
+          return models.Product
+            .findOne({
+              where: {
+                id: cartProduct.ProductId
+              }
+            })
+            .then(product => {
+              let stock = product.stock;
+              if (stock < cartProduct.quantity) {
+                throw({
+                  msg: `only ${product.stock} ${product.name} is available on the stock`,
+                  code: 400
+                })
+              } else {
+                stock -= cartProduct.quantity
+  
+                return models.Product
+                  .update({
+                    stock
+                  }, {
+                    where: {
+                      id: product.id
+                    }
+                  })
+              }
+            })
+            .then(() => {
+              return models.Cart
+                .update({
+                  total_price: 0
+                }, {
+                  where: {
+                    id: cartProduct.CartId
+                  }
+                })
+            })
+            .catch(err => {
+              throw(err);
+            })
+        }
         
       },
       beforeBulkDestroy(options) {
