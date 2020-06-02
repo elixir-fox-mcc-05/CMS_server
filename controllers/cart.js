@@ -58,6 +58,30 @@ class CartController {
             })
     }
 
+    static getTransactionHistory(req, res, next) {
+        const CartId = req.cartId;
+
+        ProductCart
+            .findAll({
+                where: {
+                    CartId,
+                    paidStatus: true
+                },
+                attributes: {
+                    include: ['updatedAt']
+                },
+                include: [Product]
+            })
+            .then(products => {
+                res.status(200).json({
+                    products
+                })
+            })
+            .catch(err => {
+                next(err);
+            })
+    }
+
     static changeQuantity(req, res, next) {
         const { quantity } = req.body;
         const { id } = req.params;

@@ -40,11 +40,11 @@ class ProductController {
             whereClause.CategoryId = categoryId;
         }
 
-        if (stock) {
-            whereClause.stock = {
-                [Op.gt]: stock
-            }
-        }
+        // if (stock) {
+        //     whereClause.stock = {
+        //         [Op.gt]: stock
+        //     }
+        // }
 
         const startIndex = (page - 1) * per_page;
         const endIndex = page * per_page; 
