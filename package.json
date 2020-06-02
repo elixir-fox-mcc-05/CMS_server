@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "dev": "set NODE_ENV=development&& nodemon bin/server.js",
-    "test": "set NODE_ENV=test && clear && jest --runInBand --detectOpenHandles --verbose"
+    "test": "set NODE_ENV=test && clear && jest --runInBand --detectOpenHandles --verbose",
+    "start": "node app.js"
   },
   "repository": {
     "type": "git",
