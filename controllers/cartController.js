@@ -1,4 +1,4 @@
-const {Cart,Product,User} = require('../models')
+const {Cart,Product,User,sequelize} = require('../models')
 
 class CartController{
 
@@ -60,21 +60,60 @@ class CartController{
             quantity : req.body.quantity,
             isPaid : false
         }
-
-        Cart
-            .create(newCart)
+        let id;
+        
+        return sequelize.transaction((t) => {
+            return Cart
+            .findOne({where:{'UserId': newCart.UserId,'ProductId': newCart.ProductId,isPaid:false}},{transaction: t})
+            .then(data1 => {
+                if(data1){
+                    data1.quantity = parseInt(data1.quantity) + parseInt(newCart.quantity)
+                    id = data1.id
+                    data1.save({ fields: ['quantity'] })
+                }else{
+                    return Cart.create(newCart,{transaction: t})
+                }
+            })
             .then(data => {
-                res.status(201).json({
-                    id: data.id,
-                    ProductId: data.ProductId,
-                    UserId: data.UserId
-                })
+                if(data){
+                    id = data.id
+                }
+                return data
             })
-            .catch(err => {
-                res.status(404).json({
-                    error : err.message
+        })
+        .then(data => {
+            return Cart.findByPk(id)
+        })
+        .then(data => {
+                    res.status(201).json({
+                        id: data.id,
+                        ProductId: data.ProductId,
+                        UserId: data.UserId,
+                        quantity: data.quantity
+                    })
                 })
-            })
+        .catch(err => {
+                    res.status(404).json({
+                        error : err.message
+                    })
+                })
+
+
+        
+        // Cart
+        //     .create(newCart)
+        //     .then(data => {
+        //         res.status(201).json({
+        //             id: data.id,
+        //             ProductId: data.ProductId,
+        //             UserId: data.UserId
+        //         })
+        //     })
+        //     .catch(err => {
+        //         res.status(404).json({
+        //             error : err.message
+        //         })
+        //     })
     }
 
     static confirm(req,res){
@@ -92,42 +131,94 @@ class CartController{
         //         }
                 
         //     }) 
-        Cart
-            .update({isPaid : true},{where : {id : req.params.id}})
-            .then(data => {
-                // console.log(data)
-                return Cart.findByPk(req.params.id) 
-            })
-            .then(data => {
-                // console.log(data)
-                res.status(200).json({
-                    id : data.id,
-                    ProductId : data.ProductId,
-                    UserId : data.LoginId,
-                    quantity : data.quantity,
-                    isPaid : data.isPaid
-                })
-            })
-            .catch(err => {
-                let errorfix = err.message
-                if(errorfix.includes(',')){
-                    errorfix = errorfix.split(',')
-                    for (let i=0 ; i <errorfix.length ; i++){
-                        errorfix[i] = errorfix[i].replace('Validation error: ','').replace('\n','')
-                        errorfix[i] = errorfix[i].replace('notNull Violation: ','')
-                        if (errorfix[i].charAt(errorfix[i].length-1) == ' '){
-                            errorfix[i] = errorfix[i].slice(0, -1); 
-                        }
-                    }
+        let cartQuantity;
+        return sequelize.transaction((t) => {
 
-                }else {
-                    errorfix = errorfix.replace('Validation error: ','')
-                    errorfix = errorfix.replace('notNull Violation: ','')
-                }
-                res.status(400).json({
-                    error : errorfix
+            return Cart.findOne({where : {id :req.params.id}},{transaction: t})
+                .then(data => {
+                    // console.log(test)
+                    cartQuantity = data.quantity
+                    return Product.findByPk(data.ProductId,{transaction: t})
                 })
+                .then(data => {
+                    // console.log(`${data.stock} + ${cartQuantity}`)
+                    data.stock = parseInt(data.stock) - parseInt(cartQuantity)
+                    
+                    data.save({ fields: ['stock'] })
+                    return Cart.update({isPaid : true},{where : {id : req.params.id}},{transaction: t})
+                }) 
+        })
+        .then(data => {
+            // console.log(data)
+            return Cart.findByPk(req.params.id) 
+        })
+        .then(data => {
+            // console.log(data)
+            res.status(200).json({
+                id : data.id,
+                ProductId : data.ProductId,
+                UserId : data.LoginId,
+                quantity : data.quantity,
+                isPaid : data.isPaid
             })
+        })
+        .catch(err => {
+                    let errorfix = err.message
+                    if(errorfix.includes(',')){
+                        errorfix = errorfix.split(',')
+                        for (let i=0 ; i <errorfix.length ; i++){
+                            errorfix[i] = errorfix[i].replace('Validation error: ','').replace('\n','')
+                            errorfix[i] = errorfix[i].replace('notNull Violation: ','')
+                            if (errorfix[i].charAt(errorfix[i].length-1) == ' '){
+                                errorfix[i] = errorfix[i].slice(0, -1); 
+                            }
+                        }
+    
+                    }else {
+                        errorfix = errorfix.replace('Validation error: ','')
+                        errorfix = errorfix.replace('notNull Violation: ','')
+                    }
+                    res.status(400).json({
+                        error : errorfix
+                    })
+                })
+
+        // Cart
+        //     .update({isPaid : true},{where : {id : req.params.id}})
+        //     .then(data => {
+        //         // console.log(data)
+        //         return Cart.findByPk(req.params.id) 
+        //     })
+        //     .then(data => {
+        //         // console.log(data)
+        //         res.status(200).json({
+        //             id : data.id,
+        //             ProductId : data.ProductId,
+        //             UserId : data.LoginId,
+        //             quantity : data.quantity,
+        //             isPaid : data.isPaid
+        //         })
+        //     })
+        //     .catch(err => {
+        //         let errorfix = err.message
+        //         if(errorfix.includes(',')){
+        //             errorfix = errorfix.split(',')
+        //             for (let i=0 ; i <errorfix.length ; i++){
+        //                 errorfix[i] = errorfix[i].replace('Validation error: ','').replace('\n','')
+        //                 errorfix[i] = errorfix[i].replace('notNull Violation: ','')
+        //                 if (errorfix[i].charAt(errorfix[i].length-1) == ' '){
+        //                     errorfix[i] = errorfix[i].slice(0, -1); 
+        //                 }
+        //             }
+
+        //         }else {
+        //             errorfix = errorfix.replace('Validation error: ','')
+        //             errorfix = errorfix.replace('notNull Violation: ','')
+        //         }
+        //         res.status(400).json({
+        //             error : errorfix
+        //         })
+        //     })
     }
 
     static edit(req,res){

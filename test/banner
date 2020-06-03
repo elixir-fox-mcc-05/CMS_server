@@ -43,7 +43,8 @@ describe('POST /register then POST /login', () => {
         const userInput = {
             first_name: 'yusak',
             email: 'mail@mail.com',
-            password: 'asdasd'
+            password: 'asdasd',
+            roles: 'admin'
         }
         request(app)
             .post('/register')
