@@ -1,7 +1,7 @@
 // require('dotenv').config()
 const express = require('express')
 const app = express()
-const port = process.env.PORT || 3000 // Port tidak kita state di sini karena kita akan gunakan server di bin
+const port = process.env.PORT // Port tidak kita state di sini karena kita akan gunakan server di bin
 const cors = require('cors')
 
 const routes = require("./routers/index.js")
