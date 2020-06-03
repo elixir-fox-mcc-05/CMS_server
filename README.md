@@ -21,20 +21,18 @@ Create user data
 * **URL**
 
   /users/register
-
   
 *  **URL Params**
 
-   **Required:**
- 
     None
 
 * **Data Params**
 
-    | Params       | Description                          |
-    |--------------|--------------------------------------|
-    | email        | E-mail of the user, must be unique   |
-    | password     | Password of the user                 |
+    | Params     | Description                                         |
+    |------------|-----------------------------------------------------|
+    | email      | E-mail of the user, must be unique                  |
+    | password   | Password of the user                                |
+    | role       | Role of the user, with default value is customer    |
 
 * **Success Response:**
 
@@ -44,6 +42,7 @@ Create user data
         {
             "id": 1,
             "email": "example@gmail.com"
+            "role": "customer"
         }
 
 * **Error Response:**
@@ -71,7 +70,7 @@ Create user data
 
 ### **Login User**
 
-Login using user data that already created/registerd
+Only for user data with role = "admin". Login using user data that already created/registerd
 
 * **Method:**
 
@@ -83,8 +82,6 @@ Login using user data that already created/registerd
 
 *  **URL Params**
 
-   **Required:**
- 
     None
 
 * **Data Params**
@@ -136,10 +133,12 @@ Create product data
   /products
 
 *  **URL Params**
-
-   **Required:**
  
-    headers = token
+    None
+
+*  **Headers**
+    
+    token
 
 * **Data Params**
 

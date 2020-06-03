@@ -34,6 +34,10 @@ module.exports = (sequelize, DataTypes) => {
           msg: 'Password must be filled'
         }
       }
+    },
+    role: {
+      type: DataTypes.STRING,
+      defaultValue: 'customer'
     }
   }, {
     sequelize,
@@ -46,7 +50,7 @@ module.exports = (sequelize, DataTypes) => {
   })
 
   User.associate = function(models) {
-    // associations can be defined here
+    User.hasMany(models.Cart, {foreignKey: 'UserId'})
   };
   return User;
 };

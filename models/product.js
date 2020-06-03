@@ -35,8 +35,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
       allowNull: false,
       validate: {
-        min: 
-        {
+        min: {
           args: [0],
           msg: `Price must be equal to or more than 0`
         }
@@ -76,7 +75,7 @@ module.exports = (sequelize, DataTypes) => {
   })
 
   Product.associate = function(models) {
-    // associations can be defined here
+    Product.hasMany(models.Cart, {foreignKey: 'ProductId'})
   };
   return Product;
 };

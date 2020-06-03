@@ -9,6 +9,7 @@ module.exports = {
       return queryInterface.bulkInsert('Users', [{
         email: 'admin@gmail.com',
         password: hashPassword,
+        role: 'admin',
         createdAt: new Date(),
         updatedAt: new Date()
       }], {});

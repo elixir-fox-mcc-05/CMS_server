@@ -14,7 +14,8 @@ class UserController {
             .then(data => {
                 res.status(201).json({
                     id: data.id,
-                    email: data.email
+                    email: data.email,
+                    role: data.role
                 });
             })
             .catch(err => {
@@ -27,7 +28,8 @@ class UserController {
         let { email, password } = req.body;
         let options = {
             where: {
-                email
+                email,
+                role: 'admin'
             }
         }
         User.findOne(options)
@@ -44,7 +46,7 @@ class UserController {
                         })
                     }
                     else {
-                        throw next({
+                        return next({
                             name: `BadRequest`,
                             errors: [{
                                 message: `Invalid E-mail/Password`
@@ -53,7 +55,7 @@ class UserController {
                     }
                 }
                 else {
-                    throw next({
+                    return next({
                         name: `BadRequest`,
                         errors: [{
                             message: `Invalid E-mail/Password`
@@ -62,7 +64,7 @@ class UserController {
                 }
             })
             .catch(err => {
-                next(err)
+                return next(err)
             })
     }
 }

@@ -21,13 +21,15 @@ afterAll((done) => {            //// similar like seeding delete data
 /////// create dummy user (in my case, initial admin account already exist)
 const adminUser = {
     email: `admin@gmail.com`,
-    password: `admin`
+    password: `admin`,
+    role: 'admin'
 }
 beforeAll((done) => {               //// similar like seeding data
     const hashPassword = generatePassword(adminUser.password)
     queryInterface.bulkInsert(`Users`, [{
         email: adminUser.email,
         password: hashPassword,
+        role: 'admin',
         createdAt: new Date(),
         updatedAt: new Date()
     }])
@@ -60,6 +62,7 @@ describe(`User feature`, () => {
                             expect(res.status).toBe(201);
                             expect(res.body).toHaveProperty('id', expect.any(Number));
                             expect(res.body).toHaveProperty('email', userInput.email);
+                            expect(res.body).toHaveProperty('role', 'customer');
                             expect(res.body).not.toHaveProperty('password')
                             return done()
                         }
@@ -252,7 +255,7 @@ describe(`User feature`, () => {
                 ]
                 const userInput = {
                     email: '',
-                    password: ''
+                    password: '',
                 }
                 request(app)
                     .post('/users/login')
@@ -349,6 +352,30 @@ describe(`User feature`, () => {
                 const userInput = {
                     email: 'unknown@gmail.com',
                     password: 'unknown'
+                }
+                request(app)
+                    .post('/users/login')
+                    .send(userInput)
+                    .end((err, res) => {
+                        if(err) {
+                            return done(err) //// err for code supertest
+                        }
+                        else {
+                            expect(res.status).toBe(400);
+                            expect(res.body).toHaveProperty('errors', errors);
+                            return done()
+                        }
+                    })
+            })
+            test(`Should return error with status 400 because account role is not admin`, (done) => {
+                const errors = [
+                    {
+                        message: 'Invalid E-mail/Password'
+                    }
+                ]
+                const userInput = {
+                    email: 'test@gmail.com',
+                    password: 'test'
                 }
                 request(app)
                     .post('/users/login')

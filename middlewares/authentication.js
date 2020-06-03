@@ -5,15 +5,15 @@ function authentication(req, res, next){
     let token = req.headers.token;
     try {
         let decoded = verifyToken(token);
-        let { id } = decoded      // it think i dont need this for this case?
+        let { id } = decoded      
         User.findByPk(Number(id))
             .then(data => {
                 if(data){
-                    req.currentUserId = Number(id); // it think i dont need this for this case?
+                    req.currentUserId = Number(id); 
                     return next()
                 }
                 else {
-                    return next({     // it think i dont need this for this case?
+                    return next({    
                         name: 'NotFound',
                         errors: [{
                             message: 'User not found'
