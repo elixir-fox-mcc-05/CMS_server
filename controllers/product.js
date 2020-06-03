@@ -264,7 +264,7 @@ class ProductController {
     )
       .then((result) => {
         console.log(result)
-        return Cart.update({subTotal: price}, { where: { idCart: req.body.item.idCart } })
+        return Cart.update({subTotal: price}, {returning: true, where: {idCart: req.body.item.idCart}})
         .then((result) => {
           res.status(200).json(result)
         })
