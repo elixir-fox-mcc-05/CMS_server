@@ -254,9 +254,9 @@ class ProductController {
   }
 
   static cour (req, res, next) {
-    let price = 30000
+    let price = req.body.subTotal + 30000
     if (req.body.duration == 2) {
-      price = 20000
+      price = req.body.subTotal + 20000
     } 
     Cart.update(
       {cour: req.body.duration},
@@ -264,12 +264,11 @@ class ProductController {
     )
       .then((result) => {
         console.log(result)
-        return Cart.increment({subTotal: price}, { where: { idCart: req.body.item.idCart } })
+        return Cart.update({subTotal: price}, { where: { idCart: req.body.item.idCart } })
         .then((result) => {
           res.status(200).json(result)
         })
       }).catch((err) => {
-        console.log(err);
         console.log(err);
       });
   }
