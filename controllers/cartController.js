@@ -140,7 +140,7 @@ class CartController{
                     cartQuantity = data.quantity
                     return Product.findByPk(data.ProductId,{transaction: t})
                 })
-                .then(data => {
+                .then(data => { 
                     // console.log(`${data.stock} + ${cartQuantity}`)
                     data.stock = parseInt(data.stock) - parseInt(cartQuantity)
                     
