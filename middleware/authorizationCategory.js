@@ -15,7 +15,7 @@ function authorizationCategory(req, res, next) {
 
             } else {
 
-                res.status(401).json({
+                res.status(404).json({
                     error : 'not found'
                 })
             }

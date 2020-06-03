@@ -128,7 +128,7 @@ describe('test success /products', () => {
                 CategoryId : categorynum
             }
             request(app)
-                .post('/products/add')
+                .post('/products/add/test')
                 .set('token',token)
                 .send(newProduct)
                 .end((err, response) => {

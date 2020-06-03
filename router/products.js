@@ -9,6 +9,7 @@ router.use(authentication)
 
 router.get('/list',ProductController.list)
 router.get('/:id',authorization,ProductController.select)
+router.post('/add/test',ProductController.addTest)
 router.post('/add',upload.single('image_url'),ProductController.add)
 router.put('/edit/:id',authorization,ProductController.edit)
 router.delete('/delete/:id',authorization,ProductController.delete)

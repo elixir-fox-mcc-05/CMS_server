@@ -1,10 +1,10 @@
-const {Product, Category} = require('../models')
+const { Product, Category } = require('../models')
 let imgur = require('imgur')
 
-class ProductController{
-    static list(req,res,next){
-        Product 
-            .findAll({order : [['id','ASC']],include : [Category]})
+class ProductController {
+    static list(req, res, next) {
+        Product
+            .findAll({ order: [['id', 'ASC']], include: [Category] })
             .then(data => {
                 res.status(200).json({
                     data
@@ -15,52 +15,50 @@ class ProductController{
                 next(err)
             })
     }
-    static add(req,res,next){
+    static add(req, res, next) {
         console.log(req.file)
-        let {name, price ,stock, CategoryId} = req.body 
-        
+        let { name, price, stock, CategoryId } = req.body
+        // let imageURL = req.body.image_url
         const encoded = req.file.buffer.toString('base64')
-        
         imgur.uploadBase64(encoded)
-            .then( json => {
-                // res.status(201).json({
-                //     url: json.data.link
-                // })
+            .then(json => {
                 console.log(json.data.link)
-                return Product.create({name,'image_url': json.data.link,price,stock,CategoryId})
+                return Product.create({ name, 'image_url': json.data.link, price, stock, CategoryId })
             })
+        // Product.create({ name, 'image_url': imageURL, price, stock, CategoryId })
             .then(data => {
-                        // console.log(data)
-                        res.status(201).json({
-                            id : data.id,
-                            name:data.name,
-                            image_url : data.image_url,
-                            price : data.price,
-                            stock : data.stock,
-                            CategoryId : data.CategoryId
-                        })
-                    })
+                // console.log(data)
+                res.status(201).json({
+                    id: data.id,
+                    name: data.name,
+                    image_url: data.image_url,
+                    price: data.price,
+                    stock: data.stock,
+                    CategoryId: data.CategoryId
+                })
+            })
             .catch(err => {
-                        // console.log(err.message)
-                        let errorfix = err.message
-                        if(errorfix.includes(',')){
-                            errorfix.replace('category is required field','')
-                            errorfix = errorfix.split(',')
-                            for (let i=0 ; i <errorfix.length ; i++){
-                                errorfix[i] = errorfix[i].replace('Validation error: ','').replace('\n','')
-                                errorfix[i] = errorfix[i].replace('notNull Violation: ','')
-                                if (errorfix[i].charAt(errorfix[i].length-1) == ' '){
-                                    errorfix[i] = errorfix[i].slice(0, -1); 
-                                }
-                            }
-        
-                        }else {
-                            errorfix = errorfix.replace('Validation error: ','')
+                // console.log(err.message)
+                let errorfix = err.message
+                if (errorfix.includes(',')) {
+                    errorfix.replace('category is required field', '')
+                    errorfix = errorfix.split(',')
+                    for (let i = 0; i < errorfix.length; i++) {
+                        errorfix[i] = errorfix[i].replace('Validation error: ', '').replace('\n', '')
+                        errorfix[i] = errorfix[i].replace('notNull Violation: ', '')
+                        if (errorfix[i].charAt(errorfix[i].length - 1) == ' ') {
+                            errorfix[i] = errorfix[i].slice(0, -1);
                         }
-                        res.status(400).json({
-                            error : errorfix
-                        })
-                    })
+                    }
+
+                } else {
+                    errorfix = errorfix.replace('Validation error: ', '')
+                }
+                res.status(400).json({
+                    error: errorfix
+                })
+            })
+
 
         // Product
         //     .create({name,image_url,price,stock,CategoryId})
@@ -98,42 +96,17 @@ class ProductController{
         //     })
 
     }
-    static select (req,res,next){
 
-        Product 
-            .findOne({where : {id : req.params.id}, include : [Category]})
-            .then(data => {
-                res.status(200).json({
-                    id  : data.id,
-                    name : data.name,
-                    image_url : data.image_url,
-                    price : data.price,
-                    stock: data.stock,
-                    CategoryId : data.CategoryId
-                })
-            })
-            .catch(err => {
-                res.status(404).json({
-                    error: 'not found'
-                })
-                // next(err)
-            })
+    static addTest(req,res,next){
+        let { name, price,image_url, stock, CategoryId } = req.body
 
-    }
-    static edit(req,res){
-
-        let {name , image_url, price ,stock, CategoryId} = req.body 
-        // console.log(req.params.id)
-        Product 
-            .update({ 'name' : name ,'image_url' : image_url, 'price':price ,'stock':stock, 'CategoryId':CategoryId},{where : {id : req.params.id}})
+        Product
+            .create({name,image_url,price,stock,CategoryId})
             .then(data => {
                 // console.log(data)
-                return Product.findByPk(req.params.id) 
-            })
-            .then(data => {
-                // console.log(data)
-                res.status(200).json({
-                    name : data.name,
+                res.status(201).json({
+                    id : data.id,
+                    name:data.name,
                     image_url : data.image_url,
                     price : data.price,
                     stock : data.stock,
@@ -141,8 +114,10 @@ class ProductController{
                 })
             })
             .catch(err => {
+                // console.log(err.message)
                 let errorfix = err.message
                 if(errorfix.includes(',')){
+                    errorfix.replace('category is required field','')
                     errorfix = errorfix.split(',')
                     for (let i=0 ; i <errorfix.length ; i++){
                         errorfix[i] = errorfix[i].replace('Validation error: ','').replace('\n','')
@@ -154,14 +129,77 @@ class ProductController{
 
                 }else {
                     errorfix = errorfix.replace('Validation error: ','')
-                    errorfix = errorfix.replace('notNull Violation: ','')
                 }
                 res.status(400).json({
                     error : errorfix
                 })
             })
     }
-    static delete(req,res){
+
+    static select(req, res, next) {
+
+        Product
+            .findOne({ where: { id: req.params.id }, include: [Category] })
+            .then(data => {
+                res.status(200).json({
+                    id: data.id,
+                    name: data.name,
+                    image_url: data.image_url,
+                    price: data.price,
+                    stock: data.stock,
+                    CategoryId: data.CategoryId
+                })
+            })
+            .catch(err => {
+                res.status(404).json({
+                    error: 'not found'
+                })
+                // next(err)
+            })
+
+    }
+    static edit(req, res) {
+
+        let { name, image_url, price, stock, CategoryId } = req.body
+        // console.log(req.params.id)
+        Product
+            .update({ 'name': name, 'image_url': image_url, 'price': price, 'stock': stock, 'CategoryId': CategoryId }, { where: { id: req.params.id } })
+            .then(data => {
+                // console.log(data)
+                return Product.findByPk(req.params.id)
+            })
+            .then(data => {
+                // console.log(data)
+                res.status(200).json({
+                    name: data.name,
+                    image_url: data.image_url,
+                    price: data.price,
+                    stock: data.stock,
+                    CategoryId: data.CategoryId
+                })
+            })
+            .catch(err => {
+                let errorfix = err.message
+                if (errorfix.includes(',')) {
+                    errorfix = errorfix.split(',')
+                    for (let i = 0; i < errorfix.length; i++) {
+                        errorfix[i] = errorfix[i].replace('Validation error: ', '').replace('\n', '')
+                        errorfix[i] = errorfix[i].replace('notNull Violation: ', '')
+                        if (errorfix[i].charAt(errorfix[i].length - 1) == ' ') {
+                            errorfix[i] = errorfix[i].slice(0, -1);
+                        }
+                    }
+
+                } else {
+                    errorfix = errorfix.replace('Validation error: ', '')
+                    errorfix = errorfix.replace('notNull Violation: ', '')
+                }
+                res.status(400).json({
+                    error: errorfix
+                })
+            })
+    }
+    static delete(req, res) {
 
         let results;
 
@@ -169,42 +207,44 @@ class ProductController{
             .findByPk(req.params.id)
             .then(data1 => {
                 // console.log(data1.id)
-                if(data1.id == req.params.id){
+                if (data1.id == req.params.id) {
                     results = Object.assign(data1)
-                    return Product.destroy({where : {id : req.params.id},returning : true})
-                }else{
-                    res.status(404).json({error : "not found"})
+                    return Product.destroy({ where: { id: req.params.id }, returning: true })
+                } else {
+                    res.status(404).json({ error: "not found" })
                 }
-                        })
+            })
             .then(data2 => {
-                res.status(200).json({name : results.name,
-                                        image_url : results.image_url,
-                                        price : results.price,
-                                        stock : results.stock,
-                                        CategoryId : results.CategoryId})
+                res.status(200).json({
+                    name: results.name,
+                    image_url: results.image_url,
+                    price: results.price,
+                    stock: results.stock,
+                    CategoryId: results.CategoryId
+                })
             })
             .catch(err => {
                 // console.log(err.message)
-                res.status(404).json({error : "not found"})
+                res.status(404).json({ error: "not found" })
             })
 
     }
-    static search(req,res){
+    static search(req, res) {
         // console.log(req.body.name)
         Product
-            .findOne({where:{name : req.body.name}})
+            .findOne({ where: { name: req.body.name } })
             .then(data => {
                 res.status(200).json({
-                    name : data.name,
-                    image_url : data.image_url,
-                    price : data.price,
+                    name: data.name,
+                    image_url: data.image_url,
+                    price: data.price,
                     stock: data.stock,
-                    CategoryId : data.CategoryId
+                    CategoryId: data.CategoryId
                 })
             })
             .catch(err => {
                 res.status(400).json({
-                    error : 'not found'
+                    error: 'not found'
                 })
             })
     }

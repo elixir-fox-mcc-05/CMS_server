@@ -58,6 +58,41 @@ class BannerController {
             })
     }
 
+    static createTest(req,res){
+        let {name,image_url} = req.body
+    
+        Banner  
+            .create({name,image_url})
+            .then(data => {
+                res.status(201).json({
+                    id: data.id,
+                    name: data.name,
+                    image_url: data.image_url
+                })
+            })
+            .catch(err => {
+                // console.log(err.message)
+                let errorfix = err.message
+                if(errorfix.includes(',')){
+                    errorfix.replace('category is required field','')
+                    errorfix = errorfix.split(',')
+                    for (let i=0 ; i <errorfix.length ; i++){
+                        errorfix[i] = errorfix[i].replace('Validation error: ','').replace('\n','')
+                        errorfix[i] = errorfix[i].replace('notNull Violation: ','')
+                        if (errorfix[i].charAt(errorfix[i].length-1) == ' '){
+                            errorfix[i] = errorfix[i].slice(0, -1); 
+                        }
+                    }
+
+                }else {
+                    errorfix = errorfix.replace('Validation error: ','')
+                }
+                res.status(400).json({
+                    error : errorfix
+                })
+            })
+    }
+
     static select(req,res){
 
         Banner

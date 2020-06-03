@@ -91,7 +91,7 @@ describe('TEST SUCCESS /banner', () => {
 
 
             request(app)
-                    .post(`/banner/add`)
+                    .post(`/banner/add/test`)
                     .set('token', token)
                     // .query({'id':id})
                     .send(newBanner)
@@ -217,7 +217,7 @@ describe('POST /banner/ADD', () => {
 
 
         request(app)
-                .post(`/banner/add`)
+                .post(`/banner/add/test`)
                 .set('token', token)
                 // .query({'id':id})
                 .send(newBanner)
@@ -250,7 +250,7 @@ describe('TEST FAILURE /banner', () => {
 
 
             request(app)
-                    .post(`/banner/add`)
+                    .post(`/banner/add/test`)
                     .set('token', token)
                     // .query({'id':id})
                     .send(newBanner)
@@ -276,7 +276,7 @@ describe('TEST FAILURE /banner', () => {
             let error = 'asdasdasd'
 
             request(app)
-                    .post(`/banner/add`)
+                    .post(`/banner/add/test`)
                     .set('token', token)
                     // .query({'id':id})
                     .send(newBanner)
@@ -299,7 +299,7 @@ describe('TEST FAILURE /banner', () => {
             let error = 'asdasdasd'
 
             request(app)
-                    .post(`/banner/add`)
+                    .post(`/banner/add/test`)
                     .set('token', token)
                     // .query({'id':id})
                     // .send(newBanner)
@@ -323,7 +323,7 @@ describe('TEST FAILURE /banner', () => {
             let error = 'asdasdasd'
 
             request(app)
-                    .post(`/banner/add`)
+                    .post(`/banner/add/test`)
                     .set('token', token)
                     .send(newBanner)
                     .end((err, response) => {
@@ -347,7 +347,7 @@ describe('TEST FAILURE /banner', () => {
             let error = 'image url must in URL format'
 
             request(app)
-                    .post(`/banner/add`)
+                    .post(`/banner/add/test`)
                     .set('token', token)
                     .send(newBanner)
                     .end((err, response) => {

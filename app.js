@@ -16,7 +16,7 @@ app.use(router)
 app.use(errHandler)
 
 
-app.listen (port, console.log('app is now listening : ', port))
+// app.listen (port, console.log('app is now listening : ', port))
 
 module.exports = app
 
