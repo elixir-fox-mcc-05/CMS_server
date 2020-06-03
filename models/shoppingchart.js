@@ -15,6 +15,9 @@ module.exports = (sequelize, DataTypes) => {
           msg: `Quantity can't be empty`
         }
       }
+    },
+    isPaid: {
+      type: DataTypes.BOOLEAN
     }
   }, {
     sequelize,

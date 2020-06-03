@@ -3,8 +3,7 @@
 module.exports = {
   up: (queryInterface, Sequelize) => {
     return queryInterface.addColumn('ShoppingCharts', 'isPaid', {
-      type: Sequelize.STRING,
-      allowNull: true
+      type: Sequelize.BOOLEAN
     })
   },
 

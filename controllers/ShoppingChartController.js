@@ -9,7 +9,7 @@ class ShoppingChartController {
         const options = {
             where: {
                 UserId,
-                isPaid: 'false'
+                isPaid: false
             },
             order: [['id', 'asc']],
             include: [ Product ],
@@ -48,7 +48,7 @@ class ShoppingChartController {
                         const shoppingChartvalues = {
                             UserId,
                             ProductId,
-                            isPaid: 'false',
+                            isPaid: false,
                             quantity: Number(quantity) + Number(currentShoppingChart.quantity)
                         }
                         const options = {
@@ -65,7 +65,7 @@ class ShoppingChartController {
                             UserId,
                             ProductId,
                             quantity,
-                            isPaid: 'false'
+                            isPaid: false
                         }
                         const options = {
                             where: {
@@ -82,7 +82,7 @@ class ShoppingChartController {
                         UserId,
                         ProductId,
                         quantity,
-                        isPaid: 'false'
+                        isPaid: false
                     }
                     const newShopingChart = await ShoppingChart.create(shoppingChartvalues)
     
@@ -168,7 +168,7 @@ class ShoppingChartController {
                         checkout.push(
                             ShoppingChart
                                 .update({
-                                    isPaid: 'true'
+                                    isPaid: true
                                 }, {
                                     where: {
                                         ProductId: element.ProductId,
