@@ -1,12 +1,15 @@
 const { ShoppingChart } = require('../models')
 const { Product } = require('../models')
+const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY)
+const { User } = require('../models')
 
 class ShoppingChartController {
     static findShoppingChart (req, res, next) {
         const UserId = req.currentUserId
         const options = {
             where: {
-                UserId
+                UserId,
+                isPaid: 'false'
             },
             order: [['id', 'asc']],
             include: [ Product ],
@@ -45,6 +48,7 @@ class ShoppingChartController {
                         const shoppingChartvalues = {
                             UserId,
                             ProductId,
+                            isPaid: 'false',
                             quantity: Number(quantity) + Number(currentShoppingChart.quantity)
                         }
                         const options = {
@@ -60,7 +64,8 @@ class ShoppingChartController {
                         const shoppingChartvalues = {
                             UserId,
                             ProductId,
-                            quantity
+                            quantity,
+                            isPaid: 'false'
                         }
                         const options = {
                             where: {
@@ -76,7 +81,8 @@ class ShoppingChartController {
                     const shoppingChartvalues = {
                         UserId,
                         ProductId,
-                        quantity
+                        quantity,
+                        isPaid: 'false'
                     }
                     const newShopingChart = await ShoppingChart.create(shoppingChartvalues)
     
@@ -117,6 +123,68 @@ class ShoppingChartController {
             }
         }
         removeShoppingChart()
+    }
+
+    static checkout (req, res, next) {
+        let { customerData, listProductId } = req.body
+        console.log(customerData, listProductId)
+        const UserId = Number(req.currentUserId) 
+        listProductId = JSON.parse(listProductId)
+        const checkout = []
+        User
+            .findByPk(UserId)
+                .then(user => {
+                    const email = user.email
+                    return stripe.customers.create({
+                        email: email,  
+                    })
+                })
+                .then(customer => {
+                    return stripe.invoiceItems.create({
+                        amount: customerData.amount,
+                        description: 'Buy Product from Toko Murah',
+                        currency: 'idr',
+                        customer: customer.id
+                    })
+                })
+                .then(invoiceItem => {
+                    return stripe.invoices.create({
+                        collection_method: 'send_invoice',
+                        customer: invoiceItem.customer,
+                        days_until_due: 10
+                    })
+                })
+                .then(invoice => {
+                    return ShoppingChart
+                        .findAll({
+                            where: {
+                                UserId,
+                                isPaid: false
+                            }
+                        })
+                })
+                .then(products => {
+                    products.forEach(element => {
+                        checkout.push(
+                            ShoppingChart
+                                .update({
+                                    isPaid: 'true'
+                                }, {
+                                    where: {
+                                        ProductId: element.ProductId,
+                                    }
+                                })
+                        )
+                    })
+                    return Promise.all(checkout)
+                })
+                .then(() => {
+                    res.status(200).json('berhasil')
+                })
+                .catch(err => {
+                    console.log('ini error', err)
+                })
+
     }
 }
 
