@@ -67,6 +67,52 @@ class UserController {
                 return next(err)
             })
     }
+
+    // router.post('/login/customer', UserController.loginCustomer)
+    static loginCustomer(req, res, next){
+        let { email, password } = req.body;
+        let options = {
+            where: {
+                email,
+            }
+        }
+        User.findOne(options)
+            .then(data => {
+                if(data){
+                    let compare = checkPassword(password, data.password);
+                    if(compare) {
+                        let token = generateToken({
+                            id: data.id,
+                            email: data.email
+                        })
+                        res.status(201).json({
+                            token,
+                            email: data.email
+                        })
+                    }
+                    else {
+                        return next({
+                            name: `BadRequest`,
+                            errors: [{
+                                message: `Invalid E-mail/Password`
+                            }]
+                        })
+                    }
+                }
+                else {
+                    return next({
+                        name: `BadRequest`,
+                        errors: [{
+                            message: `Invalid E-mail/Password`
+                        }]
+                    })
+                }
+            })
+            .catch(err => {
+                return next(err)
+            })
+    }
+
 }
 
 module.exports = UserController;
