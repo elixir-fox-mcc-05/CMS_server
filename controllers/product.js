@@ -254,10 +254,11 @@ class ProductController {
   }
 
   static cour (req, res, next) {
-    let price = req.body.subTotal + 30000
+    let price = req.body.item.subTotal + 20000
     if (req.body.duration == 2) {
-      price = req.body.subTotal + 20000
-    } 
+      price = req.body.item.subTotal + 30000
+    }
+    console.log(price)
     Cart.update(
       {cour: req.body.duration},
       {returning: true, where: {idCart: req.body.item.idCart}}
