@@ -29,7 +29,7 @@ beforeAll((done) => {               //// similar like seeding data
     queryInterface.bulkInsert(`Users`, [{
         email: adminUser.email,
         password: hashPassword,
-        role: 'admin',
+        role: adminUser.role,
         createdAt: new Date(),
         updatedAt: new Date()
     }])

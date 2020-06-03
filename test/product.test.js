@@ -42,7 +42,8 @@ const dummyProduct = [{
 ///// dummy user for authentication
 const adminUser = {
     email: `admin@gmail.com`,
-    password: `admin`
+    password: `admin`,
+    role: 'admin'
 }
 let loginToken = null;
 beforeAll((done) => {               
@@ -50,6 +51,7 @@ beforeAll((done) => {
     queryInterface.bulkInsert(`Users`, [{
         email: adminUser.email,
         password: hashPassword,
+        role: adminUser.role,
         createdAt: new Date(),
         updatedAt: new Date()
     }])
