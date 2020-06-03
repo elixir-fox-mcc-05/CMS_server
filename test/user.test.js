@@ -143,7 +143,7 @@ describe('User Sign In and Sign Up', () => {
       test('Should return bad request. All error messages (400).', (done) => {
         request(app)
           .post('/signup')
-          .send(inputSigninNull)
+          .send(inputSignupNull)
           .expect((data) => {
             const status = data.status;
             const error = data.body;
@@ -381,6 +381,32 @@ describe('User Sign In and Sign Up', () => {
         request(app)
           .post('/signin')
           .send(inputSigninPasswordEmpty)
+          .expect((data) => {
+            const status = data.status;
+            const error = data.body;
+            expect(status).toEqual(400);
+            expect(error).toHaveProperty('code', 400);
+            expect(error).toHaveProperty('type', 'BAD REQUEST');
+            expect(error).toHaveProperty(
+              'message',
+              'Opps!, invalid email / password'
+            );
+          })
+          .end((err) => {
+            if (err) {
+              done(err);
+            } else {
+              done();
+            }
+          });
+      });
+    });
+
+    describe('> Sign In failed input null', () => {
+      test('Should return bad request. Invalid email/password error messages (400).', (done) => {
+        request(app)
+          .post('/signin')
+          .send(inputSigninNull)
           .expect((data) => {
             const status = data.status;
             const error = data.body;

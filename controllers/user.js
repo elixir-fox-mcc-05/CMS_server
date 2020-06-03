@@ -34,7 +34,8 @@ class UserController {
       },
     };
 
-    User.findOne(options)
+    if (typeof (values.email) === 'string' && typeof (values.email) === 'string') {
+      User.findOne(options)
       .then((data) => {
         if (data) {
           let compare = checkPassword(values.password, data.password);
@@ -64,6 +65,13 @@ class UserController {
       .catch((err) => {
         next(err);
       });
+    } else {
+      throw {
+        code: 400,
+        type: 'BAD REQUEST',
+        message: 'Opps!, invalid email / password',
+      };
+    }
   }
 
   static findAllUsers(req, res, next) {
