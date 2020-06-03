@@ -258,14 +258,18 @@ class ProductController {
     if (req.body.duration == 2) {
       price = 20000
     } 
-    Cart.increment({subTotal: price}, { where: { idCart: req.body.idCart } })
     Cart.update(
       {cour: req.body.duration},
       {returning: true, where: {idCart: req.body.item.idCart}}
     )
       .then((result) => {
-        res.status(200).json(result)
+        console.log(result)
+        return Cart.increment({subTotal: price}, { where: { idCart: req.body.item.idCart } })
+        .then((result) => {
+          res.status(200).json(result)
+        })
       }).catch((err) => {
+        console.log(err);
         console.log(err);
       });
   }
