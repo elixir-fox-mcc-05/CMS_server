@@ -118,7 +118,8 @@ class CartController {
     };
     Cart.findAll(options)
       .then((data) => {
-        if (data.length > 0) {
+        let lengthCart = data.length;
+        if (lengthCart > 0) {
           data.forEach((element) => {
             if (element.Product.stock < element.quantity) {
               Cart.destroy(options)
@@ -135,31 +136,51 @@ class CartController {
                 });
             }
           });
-          console.log('MASUK');
-          let values = {
-            status: true,
-          };
-          let options = {
-            where: {
-              UserId: req.signedInUserId,
-              status: false,
-            },
-          };
-          return Cart.update(values, options);
+
+          data.forEach((element, index) => {
+            element.Product.decrement(
+              { stock: element.quantity },
+              { where: { id: element.ProductId } }
+            )
+              .then((data) => {
+                console.log('Success decrement stock');
+                if (index == lengthCart - 1) {
+                  let values = {
+                    status: true,
+                  };
+                  let options = {
+                    where: {
+                      UserId: req.signedInUserId,
+                      status: false,
+                    },
+                  };
+                  Cart.update(values, options)
+                    .then((data) => {
+                      console.log('masuk');
+                      console.log(data);
+                      if (data == lengthCart) {
+                        res.status(201).json({
+                          CheckoutItems:
+                            'Success checkout, please check purchase history',
+                        });
+                        return true;
+                      }
+                    })
+                    .catch((err) => {
+                      next(err);
+                    });
+                }
+              })
+              .catch((err) => {
+                next(err);
+              });
+          });
         } else {
           throw {
             code: 400,
             type: 'BAD REQUEST',
             message: 'Nothing in Cart',
           };
-        }
-      })
-      .then((data) => {
-        console.log(data);
-        if (data == 1) {
-          res.status(201).json({
-            CheckoutItems: 'Success checkout, please check purchase history',
-          });
         }
       })
       .catch((err) => {

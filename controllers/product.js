@@ -23,7 +23,11 @@ class ProductController {
   }
 
   static findAllProducts(req, res, next) {
-    Product.findAll()
+    let options = {
+      order: [['id','asc']]
+    }
+    
+    Product.findAll(options)
       .then((data) => {
         res.status(200).json({
           Products: data,
