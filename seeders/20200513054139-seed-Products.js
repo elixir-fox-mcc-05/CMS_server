@@ -88,7 +88,7 @@ module.exports = {
         description: 'The iMac Pro is a powerful, professional all-in-one that may only be for a very particular clientele. It offers a lot of raw power and a premium price tag to match.',
         image_url: 'https://thumbor.forbes.com/thumbor/960x0/https%3A%2F%2Fblogs-images.forbes.com%2Fdavidphelan%2Ffiles%2F2018%2F04%2FiMacPro_5k-retina-display_20171214-1200x974.jpg',
         price: 60000000,
-        stock: 10,
+        stock: 0,
         category: 'PC',
         createdAt: new Date(),
         updatedAt: new Date()

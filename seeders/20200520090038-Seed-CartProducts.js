@@ -23,7 +23,7 @@ module.exports = {
         CartId: 2,
         ProductId: 7,
         quantity: 1,
-        status: 'Confirmed',
+        status: 'Paid',
         createdAt: new Date(),
         updatedAt: new Date()
       },
@@ -31,7 +31,7 @@ module.exports = {
         CartId: 2,
         ProductId: 9,
         quantity: 1,
-        status: 'Confirmed',
+        status: 'Paid',
         createdAt: new Date(),
         updatedAt: new Date()
       },

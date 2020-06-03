@@ -1,4 +1,4 @@
-const { User } = require('../models/index')
+const { User, CartProduct, Cart, Product, Customer } = require('../models/index')
 const { comparePassword } = require('../helpers/bcrypt')
 const { generateToken } = require('../helpers/jwt')
 
@@ -64,6 +64,49 @@ class UserController {
                         code: 401
                     }
                 }
+            })
+            .catch(err => {
+                next(err)
+            })
+    }
+
+    static getAllOrder (req, res, next) {
+        CartProduct.findAll({
+            include: [Product, {
+                model: Cart,
+                include: [{
+                    model: Customer,
+                    attributes: {exclude: ['password']}
+                }]
+            }],
+            order: [
+                ['createdAt', 'ASC'],
+            ],
+        })
+            .then(data => {
+                res.status(200).json({
+                    data
+                })
+            })
+            .catch(err => {
+                next(err)
+            })
+    }
+
+    static updateOrder (req, res, next) {
+        let { status, id } = req.body
+        CartProduct.update({
+            status
+        }, {
+            where: {
+                id
+            }
+        })
+            .then(data => {
+                res.status(200).json({
+                    data,
+                    notif: 'Order status successfully updated!'
+                })
             })
             .catch(err => {
                 next(err)
