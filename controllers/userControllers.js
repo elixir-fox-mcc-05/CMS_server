@@ -7,13 +7,13 @@ class userController {
         let newUser = {
             email: req.body.email,
             password: req.body.password,
-            role: req.body.role
+            role: "customer"
         }
         User.create(newUser)
             .then(result =>{
             // setelah user di-register, kita akan
                 res.status(201).json({
-                    message: "New user successfully registered",
+                    message: "New customer successfully registered",
                     id: result.id,
                     email: result.email
                 })
@@ -35,7 +35,6 @@ class userController {
         .then(result => {
             // console.log(result)
             if(result){
-                // console.log("++++++++++++", result.password, " **** ",loggingUser.password, "+++++++++++++++++++++")
                 let passwordMatch = comparePassword(loggingUser.password, result.password)
                 if(passwordMatch){
                     //buatkan token
