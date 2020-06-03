@@ -185,7 +185,6 @@ class ProductController {
           User.findOne({where: {id: req.currentUserId}})
           .then((thisUser) => {
             let temp = thisUser.dataValues.balance - newBal
-            console.log(newBal);
             if (thisUser.dataValues.balance >= newBal) {
               for (let i in result) { 
                 console.log(result[i].dataValues.demand);
@@ -253,5 +252,18 @@ class ProductController {
       console.log(err);
     });
   }
+
+  static cour (req, res, next) {
+    let price = 30000
+    if (req.body.duration == 2) {
+      price = 20000
+    } 
+    Cart.update(
+      {cour: req.body.duration},
+      {returning: true, where: {idCart: req.body.item.idCart}}
+    )
+    Cart.increment({subTotal: price}, { where: { idCart: req.body.idCart } })
+  }
 }
+
 module.exports = ProductController

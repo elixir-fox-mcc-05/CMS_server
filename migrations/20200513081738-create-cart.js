@@ -37,6 +37,9 @@ module.exports = {
       subTotal: {
         type: Sequelize.INTEGER
       },
+      cour: {
+        type: Sequelize.INTEGER
+      },
       payed: {
         type: Sequelize.BOOLEAN
       },

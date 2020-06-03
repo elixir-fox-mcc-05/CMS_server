@@ -14,6 +14,7 @@ router.delete('/cart/delete', ProductController.delCart)
 router.put('/cart/update', ProductController.demand)
 router.put('/cart/check', ProductController.check)
 router.put('/cart/buy', ProductController.buy)
+router.put('/cart/cour', ProductController.cour)
 router.get('/history', ProductController.history)
 
 module.exports = router

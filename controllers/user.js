@@ -155,6 +155,7 @@ class UserController {
         }
       })
       .catch((err) => {
+        console.log(err);
         next({name: 'Wrong Password Or Email'})
       });
     }
