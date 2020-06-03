@@ -73,7 +73,7 @@ class CustomerController {
     }
 
     static getCustomerDetail (req, res, next) {
-        let { customerId } = req.params
+        let customerId = req.currentUserId
         Customer.findByPk(customerId, {
             attributes: {exclude: ['password']}
         })
@@ -95,7 +95,7 @@ class CustomerController {
     }
 
     static updateCustomerDetail (req, res, next) {
-        let { customerId } = req.params
+        let customerId = req.currentUserId
         let { name, address, email, phone } = req.body
         Customer.update({
             name,
@@ -125,7 +125,7 @@ class CustomerController {
     }
     
     static findAllCustomerCart (req, res, next) {
-        let { customerId } = req.params
+        let customerId = req.currentUserId
         CartProduct.findAll({
             include: [Product, {
                 model: Cart,
@@ -174,10 +174,10 @@ class CustomerController {
     }
 
     static findCartById (req, res, next) {
-        let { cartId } = req.params
+        let { CartId } = req.params
         CartProduct.findAll({
             where: {
-                CartId: cartId
+                CartId
             }
         })
             .then(data => {
@@ -198,12 +198,12 @@ class CustomerController {
     }
 
     static addProductToCart (req, res, next) {
-        let { cartId } = req.params
+        let { CartId } = req.params
         let { ProductId, quantity, status } = req.body
         CartProduct.create({
             quantity,
             status,
-            CartId: cartId,
+            CartId,
             ProductId
         })
             .then(data => {
@@ -218,12 +218,12 @@ class CustomerController {
 
     }
     static updateCartProduct (req, res, next) {
-        let { cartId } = req.params
+        let { CartId } = req.params
         let { id, ProductId, quantity, status } = req.body
         CartProduct.update({
             quantity,
             status,
-            CartId: cartId,
+            CartId,
             ProductId
         }, {
             where: {
@@ -242,13 +242,13 @@ class CustomerController {
     }
 
     static updateCartStatus (req, res, next) {
-        let { cartId } = req.params
+        let { CartId } = req.params
         let { status } = req.body
         CartProduct.update({
             status
         }, {
             where: {
-                CartId: cartId
+                CartId
             }
         })
             .then(data => {
@@ -262,17 +262,17 @@ class CustomerController {
             })
     }
 
-    static deleteCart (req, res, next) {
-        let { cartId } = req.params
+    static deleteProductFromCart (req, res, next) {
+        let id = req.params.CartProductId
         CartProduct.destroy({
             where: {
-                CartId: cartId
+                id
             }
         })
             .then(result => {
                 if(result) {
                     res.status(200).json({
-                        notif: 'Cart successfully removed!'
+                        notif: 'Product successfully removed from cart!'
                     })
                 } else {
                     throw {

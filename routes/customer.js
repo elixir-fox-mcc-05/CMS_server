@@ -1,19 +1,18 @@
 const express = require('express')
 const router = express.Router()
 const CustomerController = require('../controllers/customerController')
-const { authentication } = require('../middlewares/authentication')
+const { customerAuthentication } = require('../middlewares/authentication')
 
-// router.use(authentication)
+router.get('/', customerAuthentication, CustomerController.getCustomerDetail)//ok
+router.put('/', customerAuthentication, CustomerController.updateCustomerDetail)
 router.post('/register', CustomerController.registerCustomer)
 router.post('/login', CustomerController.loginCustomer)
-router.get('/:customerId', CustomerController.getCustomerDetail)//ok
-router.put('/:customerId', CustomerController.updateCustomerDetail)
-router.get('/:customerId/cart', CustomerController.findAllCustomerCart)//ok
-router.post('/:customerId/cart', CustomerController.createCart)
-router.get('/:customerId/:cartId', CustomerController.findCartById)
-router.post('/:customerId/:cartId', CustomerController.addProductToCart)
-router.put('/:customerId/:cartId', CustomerController.updateCartProduct)
-router.patch('/:customerId/:cartId', CustomerController.updateCartStatus)
-router.delete('/:customerId/:cartId', CustomerController.deleteCart)
+router.get('/cart', customerAuthentication, CustomerController.findAllCustomerCart)//ok
+router.post('/cart', customerAuthentication, CustomerController.createCart)
+router.get('/:CartId', customerAuthentication, CustomerController.findCartById)
+router.post('/:CartId', customerAuthentication, CustomerController.addProductToCart)
+router.put('/:CartId', customerAuthentication, CustomerController.updateCartProduct)
+router.patch('/:CartId', customerAuthentication, CustomerController.updateCartStatus)
+router.delete('/:CartId/:CartProductId', customerAuthentication, CustomerController.deleteProductFromCart)
 
 module.exports = router
