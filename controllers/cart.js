@@ -156,10 +156,10 @@ class CartController {
                   };
                   Cart.update(values, options)
                     .then((data) => {
-                      console.log('masuk');
-                      console.log(data);
+                      // console.log('masuk');
+                      // console.log(data);
                       if (data == lengthCart) {
-                        res.status(201).json({
+                        res.status(200).json({
                           CheckoutItems:
                             'Success checkout, please check purchase history',
                         });
@@ -182,6 +182,56 @@ class CartController {
             message: 'Nothing in Cart',
           };
         }
+      })
+      .catch((err) => {
+        next(err);
+      });
+  }
+
+  static updateQuantity(req, res, next) {
+    let options = {
+      where: {
+        id: req.params.id,
+      },
+      include: [{ model: Product }],
+    };
+
+    Cart.findOne(options)
+      .then((data) => {
+        if (data) {
+          if (data.Product.stock < req.body.quantity) {
+            throw {
+              code: 400,
+              type: 'BAD REQUEST',
+              message:
+                'Sorry, product stock is less than request, please recheck stock and refresh browser',
+            };
+          } else {
+            let values = {
+              quantity: req.body.quantity,
+            };
+            let options = {
+              where: {
+                id: req.params.id,
+                UserId: req.signedInUserId,
+                status: false,
+              },
+            };
+            return Cart.update(values, options);
+          }
+        } else {
+          throw {
+            code: 404,
+            type: 'NOT FOUND',
+            message: 'Sorry, cart item not found',
+          };
+        }
+      })
+      .then((data) => {
+        // console.log(data);
+        res.status(200).json({
+          UpdateItem: 'Success update quantity',
+        });
       })
       .catch((err) => {
         next(err);
