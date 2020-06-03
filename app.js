@@ -6,11 +6,11 @@ const cors = require('cors')
 
 const routes = require("./routers/index.js")
 
-app.use((req, res, next) => {
-    res.header('Access-Control-Allow-Origin', '*');
-    next();
+app.all('/', function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "X-Requested-With");
+    next()
   });
-  
 
 const errorHandler =  require("./middlewares/errorHandler.js")
 
