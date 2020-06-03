@@ -101,10 +101,17 @@ module.exports = (sequelize, DataTypes) => {
           .findByPk(productId)
           .then(product => {
             if (cartProduct.quantity > product.stock) {
-              throw({
-                msg: `only ${product.stock} ${product.name} is available on the stock`,
-                code: 400
-              })
+              if (product.stock === 0) {
+                throw({
+                  msg: `${product.name} is out of stock`,
+                  code: 400
+                })
+              } else {
+                throw({
+                  msg: `only ${product.stock} ${product.name} is available on the stock`,
+                  code: 400
+                })
+              }
             } else {
               cartProduct.price = cartProduct.quantity * product.price
 

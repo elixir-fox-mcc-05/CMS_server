@@ -70,7 +70,8 @@ class CartController {
                 attributes: {
                     include: ['updatedAt']
                 },
-                include: [Product]
+                include: [Product],
+                order: [['updatedAt', 'DESC']]
             })
             .then(products => {
                 res.status(200).json({
@@ -119,22 +120,20 @@ class CartController {
                 }
             })
             .then(product => {
-                return sequelize.transaction(t => {
-                    product.forEach(prod => {
-                        checkOut.push(
-                            ProductCart
-                                .update({
-                                    paidStatus: true
-                                },{
-                                    where: {
-                                        CartId: prod.CartId,
-                                        ProductId: prod.ProductId
-                                    }
-                                })
-                        )
-                    })
-                    return Promise.all(checkOut)
+                product.forEach(prod => {
+                    checkOut.push(
+                        ProductCart
+                            .update({
+                                paidStatus: true
+                            },{
+                                where: {
+                                    CartId: prod.CartId,
+                                    ProductId: prod.ProductId
+                                }
+                            })
+                    )
                 })
+                return Promise.all(checkOut)
             })
             .then(() => {
                 res.status(200).json({

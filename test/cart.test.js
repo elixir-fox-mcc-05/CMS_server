@@ -362,6 +362,96 @@ describe('Cart Router', () => {
                     })
             })
 
+            test('should return status code 400 Bad Request because product already added to cart', done => {
+                const customer = customers[0];
+                const access_token = generateToken({
+                    id: customer.id,
+                    name: customer.name,
+                    email: customer.email
+                })
+                request(app)
+                    .post('/carts')
+                    .send({
+                        quantity: 1,
+                        productId: 2
+                    })
+                    .set('Accept', 'application/json')
+                    .set('access_token', access_token)
+                    .expect('Content-Type', /json/)
+                    .expect(400)
+                    .expect(res => {
+                        const cart = res.body;
+                        expect(cart.error).toContain('Product already added to your cart')
+                    })
+                    .end(err =>{
+                        if(err) {
+                            done(err);
+                        } else {
+                            done();
+                        }
+                    })
+            })
+
+            test('should return status code 400 Bad Request because product stock is not enough', done => {
+                const customer = customers[0];
+                const access_token = generateToken({
+                    id: customer.id,
+                    name: customer.name,
+                    email: customer.email
+                })
+                request(app)
+                    .post('/carts')
+                    .send({
+                        quantity: 3,
+                        productId: 1
+                    })
+                    .set('Accept', 'application/json')
+                    .set('access_token', access_token)
+                    .expect('Content-Type', /json/)
+                    .expect(400)
+                    .expect(res => {
+                        const cart = res.body;
+                        expect(cart.error).toContain('only 1 Duke Football is available on the stock')
+                    })
+                    .end(err =>{
+                        if(err) {
+                            done(err);
+                        } else {
+                            done();
+                        }
+                    })
+            })
+
+            test('should return status code 400 Bad Request because product stock is out of stock', done => {
+                const customer = customers[0];
+                const access_token = generateToken({
+                    id: customer.id,
+                    name: customer.name,
+                    email: customer.email
+                })
+                request(app)
+                    .post('/carts')
+                    .send({
+                        quantity: 1,
+                        productId: 4
+                    })
+                    .set('Accept', 'application/json')
+                    .set('access_token', access_token)
+                    .expect('Content-Type', /json/)
+                    .expect(400)
+                    .expect(res => {
+                        const cart = res.body;
+                        expect(cart.error).toContain('Dallas Mavericks City Edition 19-20 is out of stock')
+                    })
+                    .end(err =>{
+                        if(err) {
+                            done(err);
+                        } else {
+                            done();
+                        }
+                    })
+            })
+
             test('should return status code 401 unauthorized because customer doesn\'t have permission to add product to shopping cart', done => {
                 const customer = customers[0];
                 const access_token = generateToken({
@@ -424,7 +514,98 @@ describe('Cart Router', () => {
         })
     })
 
-    describe('Change Product Quantity', () =>{
+    describe('Show Transaction History', () => {
+        describe('success', () => {
+            test('should return status code 200 along with json containing list of purchased products', done => {
+                const customer = customers[0];
+                const access_token = generateToken({
+                    id: customer.id,
+                    name: customer.name,
+                    email: customer.email
+                })
+                request(app)
+                    .get('/carts/history')
+                    .set('Accept', 'application/json')
+                    .set('access_token', access_token)
+                    .expect('Content-Type', /json/)
+                    .expect(200)
+                    .expect(res => {
+                        const { products } = res.body;
+                        expect(products[0].Product).toEqual({
+                            id: 3,
+                            name: 'Custom Name Dallas Cowboys Men Jersey',
+                            image_url: 'https://fanatics.frgimages.com/FFImage/thumb.aspx?i=/productimages/_1586000/altimages/ff_1586957alt1_full.jpg&w=900',
+                            price: '1200000',
+                            stock: 7,
+                            UserId: 1,
+                            CategoryId: 3
+                        })
+                    })
+                    .end(err =>{
+                        if(err) {
+                            done(err);
+                        } else {
+                            done();
+                        }
+                    })
+            })
+        })
+
+        describe('fail', () => {
+            test('should return status code 401 unauthorized because customer doesn\'t have permission to see shopping cart', done => {
+                const customer = customers[0];
+                const access_token = generateToken({
+                    id: 3,
+                    name: customer.name,
+                    email: customer.email
+                })
+                request(app)
+                    .get('/carts/history')
+                    .set('Accept', 'application/json')
+                    .set('access_token', access_token)
+                    .expect('Content-Type', /json/)
+                    .expect(401)
+                    .expect(res => {
+                        const cart = res.body;
+                        expect(cart.error).toContain('You dont have the authority to do this action')
+                    })
+                    .end(err =>{
+                        if(err) {
+                            done(err);
+                        } else {
+                            done();
+                        }
+                    })
+            })
+
+            test('should return status code 401 unauthorized because customer is not registered or logged in', done => {
+                const customer = customers[0];
+                const access_token = generateToken({
+                    id: 1,
+                    name: customer.name,
+                    email: customer.email
+                })
+                request(app)
+                    .get('/carts/history')
+                    .set('Accept', 'application/json')
+                    .expect('Content-Type', /json/)
+                    .expect(401)
+                    .expect(res => {
+                        const cart = res.body;
+                        expect(cart.error).toContain('You have to login to access this page')
+                    })
+                    .end(err =>{
+                        if(err) {
+                            done(err);
+                        } else {
+                            done();
+                        }
+                    })
+            })
+        })
+    })
+
+    describe('Change Product Quantity', () => {
         describe('Success', () =>{
             test('should return status 200 OK with json containing key of (CartId, ProductId, quantity, price)', done => {
                 const customer = customers[0];
@@ -537,6 +718,64 @@ describe('Cart Router', () => {
                     .expect(res => {
                         const cart = res.body;
                         expect(cart.error).toContain('Product quantity can\'t be lest than 1')
+                    })
+                    .end(err =>{
+                        if(err) {
+                            done(err);
+                        } else {
+                            done();
+                        }
+                    })
+            })
+
+            test('should return status code 400 Bad Request because product stock is not enough', done => {
+                const customer = customers[0];
+                const access_token = generateToken({
+                    id: customer.id,
+                    name: customer.name,
+                    email: customer.email
+                })
+                request(app)
+                    .patch('/carts/2')
+                    .send({
+                        quantity: 20
+                    })
+                    .set('Accept', 'application/json')
+                    .set('access_token', access_token)
+                    .expect('Content-Type', /json/)
+                    .expect(400)
+                    .expect(res => {
+                        const cart = res.body;
+                        expect(cart.error).toContain('only 15 Dallas Cowboys Helmet is available on the stock')
+                    })
+                    .end(err =>{
+                        if(err) {
+                            done(err);
+                        } else {
+                            done();
+                        }
+                    })
+            })
+
+            test('should return status code 400 Bad Request because product stock is out of stock', done => {
+                const customer = customers[0];
+                const access_token = generateToken({
+                    id: customer.id,
+                    name: customer.name,
+                    email: customer.email
+                })
+                request(app)
+                    .patch('/carts/4')
+                    .send({
+                        quantity: 2
+                    })
+                    .set('Accept', 'application/json')
+                    .set('access_token', access_token)
+                    .expect('Content-Type', /json/)
+                    .expect(400)
+                    .expect(res => {
+                        const cart = res.body;
+                        expect(cart.error).toContain('Dallas Mavericks City Edition 19-20 is out of stock')
                     })
                     .end(err =>{
                         if(err) {
@@ -726,6 +965,89 @@ describe('Cart Router', () => {
                 })
                 request(app)
                     .delete('/carts/2')
+                    .set('Accept', 'application/json')
+                    .expect('Content-Type', /json/)
+                    .expect(401)
+                    .expect(res => {
+                        const cart = res.body;
+                        expect(cart.error).toContain('You have to login to access this page')
+                    })
+                    .end(err =>{
+                        if(err) {
+                            done(err);
+                        } else {
+                            done();
+                        }
+                    })
+            })
+        })
+    })
+
+    describe('Checkout', () => {
+        describe('Success', () => {
+            test('should return status code 200 along with success message', done => {
+                const customer = customers[0];
+                const access_token = generateToken({
+                    id: customer.id,
+                    name: customer.name,
+                    email: customer.email
+                })
+                request(app)
+                    .patch('/carts/checkout')
+                    .set('Accept', 'application/json')
+                    .set('access_token', access_token)
+                    .expect('Content-Type', /json/)
+                    .expect(200)
+                    .expect(res => {
+                        const checkout = res.body;
+                        expect(checkout.msg).toEqual('Checkout Success')
+                    })
+                    .end(err =>{
+                        if(err) {
+                            done(err);
+                        } else {
+                            done();
+                        }
+                    })
+            })
+        })
+
+        describe('fail', () => {
+            test('should return status code 401 unauthorized because customer doesn\'t have permission to change quantity of product in shopping cart', done => {
+                const customer = customers[0];
+                const access_token = generateToken({
+                    id: 3,
+                    name: customer.name,
+                    email: customer.email
+                })
+                request(app)
+                    .patch('/carts/history')
+                    .set('Accept', 'application/json')
+                    .set('access_token', access_token)
+                    .expect('Content-Type', /json/)
+                    .expect(401)
+                    .expect(res => {
+                        const cart = res.body;
+                        expect(cart.error).toContain('You dont have the authority to do this action')
+                    })
+                    .end(err =>{
+                        if(err) {
+                            done(err);
+                        } else {
+                            done();
+                        }
+                    })
+            })
+
+            test('should return status code 401 unauthorized because customer is not registered or logged in', done => {
+                const customer = customers[0];
+                const access_token = generateToken({
+                    id: 1,
+                    name: customer.name,
+                    email: customer.email
+                })
+                request(app)
+                    .patch('/carts/history')
                     .set('Accept', 'application/json')
                     .expect('Content-Type', /json/)
                     .expect(401)

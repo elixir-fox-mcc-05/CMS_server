@@ -647,9 +647,70 @@ describe('Product Router', () => {
                     })
             })
         })
+    })
+
+    describe('Get Product By Id', () => {
+        describe('success', () => {
+            test('should return status code 200 OK with json contain selected products', done => {
+                let admin = user[0];
+                let access_token = generateToken({
+                    id: admin.id,
+                    name: admin.name,
+                    email: admin.email
+                })
+                request(app)
+                    .get('/products/1')
+                    .set('Accept', 'application/json')
+                    .set('access_token', access_token)
+                    .expect('Content-Type', /json/)
+                    .expect(200)
+                    .expect(res => {
+                        let { product } = res.body;
+                        expect(product).toHaveProperty('id', 1)
+                        expect(product).toHaveProperty('name', 'Duke Football')
+                        expect(product).toHaveProperty('image_url', "https://fanatics.frgimages.com/FFImage/thumb.aspx?i=/productimages/_2768000/altimages/ff_2768013alt1_full.jpg&w=900")
+                        expect(product).toHaveProperty('price', '1800000')
+                        expect(product).toHaveProperty('stock', 1)
+                        expect(product).toHaveProperty('CategoryId', 3)
+                    })
+                    .end(err => {
+                        if (err) {
+                            done(err);
+                        } else {
+                            done();
+                        }
+                    })
+            })
+        })
 
         describe('fail', () => {
-            test('should return status code 401 unauthorized because user doesnt have permission to see product list', done => {
+            test('should return status code 404 because no product found', done => {
+                let admin = user[0];
+                let access_token = generateToken({
+                    id: admin.id,
+                    name: admin.name,
+                    email: admin.email
+                })
+                request(app)
+                    .get('/products/11')
+                    .set('Accept', 'application/json')
+                    .set('access_token', access_token)
+                    .expect('Content-Type', /json/)
+                    .expect(404)
+                    .expect(res => {
+                        let product = res.body;
+                        expect(product.error).toContain('no product with id 11 found')
+                    })
+                    .end(err => {
+                        if (err) {
+                            done(err);
+                        } else {
+                            done();
+                        }
+                    })
+            })
+
+            test('should return status code 401 unauthorized because user doesnt have permission to add product', done => {
                 let admin = user[0];
                 let access_token = generateToken({
                     id: 3,
@@ -657,7 +718,7 @@ describe('Product Router', () => {
                     email: admin.email
                 })
                 request(app)
-                    .get('/products')
+                    .post('/products/1')
                     .set('Accept', 'application/json')
                     .set('access_token', access_token)
                     .expect('Content-Type', /json/)
@@ -683,7 +744,7 @@ describe('Product Router', () => {
                     email: admin.email
                 })
                 request(app)
-                    .get('/products')
+                    .post('/products/1')
                     .set('Accept', 'application/json')
                     .expect('Content-Type', /json/)
                     .expect(401)

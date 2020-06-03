@@ -110,59 +110,6 @@ describe('Category router', () => {
                     })
             })
         })
-
-        describe('fail', () => {
-            test('should return status code 401 unauthorized because user doesnt have permission to see all category', done => {
-                let admin = user[0];
-                let access_token = generateToken({
-                    id: 3,
-                    name: admin.name,
-                    email: admin.email
-                })
-                request(app)
-                    .get('/categories')
-                    .set('Accept', 'application/json')
-                    .set('access_token', access_token)
-                    .expect('Content-Type', /json/)
-                    .expect(401)
-                    .expect(res => {
-                        let category = res.body;
-                        expect(category.error).toContain('You dont have the authority to do this action')
-                    })
-                    .end(err => {
-                        if (err) {
-                            done(err);
-                        } else {
-                            done();
-                        }
-                    })
-            })
-
-            test('should return status code 401 unauthorized because user is not registered or logged in', done => {
-                let admin = user[0];
-                let access_token = generateToken({
-                    id: 3,
-                    name: admin.name,
-                    email: admin.email
-                })
-                request(app)
-                    .get('/categories')
-                    .set('Accept', 'application/json')
-                    .expect('Content-Type', /json/)
-                    .expect(401)
-                    .expect(res => {
-                        let product = res.body;
-                        expect(product.error).toContain('You have to login to access this page')
-                    })
-                    .end(err => {
-                        if (err) {
-                            done(err);
-                        } else {
-                            done();
-                        }
-                    })
-            })
-        })
     })
     
     describe('Add new category', () => {

@@ -27,7 +27,7 @@ class ProductController {
     }
 
     static showAllProducts(req, res, next) {
-        const { search, per_page, categoryId, page, stock } = req.query;
+        const { search, per_page, categoryId, page } = req.query;
         const sort  = req.query.sort.split('|');
         const sortField = sort[0];
         const sortDirection = sort[1].toUpperCase();
@@ -40,14 +40,8 @@ class ProductController {
             whereClause.CategoryId = categoryId;
         }
 
-        // if (stock) {
-        //     whereClause.stock = {
-        //         [Op.gt]: stock
-        //     }
-        // }
-
         const startIndex = (page - 1) * per_page;
-        const endIndex = page * per_page; 
+        let endIndex = page * per_page; 
 
         Product
             .findAndCountAll({
@@ -59,6 +53,9 @@ class ProductController {
             })
             .then(results => {
                 const lastPage = Math.ceil(results.count/per_page);
+                if (endIndex > results.count) {
+                    endIndex = results.count
+                }
                 res.status(200).json({
                     products: {
                         total: results.count,
@@ -74,6 +71,30 @@ class ProductController {
             .catch((err) => {
                 next(err);
             });
+    }
+
+    static showProductById(req, res, next) {
+        const { id } = req.params;
+
+        Product
+            .findByPk(id, {
+                include: [Category]
+            })
+            .then(product => {
+                if (product) {
+                    res.status(200).json({
+                        product
+                    })
+                } else {
+                    throw {
+                        msg: `no product with id ${id} found`,
+                        code: 404
+                    }
+                }
+            })
+            .catch(err => {
+                next(err);
+            })
     }
 
     static updateProduct(req, res, next) {

@@ -5,6 +5,7 @@ const { authorizeAdmin, authorizeAdminOnProduct } = require('../middlewares/auth
 
 router.get('/', ProductController.showAllProducts);
 router.use(authenticateUser);
+router.get('/:id', ProductController.showProductById);
 router.use(authorizeAdmin);
 router.post('/', ProductController.addNewProduct);
 router.put('/:id', authorizeAdminOnProduct, ProductController.updateProduct);
