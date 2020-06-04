@@ -1,4 +1,4 @@
-const {Product} = require('../models');
+const {Product, Category} = require('../models');
 
 class ProductController {
     static findAll(req, res, next) {
@@ -35,13 +35,14 @@ class ProductController {
     }
 
     static createProduct(req, res, next) {
-        let {name, img_url, price, stock} = req.body;
+        let {name, img_url, price, stock, CategoryId} = req.body;
         let UserId = req.UserId
         Product.create({
             name,
             img_url,
             price,
             stock,
+            CategoryId,
             UserId
         })
             .then(result => {
@@ -54,12 +55,13 @@ class ProductController {
 
     static updateProduct(req, res, next) {
         let {id} = req.params;
-        let {name, img_url, price, stock} = req.body;
+        let {name, img_url, price, stock, CategoryId} = req.body;
         Product.update({
             name,
             img_url,
             price,
             stock,
+            CategoryId
         }, {
             where: {
                 id
@@ -84,7 +86,7 @@ class ProductController {
 
     static deleteProduct(req, res, next) {
         let {id} = req.params;
-        Product.findOne({
+        Product.destroy({
             where: {
                 id
             }
