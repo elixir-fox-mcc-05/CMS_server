@@ -73,9 +73,16 @@ class ShoppingChartController {
                             },
                             returning: true
                         }
-                        const updatedShoppingChart = await ShoppingChart.update(shoppingChartvalues, options)
-                        const currentStock = await Product.decrement({ stock: Number(quantity) }, { where: { id: ProductId } })
-                        res.status(201).json({ ShoppingChart: updatedShoppingChart })
+                        let gapQuantity = Number(quantity) - Number(currentShoppingChart.quantity)
+                        if (gapQuantity > 0 ) {
+                            const updatedShoppingChart = await ShoppingChart.update(shoppingChartvalues, options)
+                            const currentStock = await Product.decrement({ stock: 1 }, { where: { id: ProductId } })
+                            res.status(201).json({ ShoppingChart: updatedShoppingChart })
+                        } else {
+                            const updatedShoppingChart = await ShoppingChart.update(shoppingChartvalues, options)
+                            const currentStock = await Product.increment({ stock: 1 }, { where: { id: ProductId } })
+                            res.status(201).json({ ShoppingChart: updatedShoppingChart })
+                        }
                     }
                 } else {
                     const shoppingChartvalues = {
