@@ -123,21 +123,17 @@ describe('Cart Router', () => {
                     .expect(200)
                     .expect(res => {
                         const { cart } = res.body;
-                        expect(cart).toHaveProperty('id',1)
-                        expect(cart).toHaveProperty('CustomerId',1)
-                        expect(cart).toHaveProperty('total_price','3000000')
-                        expect(cart.Products).toEqual(
-                            expect.arrayContaining([
-                                expect.objectContaining({
-                                    id: 2,
-                                    name: 'Dallas Cowboys Helmet',
-                                    image_url: 'https://fanatics.frgimages.com/FFImage/thumb.aspx?i=/productimages/_3898000/ff_3898657-ccf691495748ccdae213_full.jpg&w=2000',
-                                    price: '1500000',
-                                    stock: 15,
-                                    UserId: 1,
-                                    CategoryId: 3
-                                })
-                            ])
+                        expect(cart).toHaveProperty('totalPrice',"3000000")
+                        expect(cart.products[0].Product).toEqual(
+                            expect.objectContaining({
+                                id: 2,
+                                name: 'Dallas Cowboys Helmet',
+                                image_url: 'https://fanatics.frgimages.com/FFImage/thumb.aspx?i=/productimages/_3898000/ff_3898657-ccf691495748ccdae213_full.jpg&w=2000',
+                                price: '1500000',
+                                stock: 15,
+                                UserId: 1,
+                                CategoryId: 3
+                            })
                         )
                     })
                     .end(err =>{
@@ -747,35 +743,6 @@ describe('Cart Router', () => {
                     .expect(res => {
                         const cart = res.body;
                         expect(cart.error).toContain('only 15 Dallas Cowboys Helmet is available on the stock')
-                    })
-                    .end(err =>{
-                        if(err) {
-                            done(err);
-                        } else {
-                            done();
-                        }
-                    })
-            })
-
-            test('should return status code 400 Bad Request because product stock is out of stock', done => {
-                const customer = customers[0];
-                const access_token = generateToken({
-                    id: customer.id,
-                    name: customer.name,
-                    email: customer.email
-                })
-                request(app)
-                    .patch('/carts/4')
-                    .send({
-                        quantity: 2
-                    })
-                    .set('Accept', 'application/json')
-                    .set('access_token', access_token)
-                    .expect('Content-Type', /json/)
-                    .expect(400)
-                    .expect(res => {
-                        const cart = res.body;
-                        expect(cart.error).toContain('Dallas Mavericks City Edition 19-20 is out of stock')
                     })
                     .end(err =>{
                         if(err) {
