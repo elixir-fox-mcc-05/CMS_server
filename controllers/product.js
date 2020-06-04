@@ -1,4 +1,5 @@
 let {Product, User, Cart} = require('../models/index')
+let {delivery} = require('../helpers/cron')
 class ProductController {
 
   static detailProduct (req, res, next) {
@@ -168,7 +169,7 @@ class ProductController {
 
   static buy (req, res, next) {
     Cart.findAll({
-      include: [Product],
+      include: [Product, User],
       where: {
         UserId: req.currentUserId,
         select: true,
@@ -176,7 +177,6 @@ class ProductController {
       }
     })
       .then((result) => {
-
         if (result) {
           let newBal = 0
           for(let j in result) {
@@ -209,6 +209,7 @@ class ProductController {
                         },
                         {returning: true, where: {id: req.currentUserId}}
                       )
+                      console.log(result)
                       res.status(200).json(result)
                     })
                   } else {
@@ -255,8 +256,12 @@ class ProductController {
 
   static cour (req, res, next) {
     let price = req.body.item.subTotal + 20000
-    if (req.body.duration == 2) {
+    if (!req.body.item.cour && req.body.duration == 2) {
       price = req.body.item.subTotal + 30000
+    } else if (req.body.item.cour && req.body.duration == 2) {
+      price = req.body.item.subTotal
+    } else {
+      price = req.body.item.subTotal - 10000
     }
     console.log(price)
     Cart.update(
