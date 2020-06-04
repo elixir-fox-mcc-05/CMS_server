@@ -64,7 +64,8 @@ class ProductController {
     Cart.findOne({
       where: {
         UserId: req.currentUserId,
-        ProductId: req.body.id
+        ProductId: req.body.id,
+        payed: false
       }
     })
     .then((result) => {
