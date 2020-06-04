@@ -1,0 +1,24 @@
+{
+  "development": {
+    "username": "postgres",
+    "password": 12345,
+    "database": "CMS_Server_dev",
+    "host": "127.0.0.1",
+    "dialect": "postgres"
+  },
+  "test": {
+    "username": "postgres",
+    "password": 12345,
+    "database": "CMS_Server_test",
+    "host": "127.0.0.1",
+    "dialect": "postgres",
+    "logging": false
+  },
+  "production": {
+    "username": "qjomyjguetiekf",
+    "password": "0043ae7e0e262aa5e77019f11499524abe9020ad54015416762449c766db2f01",
+    "database": "d29gpvm9g708fo",
+    "host": "ec2-35-174-88-65.compute-1.amazonaws.com",
+    "dialect": "postgres"
+  }
+}
