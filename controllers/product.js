@@ -215,7 +215,7 @@ class ProductController {
                         },
                         {returning: true, where: {id: result[i].dataValues.Product.id}}
                       ).then((prod) => {
-                        return Cart.update(
+                        Cart.update(
                           {
                             payed: true
                           },
