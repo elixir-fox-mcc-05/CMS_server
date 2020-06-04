@@ -228,6 +228,7 @@ class ProductController {
                             },
                             {returning: true, where: {id: req.currentUserId}}
                           )
+                          res.status(200).json(result)
                         })
                       })
                     } else {
@@ -237,7 +238,6 @@ class ProductController {
                       })
                     }
                   } else {
-                    console.log('kuririnyabesssssssssssssssssssssslumada')
                     next({
                       name: 'Please Chose a Courier',
                       errors: [{msg: 'Please Chose a Courier'}]
@@ -258,7 +258,6 @@ class ProductController {
             }
           })
         }
-        res.status(200).json(result)
       }).catch((err) => {
         next(err)
       })
