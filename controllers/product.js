@@ -206,33 +206,40 @@ class ProductController {
               for (let i in result) {
                 console.log(result[i].dataValues.demand);
                 if (result[i].dataValues.demand !== 0) {
-                  if(result[i].dataValues.Product.dataValues.stock >= result[i].dataValues.demand) {
-                    let newStock = result[i].dataValues.Product.dataValues.stock - result[i].dataValues.demand
-                    Product.update(
-                      {
-                        stock: newStock
-                      },
-                      {returning: true, where: {id: result[i].dataValues.Product.id}}
-                    ).then((prod) => {
-                      return Cart.update(
+                  if (result[i].dataValues.cour) {
+                    if(result[i].dataValues.Product.dataValues.stock >= result[i].dataValues.demand) {
+                      let newStock = result[i].dataValues.Product.dataValues.stock - result[i].dataValues.demand
+                      Product.update(
                         {
-                          payed: true
+                          stock: newStock
                         },
-                        {returning: true, where: {idCart: result[i].dataValues.idCart}}
-                      ) .then((cart) => {
-                        delivery(cart[1][0].dataValues.idCart)
-                        User.update(
+                        {returning: true, where: {id: result[i].dataValues.Product.id}}
+                      ).then((prod) => {
+                        return Cart.update(
                           {
-                            balance: temp
+                            payed: true
                           },
-                          {returning: true, where: {id: req.currentUserId}}
-                        )
+                          {returning: true, where: {idCart: result[i].dataValues.idCart}}
+                        ) .then((cart) => {
+                          delivery(cart[1][0].dataValues.idCart)
+                          User.update(
+                            {
+                              balance: temp
+                            },
+                            {returning: true, where: {id: req.currentUserId}}
+                          )
+                        })
                       })
-                    })
+                    } else {
+                      next({
+                        name: 'SequelizeValidationError',
+                        errors: [{msg: `${result[i].dataValues.Product.dataValues.name} is out of stock`}]
+                      })
+                    }
                   } else {
                     next({
-                      name: 'SequelizeValidationError',
-                      errors: [{msg: `${result[i].dataValues.Product.dataValues.name} is out of stock`}]
+                      name: 'Please Chose a Courier',
+                      errors: [{msg: 'Please Chose a Courier'}]
                     })
                   }
                 } else {
