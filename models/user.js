@@ -54,6 +54,7 @@ User.init({
   User.associate = function(models) {
     // associations can be defined here
     User.hasMany(models.Product)
+    User.hasMany(models.Transaction)
   };
   return User;
 };

@@ -1,11 +1,12 @@
 const Model = require('../models')
 const Product = Model.Product
+const Category = Model.Category
 
 
 class ProductController {
     static findAll (req, res, next){
 
-        Product.findAll()
+        Product.findAll({include: {model: Category}})
             .then(result => {
                 res.status(200).json({ products : result })
             })
@@ -34,9 +35,9 @@ class ProductController {
 
     static createProduct(req, res, next) {
         let UserId = req.UserId
-        let { name, price, stock, imageUrl } = req.body
+        let { name, price, stock, imageUrl, CategoryId } = req.body
 
-        Product.create({ name, price, stock, imageUrl, UserId})
+        Product.create({ name, price, stock, imageUrl, UserId, CategoryId})
             .then(result => {
                 res.status(201).json({ products : result })
             })
@@ -47,10 +48,10 @@ class ProductController {
     }
 
     static updateProduct(req, res, next) {
-        let { name, price, stock, imageUrl } = req.body
+        let { name, price, stock, imageUrl, CategoryId } = req.body
         let { id } = req.params
         let updated = {
-            name, price, stock, imageUrl
+            name, price, stock, imageUrl, CategoryId
         }
 
         Product.update( updated, { where : { id }, returning : true })  
@@ -75,7 +76,7 @@ class ProductController {
         Product.destroy({where : {id}})
             .then(data => {
                 if(data){
-                    res.status(200).json({ msg : `Title ${id} successfully deleted!` })
+                    res.status(200).json({ message : `Product ${id} successfully deleted!` })
                 }else{
                     throw {
                         message : "Product cannot Found!",

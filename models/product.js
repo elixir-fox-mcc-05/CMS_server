@@ -47,9 +47,11 @@ module.exports = (sequelize, DataTypes) => {
     },
     imageUrl: {
       type: DataTypes.STRING,
-      isUrl: {
-        args : true,
-        message : 'must be url input'
+      validate: {
+        isUrl: {
+          args : true,
+          message : 'must be url input'
+        }
       }
     },
     UserId : {
@@ -58,6 +60,13 @@ module.exports = (sequelize, DataTypes) => {
         model : 'Users',
         key : 'id'
       }
+    },
+    CategoryId: {
+      type: DataTypes.INTEGER,
+      refrences: {
+        model: 'Categories',
+        key: 'id'
+      }
     }
   },{
     sequelize
@@ -65,6 +74,8 @@ module.exports = (sequelize, DataTypes) => {
   Product.associate = function(models) {
     // associations can be defined here
     Product.belongsTo(models.User)
+    Product.belongsTo(models.Category)
+    Product.hasMany(models.Transaction)
   };
   return Product;
 };
