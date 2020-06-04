@@ -23,13 +23,46 @@ module.exports = (sequelize, DataTypes) => {
       }
     },
     status: {
-      type: DataTypes.STRING
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notNull: {
+          args: true,
+          msg: 'Status is required'
+        },
+        notEmpty: {
+          args: true,
+          msg: 'Status is required'
+        }
+      }
     },
     CartId: {
-      type: DataTypes.INTEGER
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      validate: {
+        notNull: {
+          args: true,
+          msg: 'CartId is required'
+        },
+        notEmpty: {
+          args: true,
+          msg: 'CartId is required'
+        }
+      }
     },
     ProductId: {
-      type: DataTypes.INTEGER
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      validate: {
+        notNull: {
+          args: true,
+          msg: 'ProductId is required'
+        },
+        notEmpty: {
+          args: true,
+          msg: 'ProductId is required'
+        }
+      }
     }
   }, {
     sequelize,
