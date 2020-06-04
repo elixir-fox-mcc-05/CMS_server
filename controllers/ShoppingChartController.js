@@ -38,51 +38,21 @@ class ShoppingChartController {
                 const options = {
                     where: {
                         UserId,
-                        ProductId
+                        ProductId,
+                        isPaid: false
                     },
                     attributes: ['id', 'UserId', 'quantity', 'ProductId']
                 }
                 const currentShoppingChart = await ShoppingChart.findOne(options)
                 if (currentShoppingChart) {
                     if (quantity == 1) {
-                        const shoppingChartvalues = {
-                            UserId,
-                            ProductId,
-                            isPaid: false,
-                            quantity: Number(quantity) + Number(currentShoppingChart.quantity)
-                        }
-                        const options = {
-                            where: {
-                                id: currentShoppingChart.id,
-                            },
-                            returning: true
-                        }
-                        const updatedShoppingChart = await ShoppingChart.update(shoppingChartvalues, options)
-                        const currentStock = await Product.decrement({ stock: Number(quantity) }, { where: { id: ProductId } })
-                        res.status(201).json({ ShoppingChart: updatedShoppingChart })
+                        const updatedShoppingChart = await ShoppingChart.increment({ quantity: 1}, { where: { id: currentShoppingChart.id } })
+                        const currentStock = await Product.decrement({ stock: 1 }, { where: { id: ProductId } })
+                        res.status(200).json({ Message: `Successfully update shopping cart`})
                     } else {
-                        const shoppingChartvalues = {
-                            UserId,
-                            ProductId,
-                            quantity,
-                            isPaid: false
-                        }
-                        const options = {
-                            where: {
-                                id: currentShoppingChart.id,
-                            },
-                            returning: true
-                        }
-                        let gapQuantity = Number(quantity) - Number(currentShoppingChart.quantity)
-                        if (gapQuantity > 0 ) {
-                            const updatedShoppingChart = await ShoppingChart.update(shoppingChartvalues, options)
-                            const currentStock = await Product.decrement({ stock: 1 }, { where: { id: ProductId } })
-                            res.status(201).json({ ShoppingChart: updatedShoppingChart })
-                        } else {
-                            const updatedShoppingChart = await ShoppingChart.update(shoppingChartvalues, options)
-                            const currentStock = await Product.increment({ stock: 1 }, { where: { id: ProductId } })
-                            res.status(201).json({ ShoppingChart: updatedShoppingChart })
-                        }
+                        const updatedShoppingChart = await ShoppingChart.decrement({ quantity: 1}, { where: { id: currentShoppingChart.id } })
+                        const currentStock = await Product.increment({ stock: 1 }, { where: { id: ProductId } })
+                        res.status(200).json({ Message: `Successfully update shopping cart`})
                     }
                 } else {
                     const shoppingChartvalues = {
@@ -91,8 +61,8 @@ class ShoppingChartController {
                         quantity,
                         isPaid: false
                     }
+                    console.log('baru')
                     const newShopingChart = await ShoppingChart.create(shoppingChartvalues)
-    
                     const currentStock = await Product.decrement({ stock: Number(quantity) }, { where: { id: ProductId } })
                     res.status(201).json({ ShoppingChart: newShopingChart })
                 }
@@ -134,7 +104,6 @@ class ShoppingChartController {
 
     static checkout (req, res, next) {
         let { customerData, listProductId } = req.body
-        console.log(customerData, listProductId)
         const UserId = Number(req.currentUserId) 
         listProductId = JSON.parse(listProductId)
         const checkout = []
