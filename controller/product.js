@@ -11,7 +11,7 @@ class ProductController {
                 res.status(200).json({ products : result })
             })
             .catch(err => {
-                next(err)
+                return next(err)
             })
     }
 
@@ -29,7 +29,7 @@ class ProductController {
                 }
             })
             .catch(err => {
-                next(err)
+                return next(err)
             })
     }
 
@@ -43,7 +43,7 @@ class ProductController {
             })
             .catch(err => {
                 // console.log(err)
-                next(err)
+                return next(err)
             })
     }
 
@@ -67,7 +67,7 @@ class ProductController {
                 }
             })
             .catch(err => {
-                next(err)
+                return next(err)
             })
     }
 
@@ -85,7 +85,7 @@ class ProductController {
                 }
             })
             .catch(err => {
-                next(err)
+                return next(err)
             })
 
     }

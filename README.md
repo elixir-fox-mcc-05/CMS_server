@@ -312,5 +312,59 @@ http://localhost:3000/users/
 
 - **Sample Call:**
 ```
+  http://localhost:3000/categories/
+```
+## Get Categories
+
+- **URL**
+```
+  http://localhost:3000/categories/
+```
+- **Method:**
+
+  `get`
+
+- **URL Params**
+
+
+- **Data Params**
+
+  NONE
+
+- **Success Response:**
+
+  - **Code:** 200 OK<br />
+    **Content:** `"Categories": [
+        {
+            "id": 9,
+            "type": "Nike",
+            "createdAt": "2020-05-25T15:28:48.192Z",
+            "updatedAt": "2020-05-25T15:28:48.192Z",
+            "Products": [
+              {
+                    "id": 28,
+                    "name": "Nike Air Force 1 High Just Don All Star Blue",
+                    "price": 16000000,
+                    "stock": 5,
+                    "imageUrl": "https://d38t85204sb0x0.cloudfront.net/eyJidWNrZXQiOiJraWNrYXZlbnVlLWFzc2V0cyIsImtleSI6InByb2R1Y3RzLzcwODYvZWUzZTM2NWItZGI1ZS00NWIwLWJjYzAtZTQ4YjY2ZjgyNDFhLmpwZWciLCJlZGl0cyI6eyJyZXNpemUiOnsid2lkdGgiOjUwMH19fQ==",
+                    "UserId": 17,
+                    "CategoryId": 9,
+                    "createdAt": "2020-06-03T18:53:09.773Z",
+                    "updatedAt": "2020-06-03T18:53:09.773Z"
+                }
+            ]`
+
+- **Error Response:**
+
+  - **Code:** 500 <br />
+    **Content:** `{ message : "Internal server Error" }`
+
+    OR
+
+  - **Code:** 500 <br />
+    **Content:** `{ message : "Internal Server Error" }`
+
+- **Sample Call:**
+```
   http://localhost:3000/products/1
 ```

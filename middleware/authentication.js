@@ -27,10 +27,10 @@ function authentication(req, res, next) {
                     }
                 })
                 .catch(err => {
-                    next(err)
+                    return next(err)
                 })
         } catch (error) {
-            next(error)
+            return next(error)
         }
     }
 }

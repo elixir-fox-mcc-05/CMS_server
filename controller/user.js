@@ -14,7 +14,7 @@ class UserController {
             })
         })
         .catch(err => {
-            next(err)
+            return next(err)
         })
     }
     static logIn(req, res, next) {
@@ -48,7 +48,7 @@ class UserController {
                 }
             })
             .catch(err => {
-                next(err)
+                return next(err)
             })
     }
 }

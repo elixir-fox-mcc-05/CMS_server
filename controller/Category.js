@@ -10,7 +10,7 @@ class CategoryControll {
         }).then(result => {
             res.status(200).json({ Categories : result })
         }).catch(err => {
-            next(err)
+            return next(err)
         })
     }
 
@@ -23,7 +23,7 @@ class CategoryControll {
                 category : result
             })
         }).catch(err => {
-            next(err)
+            return next(err)
         })
     }
 
@@ -35,7 +35,7 @@ class CategoryControll {
             returning: true
         }).then(result => {
             res.status(201).json({ category : result })
-        }).catch(err => { next(err) })
+        }).catch(err => { return next(err) })
     }
 
     static deleteCategory (req, res, next) {
@@ -51,7 +51,7 @@ class CategoryControll {
                     code : 404
                 }
             }
-        }).catch(err => { next(err) })
+        }).catch(err => { return next(err) })
     }
 }
 

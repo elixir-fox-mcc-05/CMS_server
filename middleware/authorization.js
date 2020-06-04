@@ -8,7 +8,7 @@ console.log(id)
             if(user){
                 // console.log(user.role)
                 if(user.role == "Admin"){
-                    next()
+                    return next()
                 }else{
                     res.status(401).json({
                         message : 'Unauthorized to use this feature!'
@@ -21,7 +21,7 @@ console.log(id)
             }
         })
         .catch(err => {
-            next(err)
+            return next(err)
         })
 }
 

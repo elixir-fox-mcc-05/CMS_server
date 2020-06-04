@@ -12,7 +12,7 @@ class TransactionController {
             .then(result => {
                 res.status(200).json({ cart : result })
             })
-            .catch(err => { next(err) })
+            .catch(err => { return next(err) })
     }
 
     static getAll (req, res, next) {
@@ -24,7 +24,7 @@ class TransactionController {
             res.status(200).json({ cart : data })
         })
         .catch(err => {
-            next(err)
+            return next(err)
         })
     }
 
@@ -37,7 +37,7 @@ class TransactionController {
             res.status(200).json({ cart : data })
         })
         .catch(err => {
-            next(err)
+            return next(err)
         })
     }
 
@@ -55,7 +55,7 @@ class TransactionController {
                 }
             })
             .catch(err => {
-                next(err)
+                return next(err)
             })
     }
     static updateTransaction(req, res, next) {
@@ -88,7 +88,7 @@ class TransactionController {
                 })
             })
             .catch(err => {
-                next(err)
+                return next(err)
             })
     }
 }
