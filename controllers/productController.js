@@ -1,4 +1,5 @@
 const { Product } = require('../models/index');
+const { Op } = require('sequelize')
 
 class ProductController {
     // router.post('/', productController.createProduct);
@@ -120,6 +121,54 @@ class ProductController {
                         name: 'NotFound',
                         errors: [{
                             message: `Product with id ${productId} not found`
+                        }]
+                    })
+                }
+            })
+            .catch(err => {
+                return next(err)
+            })
+    }
+
+    // router.post('/byName', ProductController.readProductsByName)
+    static readProductsByName(req, res, next){
+        let { name } = req.body
+        let convertName = null
+        let option = null
+        if (name) {
+            convertName = name.toLowerCase()
+            option = {
+                order: [
+                    [`stock`, `DESC`],
+                    [`updatedAt`, 'DESC']
+                ],
+                where: {
+                    name: {
+                        [Op.like]: `%${convertName}%`
+                    }
+                }
+            }
+        }
+        else {
+            option = {
+                order: [
+                    [`stock`, `DESC`],
+                    [`updatedAt`, 'DESC']
+                ]
+            }
+        }
+        Product.findAll(option)
+            .then(data => {
+                if(data.length !== 0){
+                    res.status(200).json({
+                        products: data
+                    })
+                }
+                else {
+                    return next({
+                        name: 'NotFound',
+                        errors: [{
+                            message: `Product not found`
                         }]
                     })
                 }
