@@ -237,6 +237,7 @@ class ProductController {
                       })
                     }
                   } else {
+                    console.log('kuririnyabesssssssssssssssssssssslumada')
                     next({
                       name: 'Please Chose a Courier',
                       errors: [{msg: 'Please Chose a Courier'}]
@@ -259,7 +260,7 @@ class ProductController {
         }
         res.status(200).json(result)
       }).catch((err) => {
-        console.log(err);
+        next(err)
       })
   }
 
