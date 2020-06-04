@@ -249,7 +249,6 @@ class ProductController {
                   })
                 }
               }
-              res.status(200).json(result)
             } else {
               next({
                 name: 'We Need More Gold',
@@ -258,6 +257,7 @@ class ProductController {
             }
           })
         }
+        res.status(200).json(result)
       }).catch((err) => {
         console.log(err);
       })
