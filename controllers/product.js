@@ -139,10 +139,10 @@ class ProductController {
     }
     Product.findOne({ where: {id : req.body.ProductId}})
     .then((item) => {
+    Cart.increment({subTotal: (newStock * item.price)}, { where: { idCart: req.body.idCart } })
     return Cart.update(
       {
         demand: newStock,
-        subTotal: newStock * item.price
       },
       {returning: true, where: {idCart: req.body.idCart}}
     )
