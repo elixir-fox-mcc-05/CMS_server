@@ -25,10 +25,6 @@ class CartController {
   }
   static addToCart(req, res, next) {
     let { ProductId, total, notes } = req.body;
-    if (total < 0) return next({
-      code: 400,
-      message: 'Total cannot be negative values'
-    });
     let UserId = req.UserId;
     Cart.findOne({
       where: {
