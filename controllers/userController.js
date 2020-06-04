@@ -62,7 +62,7 @@ class UserController {
         } else {
           return next({
             type: "Bad Request",
-            code: 400,
+            code: 404,
             msg: "User Doesn't exist"
           });
         }

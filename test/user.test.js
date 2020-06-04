@@ -275,7 +275,7 @@ describe("User Test", () => {
           password: "not exist"
         };
         const error = {
-          code: 400,
+          code: 404,
           msg: "User Doesn't exist",
           type: "Bad Request"
         };
@@ -286,7 +286,7 @@ describe("User Test", () => {
             if (err) {
               return done(err);
             } else {
-              expect(response.status).toBe(400);
+              expect(response.status).toBe(404);
               expect(response.body).toHaveProperty("msg", error.msg);
               return done();
             }
