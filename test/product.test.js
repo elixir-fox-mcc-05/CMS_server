@@ -477,22 +477,6 @@ describe('Product Router', () => {
             })
         })
         describe('fail get all product', () => {
-            describe('token is empty', () => {
-                test('Return status code 401 with keys data', (done) => {
-                    customErr = 'Please login first'
-                    request(app)
-                        .get(`/product`)
-                        .end((err, response) => {
-                            if(err) {
-                                return done(err)
-                            } else {
-                                expect(response.status).toBe(401)
-                                expect(response.body).toHaveProperty('err', customErr)
-                                return done()
-                            }
-                        })
-                })
-            })
         })
     })
         
@@ -569,23 +553,6 @@ describe('Product Router', () => {
             })
         })
         describe('fail to find product', () => {
-            describe('token are empty', () => {
-                test('Return status code 401 with keys err', (done) => {
-                    customErr = 'Please login first'
-                    request(app)
-                    .get(`/product/1`)
-                    .end((err, response) => {
-                        if(err) {
-                            return done(err)
-                        } else {
-                            expect(response.status).toBe(401)
-                            expect(response.body).toHaveProperty('err', customErr)
-                            return done()
-                        }
-                    })
-                })
-            })
-
             describe('product id is not in database', () => {
                 test('Return status code 404 with keys err', (done) => {
                     customErr = 'Product not found'
