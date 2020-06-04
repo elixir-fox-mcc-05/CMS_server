@@ -255,7 +255,7 @@ class ProductController {
   }
 
   static cour (req, res, next) {
-    let price = req.body.item.subTotal + 20000
+    let price = req.body.item.subTotal
     if (!req.body.item.cour && req.body.duration == 2) {
       price = req.body.item.subTotal + 30000
     } else if (!req.body.item.cour && req.body.duration == 3) {
