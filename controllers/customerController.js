@@ -131,7 +131,11 @@ class CustomerController {
                 model: Cart,
                 where: {
                     CustomerId: customerId
-                }
+                },
+                include: [{
+                    model: Customer,
+                    attributes: {exclude: ['password']}
+                }]
             }]
         })
             .then(data => {
