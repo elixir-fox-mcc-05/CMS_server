@@ -427,6 +427,7 @@
           "UserId": 1,
           "ProductId": 1,
           "quantity": 1,
+          "isPaid": "false"
           "createdAt": "2020-05-31T12:22:36.808Z",
           "updatedAt": "2020-05-31T12:22:36.808Z",
           "Product": {
@@ -444,6 +445,7 @@
           "UserId": 1,
           "ProductId": 1,
           "quantity": 1,
+          "isPaid": "false"
           "createdAt": "2020-05-31T12:26:07.499Z",
           "updatedAt": "2020-05-31T12:26:07.499Z",
           "Product": {
@@ -570,3 +572,82 @@
     }`
 
 ---   
+
+**Show Transaction History**
+----
+
+* **URL**
+
+  /users/transactions
+
+* **Method:**
+  
+  `GET`
+
+    **Required:**
+ 
+    Headers: {
+        "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiSXJlbmUiLCJlbWFpbCI6ImlyZW5lQGdtYWlsLmNvbSIsImlhdCI6MTU4Nzk5Mzk3Nn0.IKagkwozRHj7Y-otxgk60HiE98EL78-R5Llssjoa3AQ"
+    }
+
+*  **URL Params**
+
+    none
+
+* **Data Params**
+
+    none
+
+* **Success Response:**
+  
+  * **Code:** 200 <br />
+    **Content:** `
+      "ShoppingCharts": [
+        {
+          "UserId": 1,
+          "ProductId": 1,
+          "quantity": 1,
+          "createdAt": "2020-05-31T12:22:36.808Z",
+          "updatedAt": "2020-05-31T12:22:36.808Z",
+          "isPaid": "true"
+          "Product": {
+            "id": 1,
+            "name": "Iphone 11",
+            "price": 17500000,
+            "stock": 117,
+            "category": "Electronics",
+            "image_url": "https://ecommerceimage.s3.amazonaws.com/Viviane%20Schimmel.jpeg",
+            "createdAt": "2020-05-31T11:33:21.155Z",
+            "updatedAt": "2020-05-31T12:29:10.001Z"
+          }
+        },
+        {
+          "UserId": 1,
+          "ProductId": 1,
+          "quantity": 1,
+          "isPaid": "true"
+          "createdAt": "2020-05-31T12:26:07.499Z",
+          "updatedAt": "2020-05-31T12:26:07.499Z",
+          "Product": {
+            "id": 1,
+            "name": "Iphone 11",
+            "price": 17500000,
+            "stock": 117,
+            "category": "Electronics",
+            "image_url": "https://ecommerceimage.s3.amazonaws.com/Viviane%20Schimmel.jpeg",
+            "createdAt": "2020-05-31T11:33:21.155Z",
+            "updatedAt": "2020-05-31T12:29:10.001Z"
+          }
+        }
+      ]
+    `
+ 
+* **Error Response:**
+
+  * **Code:** 500 <br />
+    **Content:** `{
+      "code": "500",
+      "type": "Internal Server Error"
+    }`
+
+---
