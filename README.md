@@ -1188,6 +1188,17 @@ Below are the list of URL that you can use<br>
         }
     ```
 
+    OR
+
+    * code: 401 <br>
+    * cause: unauthorized
+    * content: <br>
+    ```javascript
+        {
+            "err": "Unauthorized",
+        }
+    ```
+
     * code: 500 <br>
     * content: <br>
         ```javascript
@@ -1244,7 +1255,20 @@ Below are the list of URL that you can use<br>
             "err": "Please login first",
         }
     ```
+
     OR
+
+    * code: 401 <br>
+    * cause: unauthorized
+    * content: <br>
+    ```javascript
+        {
+            "err": "Unauthorized",
+        }
+    ```
+
+    OR
+
     * code: 400 <br>
     * cause: attribute quantity is empty
     * content: <br>
@@ -1306,7 +1330,20 @@ Below are the list of URL that you can use<br>
             "err": "Please login first",
         }
     ```
+
     OR
+
+    * code: 401 <br>
+    * cause: unauthorized
+    * content: <br>
+    ```javascript
+        {
+            "err": "Unauthorized",
+        }
+    ```
+
+    OR
+
     * code: 400 <br>
     * cause: attribute(s) are empty
     * content: <br>
@@ -1372,6 +1409,17 @@ Below are the list of URL that you can use<br>
 
     OR
 
+    * code: 401 <br>
+    * cause: unauthorized
+    * content: <br>
+    ```javascript
+        {
+            "err": "Unauthorized",
+        }
+    ```
+
+    OR
+
     * code: 400 <br>
     * cause: attribute status is empty
     * content: <br>
@@ -1423,7 +1471,20 @@ Below are the list of URL that you can use<br>
             "err": "Please login first",
         }
     ```
+
     OR
+
+    * code: 401 <br>
+    * cause: unauthorized
+    * content: <br>
+    ```javascript
+        {
+            "err": "Unauthorized",
+        }
+    ```
+    
+    OR
+
     * code: 404 <br>
     * cause: cart not found
     * content: <br>

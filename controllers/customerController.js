@@ -133,19 +133,6 @@ class CustomerController {
                     CustomerId: customerId
                 }
             }]
-            // include: [ CartProduct, {
-            //     model: Cart,
-            //     include: [{
-            //         model: Customer,
-            //         attributes: {exclude: ['password']}
-            //     }]
-            // }],
-            // order: [
-            //     ['id', 'ASC']
-            // ],
-            // where: {
-            //     CustomerId: customerId
-            // }
         })
             .then(data => {
                 res.status(200).json({
