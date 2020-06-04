@@ -179,12 +179,11 @@ class ShoppingChartController {
                     return Promise.all(checkout)
                 })
                 .then(() => {
-                    res.status(200).json('berhasil')
+                    res.status(200).json({ Message: 'Successfully Checkout' })
                 })
                 .catch(err => {
-                    console.log('ini error', err)
+                    next(err)
                 })
-
     }
 }
 

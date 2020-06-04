@@ -1,4 +1,5 @@
 'use strict';
+const { encrypt } = require('../helpers/bcrypt.js')
 module.exports = (sequelize, DataTypes) => {
 
   const Model = sequelize.Sequelize.Model;
@@ -8,6 +9,10 @@ module.exports = (sequelize, DataTypes) => {
   User.init({
     email: {
       type: DataTypes.STRING,
+      unique: {
+        args: true,
+        msg: `Email already exist, please choose different email`
+      },
       validate: {
         notEmpty: {
           args: true,
@@ -43,6 +48,11 @@ module.exports = (sequelize, DataTypes) => {
     }
   }, {
     sequelize,
+    hooks: {
+      beforeCreate: (user) => {
+        user.password = encrypt(user.password)
+      }
+    },
     modelName: 'User'
   })
 

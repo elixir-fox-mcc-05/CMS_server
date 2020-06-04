@@ -1,4 +1,50 @@
 
+**Register**
+----
+  
+* **URL**
+
+  /users/register
+
+* **Method:**
+  
+  `POST` 
+
+*  **URL Params**
+
+   none
+
+* **Data Params**
+
+  {
+      "email": "agus@gmail.com",
+      "password": "123456"
+  }
+
+* **Success Response:**
+  
+  * **Code:** 201 <br />
+    **Content:** `{
+      "id":"1",
+      "email":"agus@gmail.com"
+    }`
+ 
+* **Error Response:**
+
+    * **Code:** 400 <br />
+    **Content:** `{
+      "code": "400",
+      "type": "Bad Request",
+      "errors": "email atau password salah"
+    }`
+  * **Code:** 500 <br />
+    **Content:** `{
+      "code": "500",
+      "type": "Internal Server Error"
+    }`
+
+---
+
 **Login**
 ----
   
@@ -477,3 +523,50 @@
     }`
 
 ---
+
+**Checkout**
+----
+
+* **URL**
+
+  /shoppingcharts/checkout
+
+* **Method:**
+  
+  `POST` 
+
+    **Required:**
+ 
+    Headers: {
+        "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiSXJlbmUiLCJlbWFpbCI6ImlyZW5lQGdtYWlsLmNvbSIsImlhdCI6MTU4Nzk5Mzk3Nn0.IKagkwozRHj7Y-otxgk60HiE98EL78-R5Llssjoa3AQ"
+    }
+  
+*  **URL Params**
+
+   none
+
+* **Data Params**
+
+  {
+    "customerData": { amount: 15000, token: 1123afafaere}
+    "listProductId": [2,3,4]
+  }
+
+* **Success Response:**
+  
+  * **Code:** 200 <br />
+    **Content:** `
+      {
+        "Message": "Successfully Checkout"
+      }
+    `
+ 
+* **Error Response:**
+
+  * **Code:** 500 <br />
+    **Content:** `{
+      "code": "500",
+      "type": "Internal Server Error"
+    }`
+
+---   
