@@ -258,10 +258,12 @@ class ProductController {
     let price = req.body.item.subTotal + 20000
     if (!req.body.item.cour && req.body.duration == 2) {
       price = req.body.item.subTotal + 30000
+    } else if (!req.body.item.cour && req.body.duration == 3) {
+      price = req.body.item.subTotal + 20000
     } else if (req.body.item.cour && req.body.duration == 2) {
-      price = req.body.item.subTotal
+      price = req.body.item.subTotal - 30000 + 20000
     } else if (req.body.item.cour && req.body.duration == 3) {
-      price = req.body.item.subTotal - 10000
+      price = req.body.item.subTotal - 20000 + 30000
     }
     console.log(price)
     Cart.update(
