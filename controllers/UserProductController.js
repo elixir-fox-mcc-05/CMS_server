@@ -12,7 +12,8 @@ class UserProductController {
     }
     UserProduct.findOne({ where: {
       userId: payload.userId,
-      productId: payload.productId
+      productId: payload.productId,
+      checkout: false
     },
     include: [{model: Product}] })
     .then((result) => {
