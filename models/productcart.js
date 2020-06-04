@@ -75,11 +75,12 @@ module.exports = (sequelize, DataTypes) => {
           .findOne({
             where: {
               ProductId: this.ProductId,
-              CartId: this.CartId
+              CartId: this.CartId,
+              paidStatus: false
             }
           })
           .then(cartProduct => {
-            if(cartProduct && !cartProduct.paidStatus) {
+            if(cartProduct) {
               throw('Product already added to your cart')
             }
           })
