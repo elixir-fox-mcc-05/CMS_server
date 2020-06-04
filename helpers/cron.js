@@ -17,6 +17,12 @@ let delivery =  function (CartId) {
         job.stop();
       }, null, true, 'Asia/Jakarta');
       job.start();
+      let msg2 = 'Terimakasih, Kami akan memberitahu bila Barang akan sampai, happy Shoping'
+      var job2 = new CronJob(`* * * * * *`, function() {
+        send(email, msg2)
+        job2.stop();
+      }, null, true, 'Asia/Jakarta');
+      job2.start();
     })
 }
 
