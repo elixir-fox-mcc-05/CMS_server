@@ -260,7 +260,7 @@ class ProductController {
       price = req.body.item.subTotal + 30000
     } else if (req.body.item.cour && req.body.duration == 2) {
       price = req.body.item.subTotal
-    } else {
+    } else if (req.body.item.cour && req.body.duration == 3) {
       price = req.body.item.subTotal - 10000
     }
     console.log(price)
