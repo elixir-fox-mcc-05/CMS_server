@@ -237,6 +237,30 @@ class CartController {
         next(err);
       });
   }
+
+  static deleteAnItem(req, res, next) {
+    let options = {
+      where: {
+        id: req.params.id
+      }
+    }
+
+    let choosed = null
+
+    Cart.findOne(options)
+    .then(data => {
+      choosed = data
+      return Cart.destroy(options)
+    })
+    .then(data => {
+      res.status(200).json({
+        DeletedItem: choosed
+      })
+    })
+    .catch(err => {
+      next(err)
+    })
+  }
 }
 
 module.exports = CartController;
