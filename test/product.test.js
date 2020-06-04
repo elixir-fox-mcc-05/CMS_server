@@ -217,9 +217,9 @@ describe('Product', () => {
             })
         })
 
-        describe('fail read', () => {
+        describe('success read', () => {
             describe('GET /product', () => {
-                test('should return all product with status 401', done => {
+                test('should return all product with status 200', done => {
                     request(app)
                         .get('/product')
                         // .set('access_token', token_admin)
@@ -227,8 +227,8 @@ describe('Product', () => {
                             if(err){
                                 return done(err)
                             } else {
-                                expect(response.status).toBe(401)
-                                expect(response.body.error).toContain('please login first')
+                                expect(response.status).toBe(200)
+                                expect(response.body).toHaveProperty('products', expect.any(Array))
                                 return done()
                             }
                         })

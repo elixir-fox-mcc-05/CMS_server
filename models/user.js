@@ -48,6 +48,7 @@ module.exports = (sequelize, DataTypes) => {
     modelName: 'User'
   });
   User.associate = function(models) {
+    User.hasMany(models.Cart)
     User.hasMany(models.Product)
   };
   return User;
