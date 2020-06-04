@@ -129,7 +129,8 @@ class CartController {
                             },{
                                 where: {
                                     CartId: prod.CartId,
-                                    ProductId: prod.ProductId
+                                    ProductId: prod.ProductId,
+                                    paidStatus: false
                                 }
                             })
                     )
