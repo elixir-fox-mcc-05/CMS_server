@@ -32,30 +32,59 @@ class CartController {
 
     static showCart(req, res, next) {
         const cartId = req.cartId;
+        let totalPrice;
 
         Cart
             .findOne({
                 where: {
                     id: cartId
-                },
-                include: [Product]
+                }
             })
             .then(cart => {
-                const unpaid = cart.Products.filter(product => {
-                    return !product.ProductCart.paidStatus
-                })
+                totalPrice = cart.total_price;
+                return ProductCart
+                    .findAll({
+                        where: {
+                            CartId: cartId,
+                            paidStatus: false
+                        },
+                        include: [Product]
+                    })
+            })
+            .then(products => {
                 res.status(200).json({
                     cart: {
-                        id: cart.id,
-                        CustomerId: cart.CustomerId,
-                        total_price: cart.total_price,
-                        Products: unpaid
+                        totalPrice,
+                        products
                     }
                 })
             })
             .catch(err => {
                 next(err);
             })
+
+            // Cart
+            // .findOne({
+            //     where: {
+            //         id: cartId
+            //     }
+            // })
+            // .then(cart => {
+            //     const unpaid = cart.Products.filter(product => {
+            //         return !product.ProductCart.paidStatus
+            //     })
+            //     res.status(200).json({
+            //         cart: {
+            //             id: cart.id,
+            //             CustomerId: cart.CustomerId,
+            //             total_price: cart.total_price,
+            //             Products: unpaid
+            //         }
+            //     })
+            // })
+            // .catch(err => {
+            //     next(err);
+            // })
     }
 
     static getTransactionHistory(req, res, next) {

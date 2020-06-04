@@ -1312,21 +1312,26 @@
     **Content:** 
     ```json
     {
-        "product": {
-            "quantity": 2,
-            "price": "11400000",
-            "ProductId": 1,
-            "CartId": 1,
-            "paidStatus": false,
-            "Product": {
-                "id": 1,
-                "name": "GT Men's Aggressor Pro Mountain Bike",
-                "image_url": "https://dks.scene7.com/is/image/GolfGalaxy/17GTXMGGRSSRPRXXXPRF_Electric_Blue?qlt=70&wid=1100&fmt=webp",
-                "price": "5700000",
-                "stock": 25,
-                "UserId": 1,
-                "CategoryId": 6
-            }
+        "cart": {
+            "totalPrice": "5700000",
+            "products": [
+                {
+                    "quantity": 1,
+                    "price": "5700000",
+                    "ProductId": 1,
+                    "CartId": 1,
+                    "paidStatus": false,
+                    "Product": {
+                        "id": 1,
+                        "name": "GT Men's Aggressor Pro Mountain Bike",
+                        "image_url": "https://dks.scene7.com/is/image/GolfGalaxy/17GTXMGGRSSRPRXXXPRF_Electric_Blue?qlt=70&wid=1100&fmt=webp",
+                        "price": "5700000",
+                        "stock": 21,
+                        "UserId": 1,
+                        "CategoryId": 6
+                    }
+                }
+            ]
         }
     }
     ```
