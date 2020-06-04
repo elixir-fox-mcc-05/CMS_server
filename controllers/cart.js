@@ -94,7 +94,8 @@ class CartController {
             },{
                 where: {
                     ProductId: id,
-                    CartId: cartId
+                    CartId: cartId,
+                    paidStatus: false
                 },
                 returning: true
             })
