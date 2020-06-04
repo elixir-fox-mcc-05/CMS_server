@@ -119,7 +119,6 @@ class ProductController {
 
   static delCart (req, res, next) {
     console.log(req.body.idCart);
-    console.log('masukkkkkkkkkkkkkkkkkkkkkkkkkk -------------------- ini delete');
     Cart.destroy({
       where: {
         idCart: req.body.idCart
@@ -133,6 +132,12 @@ class ProductController {
   }
   
   static demand (req, res, next) {
+    let cour = 0
+    if (req.body.item.cour == 2) {
+      cour = 30000
+    } else if (req.body.item.cour == 3) {
+      cour = 20000
+    }
     let newStock = req.body.demand += 1
     if (req.body.step == 'down') {
       newStock -= 2
@@ -142,7 +147,7 @@ class ProductController {
     return Cart.update(
       {
         demand: newStock,
-        subTotal: newStock * item.price
+        subTotal: (newStock * item.price) + cour
       },
       {returning: true, where: {idCart: req.body.idCart}}
     )
@@ -265,7 +270,6 @@ class ProductController {
     } else if (req.body.item.cour && req.body.duration == 3) {
       price = req.body.item.subTotal - 30000 + 20000
     }
-    console.log(price)
     Cart.update(
       {cour: req.body.duration},
       {returning: true, where: {idCart: req.body.item.idCart}}
