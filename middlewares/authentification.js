@@ -2,9 +2,9 @@ let { verifyToken } = require('../helpers/jwt')
 let { User } = require('../models/index')
 
 function authentification (req, res, next) { 
-  console.log(req.headers.access_token)
+  // console.log(req.headers.access_token)
   let decode = verifyToken(req.headers.access_token)
-  console.log(decode)
+  // console.log(decode)
     try{
         User.findOne({
             where:{

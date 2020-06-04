@@ -79,13 +79,13 @@ class ProductController {
           UserId: req.currentUserId,
           payed: false
         }
-      })
-    .then((result) => {
-      console.log(result)
-      res.status(200).json(result)
-    }).catch((err) => {
-      console.log(err);
-    });
+    })
+      .then((result) => {
+        console.log(result)
+        res.status(200).json(result)
+      }).catch((err) => {
+        console.log(err);
+      });
   }
 
   static restock (req, res, next) {
@@ -132,6 +132,7 @@ class ProductController {
   }
   
   static demand (req, res, next) {
+    console.log('masukdeamssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssnd');
     let cour = 0
     if (req.body.item.cour == 2) {
       cour = 30000
@@ -191,7 +192,7 @@ class ProductController {
           .then((thisUser) => {
             let temp = thisUser.dataValues.balance - newBal
             if (thisUser.dataValues.balance >= newBal) {
-              for (let i in result) { 
+              for (let i in result) {
                 console.log(result[i].dataValues.demand);
                 if (result[i].dataValues.demand !== 0) {
                   if(result[i].dataValues.Product.dataValues.stock >= result[i].dataValues.demand) {
@@ -202,20 +203,20 @@ class ProductController {
                       },
                       {returning: true, where: {id: result[i].dataValues.Product.id}}
                     ).then((prod) => {
-                      Cart.update(
+                      return Cart.update(
                         {
                           payed: true
                         },
                         {returning: true, where: {idCart: result[i].dataValues.idCart}}
-                      )
-                      User.update(
-                        {
-                          balance: temp
-                        },
-                        {returning: true, where: {id: req.currentUserId}}
-                      )
-                      console.log(result)
-                      res.status(200).json(result)
+                      ) .then((cart) => {
+                        delivery(cart[1][0].dataValues.idCart)
+                        User.update(
+                          {
+                            balance: temp
+                          },
+                          {returning: true, where: {id: req.currentUserId}}
+                        )
+                      })
                     })
                   } else {
                     next({
@@ -230,6 +231,7 @@ class ProductController {
                   })
                 }
               }
+              res.status(200).json(result)
             } else {
               next({
                 name: 'We Need More Gold',
