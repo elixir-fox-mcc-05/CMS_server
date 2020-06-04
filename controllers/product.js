@@ -60,14 +60,24 @@ class ProductController {
   }
 
   static addCart (req, res, next) {
-    console.log(req.currentUserId);
     let data = {UserId: req.currentUserId, ProductId: req.body.id}
-    Cart.create(data)
+    Cart.findOne({
+      where: {
+        UserId: req.currentUserId,
+        ProductId: req.body.id
+      }
+    })
     .then((result) => {
-      console.log(result);
-      res.status(200).json(result)
+      if (!result) {
+        return Cart.create(data)
+        .then((result) => {
+          res.status(200).json(result)
+        })
+      } else {
+        next({name: 'Item Already in The Cart'})
+      }
     }).catch((err) => {
-      console.log(err);
+      next(err)
     });
   }
 
