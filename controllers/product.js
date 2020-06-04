@@ -265,10 +265,10 @@ class ProductController {
       price = req.body.item.subTotal + 30000
     } else if (!req.body.item.cour && req.body.duration == 3) {
       price = req.body.item.subTotal + 20000
-    } else if (req.body.item.cour && req.body.duration == 2) {
-      price = req.body.item.subTotal - 30000 + 20000
-    } else if (req.body.item.cour && req.body.duration == 3) {
+    } else if (req.body.item.cour == 3 && req.body.duration == 2) {
       price = req.body.item.subTotal - 20000 + 30000
+    } else if (req.body.item.cour == 2 && req.body.duration == 3) {
+      price = req.body.item.subTotal - 30000 + 20000
     }
     Cart.update(
       {cour: req.body.duration},
