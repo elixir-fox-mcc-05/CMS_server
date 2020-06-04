@@ -9,7 +9,11 @@ afterAll(done => {
     queryInterface.bulkDelete('Products', null, {})
         .then(()=> {
             console.log('db Products clean up ---');
-            done();
+            return queryInterface.bulkDelete('Categories', null, {})
+        })
+        .then(()=> {
+          console.log('db Categories clean up')
+          done();
         })
         .catch(err => {
             done(err);
@@ -31,13 +35,44 @@ function generateName(){
 
 describe ("Testing Product and Category", ()=> {
     describe("Test succes Product and Category feature", () => {
-        beforeAll(done => {
+      beforeAll(done => {
+        const dataCategory = [
+        {
+          name: generateName(),
+          createdAt: new Date(),
+          updatedAt: new Date()
+        },
+        {
+          name: generateName(),
+          createdAt: new Date(),
+          updatedAt: new Date()
+        }]
+        const dataUser = [
+        {
+            name : "test",
+            email : "yodji@gmail.com",
+            password : "$2a$15$qfZE3BWVPG7j54fdoqueY.rdd3O9AmGsmsja/Y6hhKghPUtK9PEyG",
+            RoleId : 2,
+            createdAt : new Date(),
+            updatedAt : new Date()
+        },
+        {
+            name : "test",
+            email : "yodji09@gmail.com",
+            password : "$2a$15$qfZE3BWVPG7j54fdoqueY.rdd3O9AmGsmsja/Y6hhKghPUtK9PEyG",
+            RoleId : 1,
+            createdAt : new Date(),
+            updatedAt : new Date()
+        }];
+        queryInterface.bulkInsert('Categories', dataCategory, {returning:true})
+          .then(category => {
+            idCategory = category[0].id
             const dataProduct = [
                 {name : "Tracking Shoes Eagle",
                 image_url : "https://ecs7.tokopedia.net/img/cache/700/product-1/2020/1/3/84810752/84810752_4e865fb5-b770-4257-a4fa-d0e434cbaf99_900_900",
                 price : 2500000,
                 stock : 100,
-                CategoryId : 41,
+                CategoryId : idCategory,
                 createdAt : new Date(),
                 updatedAt : new Date()
                 },
@@ -45,45 +80,28 @@ describe ("Testing Product and Category", ()=> {
                 image_url : "https://images-na.ssl-images-amazon.com/images/I/71P0lGwQ%2BSL._AC_SY679_.jpg",
                 price : 300000,
                 stock : 42,
-                CategoryId : 42,
+                CategoryId : idCategory,
                 createdAt : new Date(),
                 updatedAt : new Date()
             }
-            ];
-            const dataUser = [
-                {
-                    name : "test",
-                    email : "yodji@gmail.com",
-                    password : "$2a$15$qfZE3BWVPG7j54fdoqueY.rdd3O9AmGsmsja/Y6hhKghPUtK9PEyG",
-                    RoleId : 2,
-                    createdAt : new Date(),
-                    updatedAt : new Date()
-                },
-                {
-                    name : "test",
-                    email : "yodji09@gmail.com",
-                    password : "$2a$15$qfZE3BWVPG7j54fdoqueY.rdd3O9AmGsmsja/Y6hhKghPUtK9PEyG",
-                    RoleId : 1,
-                    createdAt : new Date(),
-                    updatedAt : new Date()
-                }
-            ];
-            queryInterface.bulkInsert("Products", dataProduct, {returning : true})
-                .then(result => {
-                    idProduct = result[0].id;
-                    return queryInterface.bulkInsert("Users", dataUser, {returning : true});
-                })
-                .then(result => {
-                    token = generateToken({
-                        id : result[0].id,
-                        email : result[0].email
-                    });
-                    done();
-                })
-                .catch(err => {
-                    done(err);
-                });
-        });
+           ];
+            return queryInterface.bulkInsert("Products", dataProduct, {returning : true})
+          })
+          .then(result => {
+              idProduct = result[0].id;
+              return queryInterface.bulkInsert("Users", dataUser, {returning : true});
+          })
+          .then(result => {
+              token = generateToken({
+                  id : result[0].id,
+                  email : result[0].email
+              });
+              done();
+          })
+          .catch(err => {
+              done(err);
+          });
+      })
         test("Should return array with detailed category", done => {
             request(app)
                 .get('/category')
@@ -165,7 +183,7 @@ describe ("Testing Product and Category", ()=> {
                 image_url : generateName(),
                 price : 1000000,
                 stock : 24,
-                CategoryId : 41
+                CategoryId : idCategory
             };
             request(app)
                 .post('/product')
@@ -205,7 +223,7 @@ describe ("Testing Product and Category", ()=> {
                 image_url : generateName(),
                 price : 1000000,
                 stock : 24,
-                CategoryId : 41
+                CategoryId : idCategory
             };
             request(app)
                 .put(`/product/${idProduct}`)

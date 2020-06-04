@@ -46,7 +46,7 @@ describe('User service', ()=> {
     });
     describe('error register', () => {
         describe('POST user/register', () => {
-            test('should return error with status 400', done => {
+            test('should return error when password doesnt match with status 400', done => {
                 const error = {type : "Bad Request",
                     code : 400,
                     msg : "Password and Confirm Password doesn't match"};
@@ -69,7 +69,7 @@ describe('User service', ()=> {
                         }
                     })
             })
-            test('should return error with status 400', done => {
+            test('should return error if email exist with status 400', done => {
                 const error = {type : "Bad Request",
                     code : 400,
                     msg : "Your email already exist"};
@@ -92,7 +92,7 @@ describe('User service', ()=> {
                         }
                     })
             })
-            test('should return error with status 400', (done) => {
+            test('should return error if doesnt use valid email with status 400', (done) => {
                 const error = {type : "Bad Request",
                     code : 400,
                     msg : "Your email doesn't valid, please use an email"};
@@ -115,7 +115,7 @@ describe('User service', ()=> {
                         }
                     });
             });
-            test('should return error with status 400', (done) => {
+            test('should return error when password less than 8 with status 400', (done) => {
                 const error = {type : "Bad Request",
                     code : 400,
                     msg : "Password must be from 8 - 50 characters"};
@@ -138,7 +138,7 @@ describe('User service', ()=> {
                         }
                     });
             });
-        });    
+        });
     });
     describe("Succes Login", ()=> {
         describe("Post /user/login", ()=> {
@@ -164,7 +164,7 @@ describe('User service', ()=> {
     });
     describe("Error Login", ()=> {
         describe("Post /user/login", () => {
-            test("Should return error with status 400", done => {
+            test("Should return error if password doesnt match with status 400", done => {
                 const error = {type : "Bad Request",
                     code : 400,
                     msg : "Wrong Password"};
@@ -185,7 +185,7 @@ describe('User service', ()=> {
                         }
                     });
             });
-            test("Should return error with status 400", done => {
+            test("Should return error if user doesnt exist with status 400", done => {
                 const error = {type : "Bad Request",
                     code : 400,
                     msg : "User Doesn't exist"};

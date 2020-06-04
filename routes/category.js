@@ -4,8 +4,8 @@ const ControllerCategory = require('../controller/controllercategory');
 const Authentication = require('../middlewares/authentication');
 const Authorization = require('../middlewares/authorization');
 
-router.use(Authentication);
 router.get('/', ControllerCategory.findAll);
+router.use(Authentication);
 router.get('/:id', ControllerCategory.findOne);
 router.post('/', Authorization, ControllerCategory.create);
 router.put('/:id', Authorization, ControllerCategory.editData);

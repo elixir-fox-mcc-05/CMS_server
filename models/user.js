@@ -32,6 +32,9 @@ module.exports = (sequelize, DataTypes) => {
       },
       onDelete : "cascade",
       onUpdate : "cascade"
+    },
+    money: {
+      type: DataTypes.INTEGER
     }
   }, {
     sequelize,
@@ -39,12 +42,14 @@ module.exports = (sequelize, DataTypes) => {
       beforeCreate : (user) => {
         user.password = generatePassword(user.password);
         user.RoleId = 1;
+        user.money = 0
       }
     },
     modelName : "User"
   });
   User.associate = function(models) {
     User.belongsTo(models.Role);
+    User.belongsToMany(models.Product, {through: 'Transactions'})
   };
   return User;
 };

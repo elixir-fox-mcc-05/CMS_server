@@ -2,7 +2,7 @@
 
 ## URL SERVER : https://shielded-bastion-44955.herokuapp.com/
 
-### NOTE : ADD DOTENV CONFIG IF YOU CLONE THIS API IN APP.JS
+### NOTE : ADD DOTENV FILE and CONFIG IF YOU CLONE THIS API IN APP.JS
 
 ####    Create User
 
@@ -722,5 +722,401 @@
     })
       .onSucces(function(result) {
         Message : succes destroy content with id 25
+      })
+  ```
+####  Find All Wishlist
+
+* Url
+
+  /transaction
+
+* Method
+
+  'GET'
+
+* Url Params
+
+  ```
+    'Token' : some token
+  ```
+
+* Data Params
+
+  ```
+    NONE
+  ```
+
+* Succes Response
+
+  ```
+    Code : 200
+    Content : {
+            "Wishlist": [
+              {
+                "id": 74,
+                "UserId": 2,
+                "ProductId": 25,
+                "status": false,
+                "quantity": 1,
+                "price": null,
+                "createdAt": "2020-06-04T01:45:32.901Z",
+                "updatedAt": "2020-06-04T01:45:32.901Z",
+                "Product": {
+                  "id": 25,
+                  "name": "Asus G240UJ",
+                  "image_url": "https://cdn-asset.jawapos.com/wp-content/uploads/2020/01/image004-640x425.png",
+                  "price": 23000000,
+                  "stock": 8,
+                  "CategoryId": 3,
+                  "createdAt": "2020-05-26T07:25:39.798Z",
+                  "updatedAt": "2020-06-04T01:19:07.829Z"
+                }
+              }
+            ]
+          }
+  ```
+
+* Error Response
+
+  ```
+  Code : 500
+  Content : Something Went Wrong
+  ```
+
+* Sample Call
+
+  ```
+    axios({
+      url : '/transaction'
+      method : 'GET'
+      headers : {
+        token : some token
+      },
+      data: {
+        ProductId: INTEGER
+      }
+    })
+      .onSucces(function(result) {
+        Wishtlist : result
+      })
+  ```
+
+####  CheckOut Wishlist
+
+* Url
+
+  /transaction/checkout
+
+* Method
+
+  'PUT'
+
+* Url Params
+
+  ```
+    'Token' : some token
+  ```
+
+* Data Params
+
+  ```
+    ListCheckOut: Array(Wishlist)
+  ```
+
+* Succes Response
+
+  ```
+    Code : 200
+    Content : {Message: Your transaction will processed}
+  ```
+
+* Error Response
+
+  ```
+  Code : 500
+  Content : Something Went Wrong
+  ```
+
+* Sample Call
+
+  ```
+    axios({
+      url : '/transaction/checkout'
+      method : 'POST'
+      headers : {
+        token : some token
+      }
+    })
+      .onFinal(function(result) {
+        Message : 'Your transaction will processed'
+      })
+  ```
+  CategoryId": 3,
+                  "createdAt": "2020-05-26T07:25:39.798Z",
+                  "updatedAt": "2020-06-04T01:19:07.829Z"
+                }
+              }
+            ]
+          }
+  ```
+
+* Error Response
+
+  ```
+  Code : 500
+  Content : Something Went Wrong
+  ```
+
+* Sample Call
+
+  ```
+    axios({
+      url : '/transaction'
+      method : 'POST'
+      headers : {
+        token : some token
+      }
+    })
+      .onSucces(function(result) {
+        Wishtlist : result
+      })
+  ```
+
+####  CheckOut History
+
+* Url
+
+  /transaction/history
+
+* Method
+
+  'GET'
+
+* Url Params
+
+  ```
+    'Token' : some token
+  ```
+
+* Data Params
+
+  ```
+    NONE
+  ```
+
+* Succes Response
+
+  ```
+    Code : 200
+    Content : {
+              "Wishlist": [
+                {
+                  "id": 74,
+                  "UserId": 2,
+                  "ProductId": 25,
+                  "status": true,
+                  "quantity": 1,
+                  "price": null,
+                  "createdAt": "2020-06-04T01:45:32.901Z",
+                  "updatedAt": "2020-06-04T01:45:32.901Z",
+                  "Product": {
+                    "id": 25,
+                    "name": "Asus G240UJ",
+                    "image_url": "https://cdn-asset.jawapos.com/wp-content/uploads/2020/01/image004-640x425.png",
+                    "price": 23000000,
+                    "stock": 8,
+                    "CategoryId": 3,
+                    "createdAt": "2020-05-26T07:25:39.798Z",
+                    "updatedAt": "2020-06-04T01:19:07.829Z"
+                  }
+                }
+              ]
+            }
+  ```
+
+* Error Response
+
+  ```
+  Code : 500
+  Content : Something Went Wrong
+  ```
+
+* Sample Call
+
+  ```
+    axios({
+      url : '/transaction/history'
+      method : 'GET'
+      headers : {
+        token : some token
+      }
+    })
+      .onSucces(function(result) {
+        Wishlist : result
+      })
+  ```
+
+####  Delete WishList
+
+* Url
+
+  /transaction/:id
+
+* Method
+
+  'DELETE'
+
+* Url Params
+
+  ```
+    'Token' : some token
+  ```
+
+* Data Params
+
+  ```
+    NONE
+  ```
+
+* Succes Response
+
+  ```
+    Code : 200
+    Content : {message: 'Succes delete wishlist'}
+  ```
+
+* Error Response
+
+  ```
+  Code : 500
+  Content : Something Went Wrong
+  ```
+
+* Sample Call
+
+  ```
+    axios({
+      url : '/transaction/:23'
+      method : 'DELETE'
+      headers : {
+        token : some token
+      }
+    })
+      .onSucces(function(result) {
+        message: 'Succes delete wishlist'
+      })
+  ```
+
+#### TOPUP User Money
+
+* Url
+
+  /user/topup
+
+* Method
+
+  'PUT'
+
+* Url Params
+
+  ```
+    'Token' : some token
+  ```
+
+* Data Params
+
+  ```
+    money: INTEGER
+  ```
+
+* Succes Response
+
+  ```
+    Code : 200
+    Content : {
+      Money: 2000000,
+      message: "Your balanced has been increased"
+      }
+  ```
+
+* Error Response
+
+  ```
+  Code : 500
+  Content : Something Went Wrong
+  ```
+
+* Sample Call
+
+  ```
+    axios({
+      url : '/user/topup'
+      method : 'PUT'
+      headers : {
+        token : some token
+      },
+      data: {
+        money: INTEGER
+      }
+    })
+      .onSucces(function(result) {
+          Money: result.money,
+          message: "Your balanced has been increased"
+      })
+  ```
+
+#### update User Money After Payment
+
+* Url
+
+  /user/transaction
+
+* Method
+
+  'PUT'
+
+* Url Params
+
+  ```
+    'Token' : some token
+  ```
+
+* Data Params
+
+  ```
+    money: INTEGER
+  ```
+
+* Succes Response
+
+  ```
+    Code : 200
+    Content : {
+      money: 19640000
+      }
+  ```
+
+* Error Response
+
+  ```
+  Code : 500
+  Content : Something Went Wrong
+  ```
+
+* Sample Call
+
+  ```
+    axios({
+      url : '/user/transaction'
+      method : 'PUT'
+      headers : {
+        token : some token
+      },
+      data: {
+        money: INTEGER
+      }
+    })
+      .onSucces(function(result) {
+          Money: result.money,
       })
   ```

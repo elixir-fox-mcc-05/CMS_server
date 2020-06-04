@@ -22,7 +22,9 @@ class ControllerUser {
                         });
                         res.status(202).json({
                             acces_token : token,
-                            Role : user.Role
+                            Role : user.Role,
+                            money: user.money,
+                            name: user.name
                         });
                     } else {
                         return next({
@@ -69,6 +71,39 @@ class ControllerUser {
             .catch(err => {
                 return next(err);
             });
+    }
+    static topup(req, res, next) {
+      const {money} = req.body
+      User
+        .increment(['money'], {by: money, where: {id: req.currentUser}})
+        .then(data => {
+          return User.findByPk(req.currentUser)
+        })
+        .then(data => {
+          res.status(200).json({
+            money: data.money,
+            message: "Your balanced has been increased"
+          })
+        })
+        .catch(err => {
+          return next(err)
+        })
+    }
+    static transaction(req, res, next) {
+      const {money} = req.body
+      User
+        .decrement('money', {by: money, where: {id: req.currentUser}})
+        .then(data => {
+          return User.findByPk(req.currentUser)
+        })
+        .then(data => {
+          res.status(200).json({
+            money: data.money
+          })
+        })
+        .catch(err => {
+          return next(err)
+        })
     }
 }
 
