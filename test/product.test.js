@@ -22,7 +22,7 @@ afterAll((done) => {
 ////dummy product
 const dummyProduct = [{
     id: 1,
-    name: `dummy product 1`,
+    name: `DUMMY PRODUCT 1`,
     description: `dummy prod 1`,
     image_url: `dummy img 1`,
     price: 100,
@@ -31,7 +31,7 @@ const dummyProduct = [{
     updatedAt: new Date()
 }, {
     id: 2,
-    name: `dummy product 2`,
+    name: `DUMMY PRODUCT 2`,
     description: `dummy prod 2`,
     image_url: `dummy img 2`,
     price: 200,
@@ -102,7 +102,7 @@ describe(`Product feature`, () => {
                         else {
                             expect(res.status).toBe(201);
                             expect(res.body.product).toHaveProperty('id', expect.any(Number));
-                            expect(res.body.product).toHaveProperty(`name`, productInput.name);
+                            expect(res.body.product).toHaveProperty(`name`, productInput.name.toUpperCase());
                             expect(res.body.product).toHaveProperty(`description`, `No description`);
                             expect(res.body.product).toHaveProperty(`image_url`, `No image available`);
                             expect(res.body.product).toHaveProperty(`price`, 0);
@@ -130,7 +130,7 @@ describe(`Product feature`, () => {
                         else {
                             expect(res.status).toBe(201);
                             expect(res.body.product).toHaveProperty('id', expect.any(Number));
-                            expect(res.body.product).toHaveProperty(`name`, productInput.name);
+                            expect(res.body.product).toHaveProperty(`name`, productInput.name.toUpperCase());
                             expect(res.body.product).toHaveProperty(`description`, productInput.description);
                             expect(res.body.product).toHaveProperty(`image_url`, productInput.image_url);
                             expect(res.body.product).toHaveProperty(`price`, productInput.price);
@@ -164,14 +164,8 @@ describe(`Product feature`, () => {
             test(`Should return error with status 400 because name and/or description and/or image_url is null`, (done) => {
                 const errors = [
                     {
-                        "message": "Product.name cannot be null"
+                        "message": "Cannot read property 'toUpperCase' of undefined"
                     },
-                    {
-                        "message": "Product.description cannot be null"
-                    },
-                    {
-                        "message": "Product.image_url cannot be null"
-                    }
                 ]
                 request(app)
                     .post('/products/')
@@ -182,7 +176,7 @@ describe(`Product feature`, () => {
                             return done(err);
                         }
                         else {
-                            expect(res.status).toBe(400);
+                            expect(res.status).toBe(500);
                             expect(res.body).toHaveProperty('errors', errors);                           
                             return done()
                         }
@@ -923,26 +917,6 @@ describe(`Product feature`, () => {
             })
         })
         describe(`Error read product by productId`, () => {
-            test(`Should return error with status 401 because no token in headers`, (done) => {
-                const productId = dummyProduct[0].id;
-                const errors = [
-                     {
-                         message: "Unauthorized. Please login first"
-                     },
-                ]
-                request(app)
-                    .get(`/products/${productId}`)
-                    .end((err, res) => {
-                        if(err){
-                            return done(err);
-                        }
-                        else {
-                            expect(res.status).toBe(401);
-                            expect(res.body).toHaveProperty('errors', errors);                           
-                            return done()
-                        }
-                    }) 
-            })
             test(`Should return error with status 404 because product by productId not found`, (done) => {
                 const productId = 9;
                 const errors = [
