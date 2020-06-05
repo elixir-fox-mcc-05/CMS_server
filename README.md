@@ -433,6 +433,26 @@
     ```
  
 * **Error Response:**
+  **Content:** 
+  * **Code:** 401 UNAUTHORIZED <br />
+    **Content:** 
+    ```json
+    { "error" : "You do not have the authority to do this action" }
+    ```
+
+    OR
+
+    ```json
+    { "error" : "you need to login to access this page" }
+    ```
+
+  OR
+
+  * **Code:** 404 NOT FOUND <br />
+    **Content:** 
+    ```json
+    { "error" : "no product with id <id> found" }
+    ```
 
   * **Code:** 500 INTERNAL SERVER ERROR <br />
     **Content:** 
@@ -440,6 +460,67 @@
     { "error" : "internal server error" }
     ```
 
+----
+  **Show Product by Id**
+----
+  Show product selected by Id.
+
+* **URL**
+
+  /products/:id
+
+* **Method:**
+  
+  `GET`
+
+* **Request Headers**
+
+  | key | value | required |
+  | :---: | :---: | :---: |
+  | Content-Type | application/x-www-form-urlencoded | true |
+  | access_token | <YOUR_TOKEN_HERE> | true |
+  
+*  **URL Params**
+
+   **Required:**
+ 
+   `id=[integer]`
+
+* **Data Params**
+
+  none
+
+* **Success Response:**
+  
+  
+  * **Code:** 200 OK <br />
+    **Content:** 
+    ```json
+    {
+        "product": {
+            "id": 2,
+            "name": "Duke Football",
+            "image_url": "https://fanatics.frgimages.com/FFImage/thumb.aspx?i=/productimages/_2768000/altimages/ff_2768013alt1_full.jpg&w=900",
+            "price": "1800000",
+            "stock": 0,
+            "UserId": 1,
+            "CategoryId": 3,
+            "Category": {
+                "id": 3,
+                "name": "American Football",
+                "total_product": 1
+            }
+        }
+    }
+    ```
+ 
+* **Error Response:**
+
+  * **Code:** 500 INTERNAL SERVER ERROR <br />
+    **Content:** 
+    ```json
+    { "error" : "internal server error" }
+    ```
 
 ----
   **Update Product**
@@ -469,13 +550,7 @@
 
 * **Data Params**
 
-  | key | value | required |
-  | :---: | :---: | :---: |
-  | name | <YOUR_PRODUCT_NAME> | true |
-  | image_url | <YOUR_IMAGE_URL> | true |
-  | price | <YOUR_PRODUCT_PRICE> | true |
-  | stock | <YOUR_PRODUCT_STOCK> | true |
-  | categoryId | <YOUR_CATEGORY_ID> | true |
+  none
 
 * **Success Response:**
   

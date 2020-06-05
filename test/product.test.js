@@ -710,7 +710,7 @@ describe('Product Router', () => {
                     })
             })
 
-            test('should return status code 401 unauthorized because user doesnt have permission to add product', done => {
+            test('should return status code 401 unauthorized because user doesnt have permission to see product', done => {
                 let admin = user[0];
                 let access_token = generateToken({
                     id: 3,

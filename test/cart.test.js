@@ -548,7 +548,7 @@ describe('Cart Router', () => {
         })
 
         describe('fail', () => {
-            test('should return status code 401 unauthorized because customer doesn\'t have permission to see shopping cart', done => {
+            test('should return status code 401 unauthorized because customer doesn\'t have permission to see transactioh history', done => {
                 const customer = customers[0];
                 const access_token = generateToken({
                     id: 3,
@@ -980,7 +980,7 @@ describe('Cart Router', () => {
         })
 
         describe('fail', () => {
-            test('should return status code 401 unauthorized because customer doesn\'t have permission to change quantity of product in shopping cart', done => {
+            test('should return status code 401 unauthorized because customer doesn\'t have permission to checkout cart', done => {
                 const customer = customers[0];
                 const access_token = generateToken({
                     id: 3,
