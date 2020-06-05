@@ -19,7 +19,7 @@ class CartController {
         const {ProductId, quantity} = req.body;
         Cart.create({UserId, ProductId, quantity})
             .then(result => {
-                res.status(201).json({result})
+                res.status(201).json({Cart: result})
             })
             .catch(err => {
                 next(err)
@@ -27,12 +27,14 @@ class CartController {
     }
 
     static updateCart(req, res, next) {
-        const {UserId} = req.UserId
-        const {quantity} = req.body;
+        const UserId = req.UserId
+        const {ProductId, quantity} = req.body;
         const {id} = req.params;
-        Cart.update({quantity}, {where: {ProductId, CartId: id}, returning: true})
+        let update = {ProductId, quantity, UserId}
+        Cart.update(update, {where: {id}, returning: true})
             .then(result => {
-                res.status(201).json({result})
+                console.log(result[1])
+                res.status(201).json({Cart: result[1]})
             })
             .catch(err => {
                 next(err)
@@ -42,7 +44,7 @@ class CartController {
     static deleteCart(req, res, next) {
         const UserId = req.UserId;
         const {id} = req.params;
-        Cart.destroy({id})
+        Cart.destroy({where: {id}})
             .then(result => {
                 res.status(200).json({message: `Successfully delete cart`})
             })

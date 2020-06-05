@@ -70,7 +70,7 @@ class ProductController {
         })
             .then(result => {
                 if (result) {
-                    res.status(200).json({Product: result})
+                    res.status(201).json({Product: result})
                 }
                 else {
                     throw {
