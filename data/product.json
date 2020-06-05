@@ -1,0 +1,65 @@
+[
+  {
+    "name": "Seringai - Seperti Api",
+    "img_url": "https://miro.medium.com/max/461/0*e6CMDw0YoHxY5plP.jpg",
+    "price": 80000,
+    "stock": 10,
+    "CategoryId": "2"
+  },
+  {
+    "name": "Seringai - Taring",
+    "img_url": "https://images.genius.com/1238729c6535628dc3ea280a4de705fc.599x599x1.jpg",
+    "price": 80000,
+    "stock": 10,
+    "CategoryId": "2"
+  },
+  {
+    "name": "Seringai - Serigala Militia",
+    "img_url": "https://s.mxmcdn.net/images-storage/albums4/3/2/8/1/2/6/44621823_800_800.jpg",
+    "price": 80000,
+    "stock": 10,
+    "CategoryId": "2"
+  },
+  {
+    "name": "Seringai - High Octane Rock",
+    "img_url": "https://m.media-amazon.com/images/I/71LTlGexO6L._SS500_.jpg",
+    "price": 80000,
+    "stock": 10,
+    "CategoryId": "2"
+  },
+  {
+    "name": "Burgerkill - Adamantine",
+    "img_url": "https://www.batok.co/wp-content/uploads/2018/04/ADAMANTINE-BURGERKILL.jpg",
+    "price": 80000,
+    "stock": 10,
+    "CategoryId": "3"
+  },
+  {
+    "name": "Burgerkill - Beyond Coma and Despair",
+    "img_url": "https://img.discogs.com/hzO7h0hIeezvBEpVALkgx3LSSlQ=/fit-in/600x600/filters:strip_icc():format(jpeg):mode_rgb():quality(90)/discogs-images/R-4281209-1568315984-4150.jpeg.jpg",
+    "price": 80000,
+    "stock": 10,
+    "CategoryId": "3"
+  },
+  {
+    "name": "JKT48 - Matahari Milikku",
+    "img_url": "https://i1.sndcdn.com/artworks-000100539830-s956vu-t500x500.jpg",
+    "price": 200000,
+    "stock": 10,
+    "CategoryId": "1"
+  },
+  {
+    "name": "Pee Wee Gaskins - Mixed Feeling",
+    "img_url": "https://images.genius.com/2ec40d1ac097883eaca7f7247514be6d.828x828x1.jpg",
+    "price": 80000,
+    "stock": 10,
+    "CategoryId": "4"
+  },
+  {
+    "name": "Secondhand Serenade - A Twist In My Story",
+    "img_url": "https://images.genius.com/b378778408db6cd6795f7a1fd32ffbdf.640x636x1.jpg",
+    "price": 120000,
+    "stock": 15,
+    "CategoryId": "1"
+  }
+]
