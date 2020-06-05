@@ -61,7 +61,8 @@ describe('Products', () => {
             image_url: 'belom nemu',
             description: 'Team Buddies adventure',
             price: 2000000,
-            stock: 1
+            stock: 1,
+            genre: 'RPG'
           })
           .end((err, response) => {
             if (err) {
