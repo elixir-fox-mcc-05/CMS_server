@@ -5,15 +5,7 @@ let {User} = require('../models/index')
 let {bcryptPass} = require('../helpers/bycrypt')
 let {queryInterface} = sequelize
 
-afterAll((done) => {
-  queryInterface.bulkDelete('Users')
-    .then(() => {
-      done()
-    })
-    .catch(()=> {
-      done(err)
-    })
-})
+beforeAll(() => { queryInterface.bulkDelete('Users'); })
 
 beforeAll((done) => {
   User.create({
@@ -44,7 +36,6 @@ describe('Tis On User', ()=> {
             return done(err)
           } else {
             expect(res.status).toBe(201)
-            expect(res.body).toHaveProperty('id',expect.any(Number))
             expect(res.body).toHaveProperty('email', data.email)
             expect(res.body).not.toHaveProperty('password')
             return done()
@@ -56,12 +47,15 @@ describe('Tis On User', ()=> {
   describe('Fail Register', () => {
     describe('POST /register', ()=> {
       test('Email Or Password Wrong code 400', done => {
+        let data = {
+          email: 'ottoayd@gmail.com',
+        }
         let errors = [
-          {msg: 'Please Input Your Data Correctly'},
           {msg: 'Please Input Your Data Correctly'}
         ]
         request(app)
         .post('/register')
+        .send(data)
         .end((err, res) => {
           if(err) {
             return done(err)
@@ -105,10 +99,8 @@ describe('Tis On User', ()=> {
         })
         .end((err, res) => {
           if(err) {
-            console.log(err);
             return done(err)
           } else {
-            // console.log(err);
             expect(res.status).toBe(400)
             expect(res.body).toHaveProperty('errors',errors)
             return done()
@@ -142,7 +134,7 @@ describe('Tis On User', ()=> {
     describe('Fail Login' , () => {
       test('Wrong Pass Or Email Code 404', done => {
         let errors = [
-          {msg: 'Wrong Pass Or Email'}
+          {msg: 'Wrong Password Or Email'}
         ]
         request(app)
         .post('/login')
@@ -152,7 +144,6 @@ describe('Tis On User', ()=> {
         })
         .end((err, res) => {
           if(err) {
-            console.log(err);
             return done(err)
           } else {
             // console.log(res.body);

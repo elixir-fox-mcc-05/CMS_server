@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "SET NODE_ENV=development&&nodemon bin/server.js",
-    "test": "SET NODE_ENV=test&&jest --detectOpenHandles",
+    "test": "set NODE_ENV=test&&jest --detectOpenHandles --runInBand --forceExit",
     "start": "node bin/server.js"
   },
   "repository": {

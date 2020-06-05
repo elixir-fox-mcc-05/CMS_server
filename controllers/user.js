@@ -98,7 +98,7 @@ class UserController {
               email: result.email
             }
             let access_token = jwtToken(payload)
-              res.status(200).json({
+              res.status(201).json({
                 balance,
                 status,
                 access_token,
@@ -108,23 +108,16 @@ class UserController {
         }
       })
       .catch((err) => {
-        console.log(err);
-        next({
-          name: 'Password is to Weak',
-          errors: [{msg: 'Password is to Weak'}]
-        })
+        next(err)
       });
   }
   static login(req, res, next) {
-    console.log(req.body);
     User.findOne({
       where: {
         email: req.body.email
       }
     })
       .then((result) => {
-        console.log('masukkkk login')
-        console.log(result)
         if(result) {
           let temp = compare (req.body.password, result.dataValues.password)
           if(temp) {

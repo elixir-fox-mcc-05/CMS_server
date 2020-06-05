@@ -111,20 +111,21 @@ class ProductController {
       .then((result) => {
         res.status(200).json(result)
       }).catch((err) => {
-        console.log(err);
+        next(err)
       })
   }
 
   static delete (req, res, next) {
+    console.log('masuk deleteeeee');
     Product.destroy({
       where: {
-          id: req.params.id
+        id: req.params.id
       }
     })
       .then((result) => {
         res.status(200).json(result)
       }).catch((err) => {
-        console.log(err);
+        next(err)
       })
   }
 
