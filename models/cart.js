@@ -5,7 +5,9 @@ module.exports = (sequelize, DataTypes) => {
   class Cart extends Model {};
 
   Cart.init({
-    UserId: DataTypes.INTEGER,
+    UserId: {
+      type:DataTypes.INTEGER
+    },    
     ProductId: {
       type:DataTypes.INTEGER,
       allowNull: false
@@ -19,6 +21,9 @@ module.exports = (sequelize, DataTypes) => {
           msg: 'Minimum purchase product is 1'
         }
       }
+    },
+    totalPrice: {
+      type:DataTypes.INTEGER
     },
     isPaid: {
       type:DataTypes.BOOLEAN,

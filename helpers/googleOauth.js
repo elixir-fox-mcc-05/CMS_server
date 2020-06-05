@@ -1,4 +1,4 @@
-function vertifyGoogle(token) {
+function verifyGoogle(token) {
     const {OAuth2Client} = require('google-auth-library');
     const client = new OAuth2Client(process.env.CLIENT_ID);
 
@@ -15,4 +15,4 @@ function vertifyGoogle(token) {
     })
 }
 
-module.exports = vertifyGoogle
+module.exports = verifyGoogle

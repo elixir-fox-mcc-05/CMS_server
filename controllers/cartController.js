@@ -5,6 +5,7 @@ class CartController {
     static createCart(req, res, next){
         let { ProductId, quantity } = req.body
         let input = null
+        let calculatePrice = null
         Product.findByPk(Number(ProductId))
             .then(data => {
                 if(!data){
@@ -16,10 +17,12 @@ class CartController {
                     })
                 }
                 else {
+                    calculatePrice = Number(data.price) * Number(quantity)
                     input = {
                         UserId: Number(req.currentUserId),
                         ProductId: Number(data.id),
-                        quantity: Number(quantity)
+                        quantity: Number(quantity),
+                        totalPrice: calculatePrice
                     }
                     return Cart.create(input)
                         .then(data => {
@@ -57,8 +60,8 @@ class CartController {
             })
     }
 
-    // router.put('/:cartId', CartController.updateCart);
-    static updateCart(req, res, next){
+    // router.put('/:cartId', CartController.paymentCart);
+    static paymentCart(req, res, next){
         let { cartId } = req.params
         let option = {
             where: {
@@ -66,13 +69,12 @@ class CartController {
             },
             returning: true
         }
-        let { isPaid, quantity } = req.body
+        let { isPaid } = req.body
         let input = null
-        if (isPaid === 'true'){
-            isPaid = true
+        console.log(isPaid)
+        if (isPaid === true){
             input = {
-                isPaid,
-                quantity
+                isPaid
             }
             let productStock = null
             let productOption = null
@@ -96,30 +98,23 @@ class CartController {
                     return next(err)
                 })
         }
-        else if (isPaid === 'false') {
-            isPaid = false
-            input = {
-                isPaid,
-                quantity
-            }
-            Cart.update(input, option)
-                .then(data => {
-                    return res.status(200).json({
-                        cart: data[1][0],
-                        message: 'Update Success, please make the payment immedietly'
-                    })
-                })
-                .catch(err => {
-                    return next(err)
-                })
-        }
         else {
-            return next({
-                name: `BadRequest`,
-                errors: {
-                    message: `isPaid must be filled`
-                }
-            })
+            if (isPaid === false){
+                return next({
+                    name: `BadRequest`,
+                    errors: {
+                        message: `please make the payment immedietly`
+                    }
+                })
+            }
+            else {
+                return next({
+                    name: `BadRequest`,
+                    errors: {
+                        message: `isPaid must be filled`
+                    }
+                })
+            }
         }
     }
 

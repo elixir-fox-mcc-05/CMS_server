@@ -5,8 +5,9 @@ class ProductController {
     // router.post('/', productController.createProduct);
     static createProduct(req, res, next){
         let { name, description, image_url, price, stock } = req.body
+        let convertName = name.toUpperCase()
         let input = {
-            name,
+            name: convertName,
             description,
             image_url,
             price: Number(price),
@@ -136,7 +137,7 @@ class ProductController {
         let convertName = null
         let option = null
         if (name) {
-            convertName = name.toLowerCase()
+            convertName = name.toUpperCase()
             option = {
                 order: [
                     [`stock`, `DESC`],

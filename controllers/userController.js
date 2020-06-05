@@ -1,7 +1,7 @@
 const { User } = require('../models/index');
 const { checkPassword } = require('../helpers/bcryptjs');
 const { generateToken } = require('../helpers/jwt');
-const vertifyGoogle = require('../helpers/googleOauth');
+const verifyGoogle = require('../helpers/googleOauth');
 
 class UserController {
     // router.post('/register', UserController.registerUser);
@@ -74,7 +74,7 @@ class UserController {
         let { email, password } = req.body;
         let options = {
             where: {
-                email,
+                email
             }
         }
         User.findOne(options)

@@ -17,6 +17,9 @@ module.exports = {
       quantity: {
         type: Sequelize.INTEGER
       },
+      totalPrice: {
+        type: Sequelize.INTEGER
+      },
       isPaid: {
         type: Sequelize.BOOLEAN
       },
