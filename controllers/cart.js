@@ -120,8 +120,10 @@ class CartController {
       .then((data) => {
         let lengthCart = data.length;
         if (lengthCart > 0) {
+          let allStocked = true
           data.forEach((element) => {
             if (element.Product.stock < element.quantity) {
+              allStocked  = false
               Cart.destroy(options)
                 .then((data) => {
                   throw {
@@ -136,45 +138,47 @@ class CartController {
                 });
             }
           });
-
-          data.forEach((element, index) => {
-            element.Product.decrement(
-              { stock: element.quantity },
-              { where: { id: element.ProductId } }
-            )
-              .then((data) => {
-                console.log('Success decrement stock');
-                if (index == lengthCart - 1) {
-                  let values = {
-                    status: true,
-                  };
-                  let options = {
-                    where: {
-                      UserId: req.signedInUserId,
-                      status: false,
-                    },
-                  };
-                  Cart.update(values, options)
-                    .then((data) => {
-                      // console.log('masuk');
-                      // console.log(data);
-                      if (data == lengthCart) {
-                        res.status(200).json({
-                          CheckoutItems:
-                            'Success checkout, please check purchase history',
-                        });
-                        return true;
-                      }
-                    })
-                    .catch((err) => {
-                      next(err);
-                    });
-                }
-              })
-              .catch((err) => {
-                next(err);
-              });
-          });
+          
+          if (allStocked) {
+            data.forEach((element, index) => {
+              element.Product.decrement(
+                { stock: element.quantity },
+                { where: { id: element.ProductId } }
+              )
+                .then((data) => {
+                  console.log('Success decrement stock');
+                  if (index == lengthCart - 1) {
+                    let values = {
+                      status: true,
+                    };
+                    let options = {
+                      where: {
+                        UserId: req.signedInUserId,
+                        status: false,
+                      },
+                    };
+                    Cart.update(values, options)
+                      .then((data) => {
+                        // console.log('masuk');
+                        // console.log(data);
+                        if (data == lengthCart) {
+                          res.status(200).json({
+                            CheckoutItems:
+                              'Success checkout, please check purchase history',
+                          });
+                          return true;
+                        }
+                      })
+                      .catch((err) => {
+                        next(err);
+                      });
+                  }
+                })
+                .catch((err) => {
+                  next(err);
+                });
+            });
+          }
         } else {
           throw {
             code: 400,
