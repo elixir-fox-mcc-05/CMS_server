@@ -1,0 +1,26 @@
+[
+  {
+    "name": "Susu Ultramilk",
+    "image_url": "https://www.prosehat.com/wp-content/uploads/2018/04/00029984_Susu-Ultra-Coklat-250ml.jpg",
+    "price": 4000,
+    "stock": 20,
+    "UserId": 2,
+    "CategoryId": 1
+  },
+  {
+    "name": "Bimoli",
+    "image_url": "https://tokomurah.biz/wp-content/uploads/2018/02/Bimoli-2L-1.jpg",
+    "price": 20000,
+    "stock": 60,
+    "UserId": 2,
+    "CategoryId": 1
+  },
+  {
+    "name": "Gula Pasir",
+    "image_url": "https://www.prosehat.com/wp-content/uploads/2018/04/00029984_Susu-Ultra-Coklat-250ml.jpg",
+    "price": 7000,
+    "stock": 100,
+    "UserId": 3,
+    "CategoryId": 1
+  }
+]
