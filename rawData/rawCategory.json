@@ -1,0 +1,34 @@
+[
+    {
+        "id": 1,
+        "name": "Football"
+    },
+    {
+        "id": 2,
+        "name": "Basketball"
+    },
+    {
+        "id": 3,
+        "name": "American Football"
+    },
+    {
+        "id": 4,
+        "name": "Baseball"
+    },
+    {
+        "id": 5,
+        "name": "Ice Hockey"
+    },
+    {
+        "id": 6,
+        "name": "Cycling"
+    },
+    {
+        "id": 7,
+        "name": "Water Sport"
+    },
+    {
+        "id": 8,
+        "name": "Outdoor Sport"
+    }
+]

@@ -1,0 +1,34 @@
+[
+    {
+        "id": 1,
+        "name": "Duke Football",
+        "image_url": "https://fanatics.frgimages.com/FFImage/thumb.aspx?i=/productimages/_2768000/altimages/ff_2768013alt1_full.jpg&w=900",
+        "price": 1800000,
+        "stock": 1,
+        "CategoryId": 3
+    },
+    {
+        "id": 2,
+        "name": "Dallas Cowboys Helmet",
+        "image_url": "https://fanatics.frgimages.com/FFImage/thumb.aspx?i=/productimages/_3898000/ff_3898657-ccf691495748ccdae213_full.jpg&w=2000",
+        "price": 1500000,
+        "stock": 15,
+        "CategoryId": 3
+    },
+    {
+        "id": 3,
+        "name": "Custom Name Dallas Cowboys Men Jersey",
+        "image_url": "https://fanatics.frgimages.com/FFImage/thumb.aspx?i=/productimages/_1586000/altimages/ff_1586957alt1_full.jpg&w=900",
+        "price": 1200000,
+        "stock": 7,
+        "CategoryId": 3
+    },
+    {
+        "id": 4,
+        "name": "Dallas Mavericks City Edition 19-20",
+        "image_url": "https://cdn.shopify.com/s/files/1/0021/1442/0799/products/AV4569-462-PHSBH001-NDS-A_1800x1800.png?v=1574198240",
+        "price": 2800000,
+        "stock": 0,
+        "CategoryId": 2
+    }
+]
