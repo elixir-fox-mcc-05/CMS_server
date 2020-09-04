@@ -1,4 +1,4 @@
-# CMS_server
+# E-commerce_CMS_Server
 
 ## Authors
 
