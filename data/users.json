@@ -1,0 +1,27 @@
+[
+  {
+    "name": "naura",
+    "email": "naura@gmail.com",
+    "password": "zxcvb",
+    "role": "Super-admin",
+    "image_url": "https://i.pinimg.com/originals/1f/5f/fe/1f5ffe64590cf6bfe94307fee4a11659.jpg"
+
+  },
+  {
+    "name": "jihan",
+    "email": "jihan@gmail.com",
+    "password": "zxcvb",
+    "role": "Admin",
+    "image_url": "https://dwipradityarahadi.files.wordpress.com/2010/08/yoona-snsd1.jpg?w=256&h=256"
+
+  },
+  {
+    "name": "hanin",
+    "email": "hanin@gmail.com",
+    "password": "zxcvb",
+    "role": "Member",
+    "image_url": "https://d2hhj3gz5jljkm.cloudfront.net/7d9/deed5/290f/4a51/9b15/138e840a16be/normal/5364355.png"
+
+  }
+  
+]
