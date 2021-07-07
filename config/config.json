@@ -1,0 +1,19 @@
+{
+  "development": {
+    "username": "godzi",
+    "password": "satu1234",
+    "database": "database_CMS_development",
+    "host": "localhost",
+    "dialect": "postgres"
+  },
+  "test": {
+    "username": "godzi",
+    "password": "satu1234",
+    "database": "database_CMS_test",
+    "host": "localhost",
+    "dialect": "postgres"
+  },
+  "production": {
+    "use_env_variable": "DATABASE_URL"
+  }
+}
